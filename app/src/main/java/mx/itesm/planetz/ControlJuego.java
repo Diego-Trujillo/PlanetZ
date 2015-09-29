@@ -43,7 +43,7 @@ public class ControlJuego extends SimpleBaseGameActivity
     public EngineOptions onCreateEngineOptions() {
         camara = new Camera(0,0,ANCHO_CAMARA,ALTO_CAMARA);
         return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
-                new FillResolutionPolicy(), camara);
+                new RatioResolutionPolicy(ANCHO_CAMARA,ALTO_CAMARA), camara);
     }
 
     // Crea los recursos del juego.
