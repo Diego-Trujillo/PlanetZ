@@ -1,5 +1,7 @@
 package mx.itesm.planetz;
 
+import org.andengine.entity.modifier.LoopEntityModifier;
+import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.background.IBackground;
@@ -23,137 +25,208 @@ import org.andengine.util.modifier.ParallelModifier;
  */
 public class MenuScene extends BaseScene {
 
-    //Constantes que representan cada opción
-    private final int MENU_PLAY = 0;
-    private final int MENU_BACKPACK = 1;
-    private static final int MENU_SETTINGS = 2;
-    private static final int MENU_ABOUT = 3;
+    // =============================================================================================
+    //                     D E C L A R A C I Ó N  D E  V A R I A B L E S
+    // =============================================================================================
 
-    //El menu
-    private org.andengine.entity.scene.menu.MenuScene menuScene;
+    // ===========================================================
+    //                     Elementos del fondo
+    // ===========================================================
 
-    //Texturas
-    //Fondo
+    // ============== Fondo de las estrellas =====================
     private AutoParallaxBackground movingParallaxBackground;
     private ParallaxBackground.ParallaxEntity movingParallaxEntity;
     private Sprite backgroundSprite;
 
-    //Logo
+    // =============== Planeta ===================================
+    private ITextureRegion planetTextureRegion;
+    private Sprite planetSprite;
+
+    // =============== Logotipo ==================================
     private ITextureRegion logoTextureRegion;
     private Sprite logoSprite;
 
-    //Botones
-    private ITiledTextureRegion playButtonRegion;
-    private ITiledTextureRegion backpackButtonRegion;
-    private ITiledTextureRegion settingsButtonRegion;
-    private ITiledTextureRegion aboutButtonRegion;
+
+    // ===========================================================
+    //                      Menú Principal
+    // ===========================================================
+
+    // =============== El Contenedor =============================
+    private org.andengine.entity.scene.menu.MenuScene mainMenuScene;
+
+    // =============== Bandera sobre disponibilidad ==============
+    private boolean mainMenuEnabled;
+
+    // =============== Opciones de Botones =======================
+    private static final int MAIN_PLAY = 0;
+    private static final int MAIN_BACKPACK = 1;
+    private static final int MAIN_SETTINGS = 2;
+    private static final int MAIN_ABOUT = 3;
+
+    // =============== Texturas de los Botones=====================
+    private ITiledTextureRegion mainMenuPlayButtonRegion;
+    private ITiledTextureRegion mainMenuBackpackButtonRegion;
+    private ITiledTextureRegion mainMenuSettingsButtonRegion;
+    private ITiledTextureRegion mainMenuAboutButtonRegion;
+
+
+
+    // =============================================================================================
+    //                                    C O N S T R U C T O R
+    // =============================================================================================
 
     public MenuScene(){
         super();
         sceneType = SceneType.MENU;
     }
+
+    // =============================================================================================
+    //                                       M É T O D O S
+    // =============================================================================================
+
+    // ===========================================================
+    //                 Cargar recursos gráficos
+    // ===========================================================
     @Override
     public void loadGFX() {
-        //Llamamos al administrador de recursos
+        // =======================================================
+        //              Cargar los elementos del fondo
+        // =======================================================
+        // =============== Llamar al administrador de recursos ===
         resourceManager.loadMenuResourcesGFX();
 
-        //Fondo
+        // =============== Fondo de estrellas ====================
         movingParallaxBackground = new AutoParallaxBackground(0f,0,0,1);
         backgroundSprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.menuBackgroundTextureRegion);
-        movingParallaxEntity = new ParallaxBackground.ParallaxEntity(-15f,backgroundSprite);
+        movingParallaxEntity = new ParallaxBackground.ParallaxEntity(15f,backgroundSprite);
         movingParallaxBackground.attachParallaxEntity(movingParallaxEntity);
 
+        // =============== Planeta giratorio ====================
+        planetTextureRegion = resourceManager.menuPlanetTextureRegion;
+        planetSprite = resourceManager.loadSprite(0,0,planetTextureRegion);
 
-        //Logo
+
+        // =============== Logotipo del juego ===================
         logoTextureRegion = resourceManager.menuLogoBackgroundTextureRegion;
         logoSprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2+100,logoTextureRegion);
 
-        //Botones
-        playButtonRegion = resourceManager.buttonTextureRegion_play;
-        backpackButtonRegion = resourceManager.buttonTextureRegion_backpack;
-        settingsButtonRegion = resourceManager.buttonTextureRegion_settings;
-        aboutButtonRegion = resourceManager.buttonTextureRegion_about;
+        // =======================================================
+        //                  Menú principal
+        // =======================================================
 
-        ;
+        // =============== Botones del menú principal ============
+        mainMenuPlayButtonRegion = resourceManager.buttonTextureRegion_play;
+        mainMenuBackpackButtonRegion = resourceManager.buttonTextureRegion_backpack;
+        mainMenuSettingsButtonRegion = resourceManager.buttonTextureRegion_settings;
+        mainMenuAboutButtonRegion = resourceManager.buttonTextureRegion_about;
 
+        mainMenuPlayButtonRegion.setCurrentTileIndex(0);
+        mainMenuBackpackButtonRegion.setCurrentTileIndex(0);
+        mainMenuSettingsButtonRegion.setCurrentTileIndex(0);
+        mainMenuAboutButtonRegion.setCurrentTileIndex(0);
 
-        playButtonRegion.setCurrentTileIndex(0);
-        backpackButtonRegion.setCurrentTileIndex(0);
-        settingsButtonRegion.setCurrentTileIndex(0);
-        aboutButtonRegion.setCurrentTileIndex(0);
-
+        // =============== Disponibilidad del menú ===============
+        mainMenuEnabled = true;
     }
+
+    // ===========================================================
+    //                      Cargar Música
+    // ===========================================================
 
     @Override
     public void loadMFX() {
 
     }
 
+    // ===========================================================
+    //                      Cargar Sonidos
+    // ===========================================================
     @Override
     public void loadSFX() {
 
     }
 
+    // ===========================================================
+    //                      Crear Escena
+    // ===========================================================
     @Override
     public void createScene() {
+        // =============== Adjuntar el fondo móvil ===============
         setBackground(movingParallaxBackground);
+
+        // =============== Adjuntar el planeta y darle rotación ==
+        attachChild(planetSprite);
+        planetSprite.setPosition(gameManager.CAMERA_WIDTH / 2, -100);
         attachChild(logoSprite);
-        addMenu();
+        planetSprite.registerEntityModifier(new LoopEntityModifier(new RotationModifier(90,0,-360)));
+
+        // =============== Agregar la sub-escena del menú ========
+        addMainMenu();
+        setChildScene(mainMenuScene);
 
     }
 
-    public void addMenu(){
-        //Inicializando el menú
-        menuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
-        menuScene.setPosition(0,0);
+    // ===========================================================
+    //                Crear el menú principal
+    // ===========================================================
+    public void addMainMenu(){
+        // ===============  Inicializando la subescena ===========
+        mainMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
+        mainMenuScene.setPosition(0,0);
 
-        //Creando los botones
-        IMenuItem playButton = new TiledSpriteMenuItem(MENU_PLAY,playButtonRegion,vertexBufferObjectManager);
-        IMenuItem backpackButton = new TiledSpriteMenuItem(MENU_BACKPACK, backpackButtonRegion, vertexBufferObjectManager);
-        IMenuItem settingsButton = new TiledSpriteMenuItem(MENU_SETTINGS, settingsButtonRegion, vertexBufferObjectManager);
-        IMenuItem aboutButton = new TiledSpriteMenuItem(MENU_ABOUT,aboutButtonRegion,vertexBufferObjectManager);
+        // =============== Creando los botones ===================
+        IMenuItem playButton = new TiledSpriteMenuItem(MAIN_PLAY,mainMenuPlayButtonRegion,vertexBufferObjectManager);
+        IMenuItem backpackButton = new TiledSpriteMenuItem(MAIN_BACKPACK, mainMenuBackpackButtonRegion, vertexBufferObjectManager);
+        IMenuItem settingsButton = new TiledSpriteMenuItem(MAIN_SETTINGS, mainMenuSettingsButtonRegion, vertexBufferObjectManager);
+        IMenuItem aboutButton = new TiledSpriteMenuItem(MAIN_ABOUT,mainMenuAboutButtonRegion,vertexBufferObjectManager);
 
-        //Agregando las opciones al menú
-        menuScene.addMenuItem(playButton);
-        menuScene.addMenuItem(backpackButton);
-        menuScene.addMenuItem(settingsButton);
-        menuScene.addMenuItem(aboutButton);
+        // =============== Agregando los botones =================
+        mainMenuScene.addMenuItem(playButton);
+        mainMenuScene.addMenuItem(backpackButton);
+        mainMenuScene.addMenuItem(settingsButton);
+        mainMenuScene.addMenuItem(aboutButton);
 
-        //Configurando fondo y animaciones
-        menuScene.buildAnimations();
-        menuScene.setBackgroundEnabled(false);
+        // =============== Configurando las animaciones =========
+        mainMenuScene.buildAnimations();
+        mainMenuScene.setBackgroundEnabled(false);
 
-        //Asignando las posiciones a los botones
+        // =============== Ubicando los botones =================
         playButton.setPosition(179,100);
         backpackButton.setPosition(486,100);
         settingsButton.setPosition(793,100);
         aboutButton.setPosition(1100, 100);
 
-        menuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
+        // === Establece lo que sea realizará al presionar b. ===
+        mainMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem,
                                              float pMenuItemLocalX, float pMenuItemLocalY) {
-                switch(pMenuItem.getID()) {
-                    case MENU_PLAY:
+                switch (pMenuItem.getID()) {
+                    case MAIN_PLAY:
                         System.out.println("OPCION PLAY");
                         break;
-                    case MENU_BACKPACK:
-                        backpackButtonRegion.setCurrentTileIndex(1);
+                    case MAIN_BACKPACK:
                         System.out.println("OPCION BACKPACK");
                         break;
-                    case MENU_SETTINGS:
+                    case MAIN_SETTINGS:
                         System.out.println("OPCION SETTINGS");
                         break;
-                    case MENU_ABOUT:
+                    case MAIN_ABOUT:
                         System.out.println("OPCION ABOUT");
                         break;
                 }
+
+                // Remover la habilidad de presionar botones, y esconder este menú.
+                unregisterTouchArea(mainMenuScene);
+                System.out.println("UNEISTED");
+                registerTouchArea(mainMenuScene);
+                System.out.println("registed");
+
                 return true;
+
             }
         });
 
-        // Asigna este menú a la escena
-        setChildScene(menuScene);
 
     }
 
@@ -162,12 +235,19 @@ public class MenuScene extends BaseScene {
 
     }
 
+    // ===========================================================
+    //            Cuando se presiona la tecla retroceder
+    // ===========================================================
     @Override
     public void onBackKeyPressed() {
+        // =============== Destruír la escena y salir del juego ==
         destroyScene();
         System.exit(0);
     }
 
+    // ===========================================================
+    //                      Destruir la escena actual
+    // ===========================================================
     @Override
     public void destroyScene() {
         resourceManager.unloadMenuResources();

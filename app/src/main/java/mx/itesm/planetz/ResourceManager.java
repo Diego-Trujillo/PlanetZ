@@ -60,6 +60,10 @@ public class ResourceManager {
     //Logo
     private BitmapTextureAtlas menuLogoTextureAtlas;
     public ITextureRegion menuLogoBackgroundTextureRegion;
+
+    //Planeta
+    private BitmapTextureAtlas menuPlanetTextureAtlas;
+    public ITextureRegion menuPlanetTextureRegion;
     //Botones
     private BitmapTextureAtlas buttonTextureAtlas;
 
@@ -96,38 +100,6 @@ public class ResourceManager {
         MusicFactory.setAssetBasePath("mfx/");
 
     }
-/*
-    //Método General
-    public void loadGFX(SceneType sceneType){
-        switch(sceneType){
-            case SPLASH:
-                loadSplashResourcesGFX();
-                break;
-
-        }
-
-    }
-
-    public void loadMFX(SceneType sceneType){
-        switch(sceneType){
-            case SPLASH:
-                loadSplashResourcesMFX();
-
-        }
-
-    }
-
-    public void loadSFX(SceneType sceneType){
-        switch(sceneType){
-            case SPLASH:
-                loadSplashResourcesSFX();
-
-        }
-
-    }
-*/
-
-    //Métodos específicos para la escena
 
     //SPLASH
     public void loadSplashResourcesGFX(){
@@ -168,11 +140,16 @@ public class ResourceManager {
     public void loadMenuResourcesGFX(){
         //Obteniendo folder para el fondo y el logo
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
-        menuBackgroundTextureAtlas = new BitmapTextureAtlas(textureManager,1920,1200,TextureOptions.BILINEAR);
-        menuBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundTextureAtlas,gameManager,"background.png",0,0);
+        menuBackgroundTextureAtlas = new BitmapTextureAtlas(textureManager,1280,800,TextureOptions.BILINEAR);
+        menuBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundTextureAtlas,gameManager,"fondomenu.jpg",0,0);
 
-        menuLogoTextureAtlas = new BitmapTextureAtlas(textureManager,450,450,TextureOptions.BILINEAR);
-        menuLogoBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuLogoTextureAtlas,gameManager,"gameLogo.png",0,0);
+        //Logo
+        menuLogoTextureAtlas = new BitmapTextureAtlas(textureManager,800,550,TextureOptions.BILINEAR);
+        menuLogoBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuLogoTextureAtlas,gameManager,"Logo.png",0,0);
+
+        //Planeta
+        menuPlanetTextureAtlas = new BitmapTextureAtlas(textureManager,1280,800,TextureOptions.BILINEAR);
+        menuPlanetTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas,gameManager,"naveconplaneta.png",0,0);
 
         //Obteniendo folder e inicializando el atlas en memoria para los botones
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/buttons/");
@@ -187,13 +164,12 @@ public class ResourceManager {
         //Cargando a memoria las imágenes
         menuBackgroundTextureAtlas.load();
         menuLogoTextureAtlas.load();
+        menuPlanetTextureAtlas.load();
         buttonTextureAtlas.load();
 
     }
 
     public void loadMenuResourcesMFX(){
-
-
     }
 
     public void unloadMenuResources(){
