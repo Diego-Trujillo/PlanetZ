@@ -46,6 +46,9 @@ public class MenuScene extends BaseScene {
     private ITextureRegion logoTextureRegion;
     private Sprite logoSprite;
 
+    // =============== Overlays para los submenús ===============
+    private ITextureRegion menuOverlayTextureRegion;
+    private Sprite menuOverlaySprite;
 
     // ===========================================================
     //                      Menú Principal
@@ -113,6 +116,10 @@ public class MenuScene extends BaseScene {
         // =============== Logotipo del juego ===================
         logoTextureRegion = resourceManager.menuLogoBackgroundTextureRegion;
         logoSprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2+100,logoTextureRegion);
+
+        // =============== Overlay para los submenús ============
+        menuOverlayTextureRegion = resourceManager.menuOverlayTextureRegion;
+        menuOverlaySprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,menuOverlayTextureRegion);
 
         // =======================================================
         //                  Menú principal
@@ -218,7 +225,7 @@ public class MenuScene extends BaseScene {
 
                 // Remover la habilidad de presionar botones, y esconder este menú.
                 setEnableMainMenuButtons(false);
-
+                attachChild(menuOverlaySprite);
                 return true;
 
             }
@@ -230,7 +237,7 @@ public class MenuScene extends BaseScene {
     }
 
     // ===========================================================
-    //         Habilitar/deshabilitar el menú princpal.
+    //         Habilitar/deshabilitar el MENÚ PRINCIPAL
     // ===========================================================
 
     public void setEnableMainMenuButtons(boolean condition){

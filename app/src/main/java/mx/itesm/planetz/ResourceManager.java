@@ -64,13 +64,18 @@ public class ResourceManager {
     //Planeta
     private BitmapTextureAtlas menuPlanetTextureAtlas;
     public ITextureRegion menuPlanetTextureRegion;
-    //Botones
+
+    //Menu principal
     private BitmapTextureAtlas buttonTextureAtlas;
 
     public ITiledTextureRegion buttonTextureRegion_play;
     public ITiledTextureRegion buttonTextureRegion_backpack;
     public ITiledTextureRegion buttonTextureRegion_settings;
     public ITiledTextureRegion buttonTextureRegion_about;
+
+    //Overlay de los menús
+    private BitmapTextureAtlas menuOverlayTextureAtlas;
+    public ITextureRegion menuOverlayTextureRegion;
 
     //Administrador de Sonido y música para la escena
     public SoundManager soundManager;
@@ -151,9 +156,15 @@ public class ResourceManager {
         menuPlanetTextureAtlas = new BitmapTextureAtlas(textureManager,1280,800,TextureOptions.BILINEAR);
         menuPlanetTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas,gameManager,"naveconplaneta.png",0,0);
 
+        //Overlay del Menú
+        menuOverlayTextureAtlas = new BitmapTextureAtlas(textureManager,1280,720,TextureOptions.BILINEAR);
+        menuOverlayTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuOverlayTextureAtlas, gameManager, "menuOverlay.png",0,0);
+
         //Obteniendo folder e inicializando el atlas en memoria para los botones
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/buttons/");
         buttonTextureAtlas = new BitmapTextureAtlas(textureManager,512,512,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+
 
         //Inicializando los botones
         buttonTextureRegion_play = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(buttonTextureAtlas,gameManager,"playButton.png",0,0,2,1);
@@ -161,10 +172,12 @@ public class ResourceManager {
         buttonTextureRegion_settings = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(buttonTextureAtlas,gameManager,"settingsButton.png",0,256,2,1);
         buttonTextureRegion_about = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(buttonTextureAtlas,gameManager,"aboutButton.png",0,384,2,1);
 
+
         //Cargando a memoria las imágenes
         menuBackgroundTextureAtlas.load();
         menuLogoTextureAtlas.load();
         menuPlanetTextureAtlas.load();
+        menuOverlayTextureAtlas.load();
         buttonTextureAtlas.load();
 
     }
