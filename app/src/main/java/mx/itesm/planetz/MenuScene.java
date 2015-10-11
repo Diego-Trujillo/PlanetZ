@@ -63,13 +63,17 @@ public class MenuScene extends BaseScene {
     private static final int MAIN_SETTINGS = 2;
     private static final int MAIN_ABOUT = 3;
 
-    // =============== Texturas de los Botones=====================
+    // =============== Texturas de los Botones ====================
     private ITiledTextureRegion mainMenuPlayButtonRegion;
     private ITiledTextureRegion mainMenuBackpackButtonRegion;
     private ITiledTextureRegion mainMenuSettingsButtonRegion;
     private ITiledTextureRegion mainMenuAboutButtonRegion;
 
-
+    // =============== Botones como items de menú =================
+    private IMenuItem mainMenuPlayButton;
+    private IMenuItem mainMenuBackpackButton;
+    private IMenuItem mainMenuSettingsButton;
+    private IMenuItem mainMenuAboutButton;
 
     // =============================================================================================
     //                                    C O N S T R U C T O R
@@ -120,13 +124,9 @@ public class MenuScene extends BaseScene {
         mainMenuSettingsButtonRegion = resourceManager.buttonTextureRegion_settings;
         mainMenuAboutButtonRegion = resourceManager.buttonTextureRegion_about;
 
-        mainMenuPlayButtonRegion.setCurrentTileIndex(0);
-        mainMenuBackpackButtonRegion.setCurrentTileIndex(0);
-        mainMenuSettingsButtonRegion.setCurrentTileIndex(0);
-        mainMenuAboutButtonRegion.setCurrentTileIndex(0);
 
-        // =============== Disponibilidad del menú ===============
-        mainMenuEnabled = true;
+
+
     }
 
     // ===========================================================
@@ -175,26 +175,26 @@ public class MenuScene extends BaseScene {
         mainMenuScene.setPosition(0,0);
 
         // =============== Creando los botones ===================
-        IMenuItem playButton = new TiledSpriteMenuItem(MAIN_PLAY,mainMenuPlayButtonRegion,vertexBufferObjectManager);
-        IMenuItem backpackButton = new TiledSpriteMenuItem(MAIN_BACKPACK, mainMenuBackpackButtonRegion, vertexBufferObjectManager);
-        IMenuItem settingsButton = new TiledSpriteMenuItem(MAIN_SETTINGS, mainMenuSettingsButtonRegion, vertexBufferObjectManager);
-        IMenuItem aboutButton = new TiledSpriteMenuItem(MAIN_ABOUT,mainMenuAboutButtonRegion,vertexBufferObjectManager);
+        mainMenuPlayButton = new TiledSpriteMenuItem(MAIN_PLAY,mainMenuPlayButtonRegion,vertexBufferObjectManager);
+        mainMenuBackpackButton = new TiledSpriteMenuItem(MAIN_BACKPACK, mainMenuBackpackButtonRegion, vertexBufferObjectManager);
+        mainMenuSettingsButton = new TiledSpriteMenuItem(MAIN_SETTINGS, mainMenuSettingsButtonRegion, vertexBufferObjectManager);
+        mainMenuAboutButton = new TiledSpriteMenuItem(MAIN_ABOUT,mainMenuAboutButtonRegion,vertexBufferObjectManager);
 
         // =============== Agregando los botones =================
-        mainMenuScene.addMenuItem(playButton);
-        mainMenuScene.addMenuItem(backpackButton);
-        mainMenuScene.addMenuItem(settingsButton);
-        mainMenuScene.addMenuItem(aboutButton);
+        mainMenuScene.addMenuItem(mainMenuPlayButton);
+        mainMenuScene.addMenuItem(mainMenuBackpackButton);
+        mainMenuScene.addMenuItem(mainMenuSettingsButton);
+        mainMenuScene.addMenuItem(mainMenuAboutButton);
 
         // =============== Configurando las animaciones =========
         mainMenuScene.buildAnimations();
         mainMenuScene.setBackgroundEnabled(false);
 
         // =============== Ubicando los botones =================
-        playButton.setPosition(179,100);
-        backpackButton.setPosition(486,100);
-        settingsButton.setPosition(793,100);
-        aboutButton.setPosition(1100, 100);
+        mainMenuPlayButton.setPosition(179,100);
+        mainMenuBackpackButton.setPosition(486, 100);
+        mainMenuSettingsButton.setPosition(793, 100);
+        mainMenuAboutButton.setPosition(1100, 100);
 
         // === Establece lo que sea realizará al presionar b. ===
         mainMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
@@ -217,10 +217,7 @@ public class MenuScene extends BaseScene {
                 }
 
                 // Remover la habilidad de presionar botones, y esconder este menú.
-                unregisterTouchArea(mainMenuScene);
-                System.out.println("UNEISTED");
-                registerTouchArea(mainMenuScene);
-                System.out.println("registed");
+                setEnableMainMenuButtons(false);
 
                 return true;
 
@@ -228,7 +225,35 @@ public class MenuScene extends BaseScene {
         });
 
 
+
+
     }
+
+    // ===========================================================
+    //         Habilitar/deshabilitar el menú princpal.
+    // ===========================================================
+
+    public void setEnableMainMenuButtons(boolean condition){
+        if(condition){
+            mainMenuScene.registerTouchArea(mainMenuPlayButton);
+            mainMenuScene.registerTouchArea(mainMenuBackpackButton);
+            mainMenuScene.registerTouchArea(mainMenuSettingsButton);
+            mainMenuScene.registerTouchArea(mainMenuAboutButton);
+            mainMenuScene.setVisible(true);
+            logoSprite.setVisible(true);
+        }
+        else{
+            mainMenuScene.unregisterTouchArea(mainMenuPlayButton);
+            mainMenuScene.unregisterTouchArea(mainMenuBackpackButton);
+            mainMenuScene.unregisterTouchArea(mainMenuSettingsButton);
+            mainMenuScene.unregisterTouchArea(mainMenuAboutButton);
+            mainMenuScene.setVisible(false);
+            logoSprite.setVisible(false);
+        }
+
+
+    }
+
 
     protected void onManagedUpdate(float pSecondsElapsed) {
         super.onManagedUpdate(pSecondsElapsed);
