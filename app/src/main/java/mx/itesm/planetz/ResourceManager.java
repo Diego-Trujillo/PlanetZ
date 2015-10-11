@@ -32,27 +32,46 @@ import java.io.IOException;
 
 /**
  * Administra los recursos visuales y auditivos y da métodos útiles
+ *
  * Created by Diego on 03/10/2015.
  */
 public class ResourceManager {
+    // =============================================================================================
+    //                          D E C L A R A C I Ó N  D E  V A R I A B L E S
+    // =============================================================================================
 
-    //Instancia única
+    // ============== Referencia de Instancia Única =============
     private static ResourceManager INSTANCE = new ResourceManager();
 
-    //Referencia al Administrador de Juego, el motor, la cámara y el administrador de Texturas
+    // ===========================================================
+    //    Referencia a los Adm. de Juego y de Sesión/Progreso
+    // ===========================================================
     GameManager gameManager;
-    Engine engine;
-    Camera camera;
-    TextureManager textureManager;
+    SessionManager sessionManager;
+    // ===========================================================
+    //               Referencia al motor y sus elementos
+    // ===========================================================
+    Engine engine;                  //Motor del juego
+    Camera camera;                  // Cámara principal
+    TextureManager textureManager;  // Administrador de Texturas
 
-    //Declara los Atlas de Regiones de Bitmaps para las distintas escenas.
 
-    //ESCENA SPLASH
+    // ===========================================================
+    //                        ESCENA SPLASH
+    // ===========================================================
+
+    // ============== RECURSOS GRÁFICOS ==========================
     private BitmapTextureAtlas splashTextureAtlas;
     public ITextureRegion splashTextureRegion_background;
     public ITextureRegion splashTextureRegion_logo;
 
-    //ESCENA MENU
+    // ============== RECURSOS MUSICALES =========================
+
+
+
+    // ===========================================================
+    //                        ESCENA MENU
+    // ===========================================================
     //Fondo
     private BitmapTextureAtlas menuBackgroundTextureAtlas;
     public ITextureRegion menuBackgroundTextureRegion;

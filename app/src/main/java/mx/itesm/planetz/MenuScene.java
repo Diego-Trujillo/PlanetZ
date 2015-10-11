@@ -21,6 +21,8 @@ import org.andengine.util.SocketUtils;
 import org.andengine.util.modifier.ParallelModifier;
 
 /**
+ *  Contiene la escena del menú principal.
+ *
  * Created by Diego on 04/10/2015.
  */
 public class MenuScene extends BaseScene {

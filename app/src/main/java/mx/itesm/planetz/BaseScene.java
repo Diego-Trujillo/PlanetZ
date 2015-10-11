@@ -14,49 +14,72 @@ import java.io.IOException;
  * Created by Diego on 03/10/2015.
  */
 public abstract class BaseScene extends Scene {
-    //El identificador de la escena
+
+    // =============================================================================================
+    //                          D E C L A R A C I Ó N  D E  V A R I A B L E S
+    // =============================================================================================
+
+    // ===========================================================
+    //       Identifica el tipo de escena que es
+    // ===========================================================
     protected SceneType sceneType;
 
-    //Referencia al Administrador de Juego, Administrador de Escenas y el Administrador de Recursos
-    protected GameManager gameManager;
-    protected SceneManager sceneManager;
-    protected ResourceManager resourceManager;
+    // ===========================================================
+    //        Referencias a los administradores de recursos
+    // ===========================================================
+    protected GameManager gameManager;          // Administrador de Juego
+    protected SceneManager sceneManager;        // Administrador de Escenas
+    protected ResourceManager resourceManager;  // Administrador de Recursos
 
-    //Referencia al motor, la cámara y el Vertex Buffer Object Manager
+    // ===========================================================
+    //          Referencias a elementos del motor
+    // ===========================================================
     protected Engine engine;
     protected VertexBufferObjectManager vertexBufferObjectManager;
     protected Camera camera;
 
-    //Constructor para la escena Base
+    // =============================================================================================
+    //                                      C O N S T R U C T O R
+    // =============================================================================================
     public BaseScene(){
-        //Inicializa las referencias a los Administradores
+        // ============== Obtiene referencias a los admin. ======
         this.sceneManager =  SceneManager.getInstance();
         this.gameManager = sceneManager.gameManager;
         this.resourceManager = ResourceManager.getInstance();
 
-        //Inicializa los demás objetos importantes
+        // ============== Obtiene referencias a elem. del motor =
         this.engine = gameManager.getEngine();
         this.vertexBufferObjectManager = gameManager.getVertexBufferObjectManager();
         this.camera = engine.getCamera();
 
-        //Carga los recursos y crea los visuales de la escena
+        // ============== Carga los recursos de la escena =======
         loadResources();
     }
-
+    // =============================================================================================
+    //                                         M É T O D O S
+    // =============================================================================================
+    // ===========================================================
+    //    Define cómo se van a cargar los recursos de la escena
+    // ===========================================================
     public void loadResources(){
         loadGFX();
         loadMFX();
         loadSFX();
     }
+    // =============================================================================================
+    //                                M É T O D O S  A B S T R A C T O S
+    // =============================================================================================
 
-    //Métodos abstractos que se deben implementar
-    public abstract void loadGFX();
-    public abstract void loadMFX();
-    public abstract void loadSFX();
-    public abstract void createScene();
-    public abstract void onBackKeyPressed();
-    public abstract void destroyScene();
+    public abstract void loadGFX();         // Cargar los recursos gráficos
+    public abstract void loadMFX();         // Cargar los recursos de música
+    public abstract void loadSFX();         // Cargar los recursos de sonido
+    public abstract void createScene();     // Crear y adjuntar los elementos de la escena
+    public abstract void onBackKeyPressed();// Define el comportamiento cuando se presione la tecla "Back"
+    public abstract void destroyScene();    // Define cómo se debe liberar la escena y sus recursos
 
-    // SETTERS & GETTERS ELEMENTALES
+    // =============================================================================================
+    //                                G E T T E R S  &  S E T T E R S
+    // =============================================================================================
+    // ============== REGRESA el TIPO DE ESCENA que es ===========
     public SceneType getSceneType() {return sceneType;}
 }

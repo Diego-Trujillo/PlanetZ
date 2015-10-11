@@ -12,6 +12,8 @@ public class SessionManager {
     // =============================================================================================
     //                          D E C L A R A C I Ó N  D E  V A R I A B L E S
     // =============================================================================================
+
+    // ============== Referencia de Instancia Única =============
     private static SessionManager INSTANCE = new SessionManager();
 
     // ===========================================================
@@ -24,26 +26,28 @@ public class SessionManager {
     //                   Variables Contenedoras
     // ===========================================================
 
-    // ============== Nombre de archivo con el progreso ==========
+    // ============== NOMBRE DE ARCHIVO con el progreso ==========
     private String fileName;
 
-    // ============== Opciones de Audio. Orden: Musica-Sonido ====
+    // ============== Opciones de AUDIO ==========================
     public boolean musicEnabled, soundEnabled;
     public float musicVolume, soundVolume;
 
-    // ============== Nivel de modo Aventura en el que se halla ==
+    // ============== Nivel de ADVENTURE MODE en el que se halla =
     public int currentLevel;
 
-    // ============== Si se ha desbloqueado Infinite Mode ========
+    // ============== Si se ha desbloqueado INFINITE MODE========
     public boolean infiniteModeUnlocked;
 
-    // ============== Contiene qué gemas se han desbloqueado =====
+    // ============== Contiene qué GEMAS se han desbloqueado =====
     public boolean gemsUnlocked[][];
-
     // =============================================================================================
     //                                         M É T O D O S
     // =============================================================================================
 
+    // ===========================================================
+    // Inicializa la instancia única de el Adm. de Sesión/Progreso
+    // ===========================================================
     public static void initialize(GameManager gameManager){
         getInstance().gameManager = gameManager;
         getInstance().resourceManager = gameManager.resourceManager;
@@ -52,7 +56,7 @@ public class SessionManager {
     //                                G E T T E R S  &  S E T T E R S
     // =============================================================================================
 
-    // ============== La instancia particular de esta clase ======
+    // ============== REGRESA la INSTANCIA de este Adm. =========
     public static SessionManager getInstance() {
         return INSTANCE;
     }

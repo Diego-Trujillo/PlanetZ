@@ -14,58 +14,101 @@ import java.io.IOException;
  */
 public class SplashScene extends BaseScene{
 
-    //Sprites
+    // =============================================================================================
+    //                          D E C L A R A C I Ó N  D E  V A R I A B L E S
+    // =============================================================================================
+    // ===========================================================
+    //                     Sprites
+    // ===========================================================
+
+    // ============== Fondo ======================================
     private SpriteBackground backgroundSprite;
+
+    // ============== Logotipo ITESM =============================
     private Sprite logoSprite;
 
+    // =============================================================================================
+    //                                      C O N S T R U C T O R
+    // =============================================================================================
     public SplashScene(){
+        // ============== Iniciamos la super-clase ===============
         super();
+        // ============== Asignamos el tipo de escena ============
         sceneType = SceneType.SPLASH;
     }
 
+    // =============================================================================================
+    //                                         M É T O D O S
+    // =============================================================================================
+    // ===========================================================
+    //              Cargamos los gráficos de la escena
+    // ===========================================================
     @Override
     public void loadGFX() {
-        //Llamar al Administrador de Recursos
+        // ============== Llamamos al Adm. de Recursos ===========
         resourceManager.loadSplashResourcesGFX();
 
-        //Inicializar el Fondo
+        // ============== Cargamos el fondo =====================
         backgroundSprite = new SpriteBackground(0,0,0,resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.splashTextureRegion_background));
-        //Inicializar el logo del ITESM
+
+        // ============== Cargamos el logotipo de ITESM =========
         logoSprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.splashTextureRegion_logo);
     }
-
+    // ===========================================================
+    //              Cargamos la música de la escena
+    // ===========================================================
     @Override
     public void loadMFX(){
         resourceManager.loadSplashResourcesMFX();
     }
 
+    // ===========================================================
+    //         Cargamos los sonidos de la escena (No utilizado)
+    // ===========================================================
     @Override
-    public void loadSFX() {
+    public void loadSFX() {return;}
 
-    }
-
+    // ===========================================================
+    //                     Creamos la escena
+    // ===========================================================
     @Override
     public void createScene() {
+        // ============== Reproducimos el sonido de Bienvenida ===
         resourceManager.music.play();
+
+        // ============== Adjuntamos el fondo de la escena =======
         this.setBackground(backgroundSprite);
+
+        // ============== Adjuntamos el logotipo a la escena =====
         attachChild(logoSprite);
     }
-
+    // ===========================================================
+    //                Actualización de pantalla
+    // ===========================================================
     @Override
     protected void onManagedUpdate(float pSecondsElapsed){
         super.onManagedUpdate(pSecondsElapsed);
     }
 
+    // ===========================================================
+    //   Define el comportamiento al presionarse la tecla de Back
+    // ===========================================================
     @Override
     public void onBackKeyPressed() {
+        // ============== Liberamos los recursos de la escena ====
         destroyScene();
+
+        // ============== Terminamos el juego ====================
         gameManager.finish();
     }
 
-
+    // ===========================================================
+    //   Define cómo se debe liberar la escena y los recursos
+    // ===========================================================
     @Override
     public void destroyScene() {
         resourceManager.unloadSplashResources();
+        this.unregisterTouchArea(this);
         this.detachSelf();
         this.dispose();
     }
