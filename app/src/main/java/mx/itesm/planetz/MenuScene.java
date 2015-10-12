@@ -54,7 +54,7 @@ public class MenuScene extends BaseScene {
     private Sprite menuOverlaySprite;
 
     // ===========================================================
-    //                      Menú Principal
+    //                   MENÚ PRINCIPAL
     // ===========================================================
 
     // =============== El Contenedor =============================
@@ -83,6 +83,23 @@ public class MenuScene extends BaseScene {
     private IMenuItem mainMenuSettingsButton;
     private IMenuItem mainMenuAboutButton;
     private IMenuItem mainMenuToggleAudioButton;
+
+    // =============== OPCIÓN REGRESAR DE SUBMENUS =================
+    // =============================================================
+    private static final int SUBMENU_BACK = 0;
+
+    // ===========================================================
+    //                   SUBMENÚ PLAY
+    // ===========================================================
+    // =============== Bandera sobre disponibilidad ==============
+    private boolean playMenuEnabled;
+
+    // =============== Opciones de Botones =======================
+    private static final int PLAY_ADVENTURE_MODE = 1;
+    private static final int PLAY_ADVENTURE_MODE_NEWGAME = 3;
+    private static final int PLAY_ADVENTURE_MODE_CONTINUE = 4;
+    private static final int PLAY_INFINITE_MODE = 2;
+
 
     // =============================================================================================
     //                                    C O N S T R U C T O R
@@ -156,9 +173,7 @@ public class MenuScene extends BaseScene {
     //                      Cargar Sonidos
     // ===========================================================
     @Override
-    public void loadSFX() {
-
-    }
+    public void loadSFX() {}
 
     // ===========================================================
     //                      Crear Escena
@@ -176,10 +191,10 @@ public class MenuScene extends BaseScene {
 
         // =============== Agregar la sub-escena del menú ========
         addMainMenu();
-
-
-
+        mainMenuEnabled = true;
         setChildScene(mainMenuScene);
+
+        // =============== Reproducir música de fondo ============
         resourceManager.menuMusic.play();
 
     }
@@ -242,23 +257,34 @@ public class MenuScene extends BaseScene {
                         System.out.println("OPCION ABOUT");
                         break;
                     case MAIN_TOGGLE_AUDIO:
+                        // == Cuando cualquiera de los dos canales de audio está habilitado ==
                         if(sessionManager.musicEnabled || sessionManager.soundEnabled){
+                            // -- Cambiar al sprite de la bocina
                             ((ToggleSpriteMenuItem)mainMenuToggleAudioButton).setCurrentTileIndex(1);
-                            System.out.println("SOUND OFF");
+
+                            // -- Enmudecer los canales de AFX
                             resourceManager.musicManager.setMasterVolume(0);
                             resourceManager.soundManager.setMasterVolume(0);
 
                         }
+                        // == Cuando ningún canal de audio está habilitado ====================
                         else{
+                            // -- Cambiar el sprite de la bocina
                             ((ToggleSpriteMenuItem)mainMenuToggleAudioButton).setCurrentTileIndex(0);
-                            System.out.println("SOUND ON");
+
+                            // --Desenmudecer los canales de AFX
                             resourceManager.musicManager.setMasterVolume(sessionManager.musicVolume);
                             resourceManager.musicManager.setMasterVolume(sessionManager.soundVolume);
 
                         }
+                        // -- Cambiar el volumen de la pista actual
                         resourceManager.menuMusic.setVolume(resourceManager.musicManager.getMasterVolume());
+
+                        // -- Cambiar la bandera de habilitación de AFX
                         sessionManager.musicEnabled = !(sessionManager.musicEnabled);
                         sessionManager.soundEnabled = !(sessionManager.soundEnabled);
+
+                        // -- Escribir los cambios al Adm. de Sesión
                         sessionManager.writeChanges();
                         break;
                 }
@@ -298,6 +324,9 @@ public class MenuScene extends BaseScene {
 
     }
 
+    // ===========================================================
+    //                          Condición Update
+    // ===========================================================
 
     protected void onManagedUpdate(float pSecondsElapsed) {
         super.onManagedUpdate(pSecondsElapsed);
