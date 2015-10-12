@@ -55,19 +55,23 @@ public class SessionManager {
     // Inicializa la instancia única de el Adm. de Sesión/Progreso
     // ===========================================================
     public static void initialize(GameManager gameManager){
+        // ============== Inicializa referencias a Adm.'s ========
         getInstance().gameManager = gameManager;
 
+        // ============== Inicializa la sesión/progreso ==========
         getInstance().sharedPreferences = getInstance().gameManager.getSharedPreferences(preferenceName, Context.MODE_PRIVATE);
         getInstance().sharedPreferencesEditor = getInstance().sharedPreferences.edit();
 
-        // ============== Inicializa la sesión/progreso ==========
+        // ============== Carga la sesión/progreso ===============
         getInstance().initializePreferences();
     }
     // ===========================================================
     //      Inicializa la sesión/progreso de la aplicación
     // ===========================================================
     public void initializePreferences(){
-
+        /* Básicamente, obtiene las preferencias del archivo de preferencias "Progreso",
+        *  Busca el valor indicado por la llave (key, ... ), si no existe el valor, entonces
+        *  lo crea con el valor default (..., default).*/
         // ============== Estado de los AFX's ===================
         musicEnabled = sharedPreferences.getBoolean("musicEnabled", true);
         soundEnabled = sharedPreferences.getBoolean("soundEnabled", true);

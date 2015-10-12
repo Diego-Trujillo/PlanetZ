@@ -309,11 +309,16 @@ public class MenuScene extends BaseScene {
     // ===========================================================
     @Override
     public void onBackKeyPressed() {
-        // =============== Destruír la escena y salir del juego ==
-        destroyScene();
-        System.out.println("EXITTING!");
-        gameManager.finish();
-        System.exit(0);
+
+        if(mainMenuEnabled){
+            // =============== Salir del Juego ===================
+            destroyScene();
+            gameManager.quit();
+        }
+        else{
+            // =============== Habilitar el menú ==================
+            setEnableMainMenuButtons(true);
+        }
     }
 
     // ===========================================================
