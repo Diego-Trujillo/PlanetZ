@@ -29,6 +29,7 @@ import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.opengl.util.GLState;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Administra los recursos visuales y auditivos y da métodos útiles
@@ -48,172 +49,241 @@ public class ResourceManager {
     // ===========================================================
     GameManager gameManager;
     SessionManager sessionManager;
+
     // ===========================================================
     //               Referencia al motor y sus elementos
     // ===========================================================
-    Engine engine;                  //Motor del juego
-    Camera camera;                  // Cámara principal
-    TextureManager textureManager;  // Administrador de Texturas
-
+    Engine engine;                      //Motor del juego
+    Camera camera;                      // Cámara principal
+    TextureManager textureManager;      // Administrador de Texturas
+    public MusicManager musicManager;   // Administrador de Música
+    public SoundManager soundManager;   // Administrador de Sonido
 
     // ===========================================================
     //                        ESCENA SPLASH
     // ===========================================================
 
     // ============== RECURSOS GRÁFICOS ==========================
+    // ===========================================================
     private BitmapTextureAtlas splashTextureAtlas;
     public ITextureRegion splashTextureRegion_background;
     public ITextureRegion splashTextureRegion_logo;
 
     // ============== RECURSOS MUSICALES =========================
-
+    // ===========================================================
+    public Music splashMusic;
 
 
     // ===========================================================
     //                        ESCENA MENU
     // ===========================================================
-    //Fondo
+
+    // ============== RECURSOS GRÁFICOS ==========================
+    // ===========================================================
+    // ============== Contenedor de Atlas's de Región ============
+    private ArrayList<BitmapTextureAtlas> menuBitmapTextureAtlasContainer;
+
+    // ============== Fondo ======================================
     private BitmapTextureAtlas menuBackgroundTextureAtlas;
     public ITextureRegion menuBackgroundTextureRegion;
 
-    //Logo
+    // ============== Logotipo Juego =============================
     private BitmapTextureAtlas menuLogoTextureAtlas;
     public ITextureRegion menuLogoBackgroundTextureRegion;
 
-    //Planeta
+    // ============== Planeta ====================================
     private BitmapTextureAtlas menuPlanetTextureAtlas;
     public ITextureRegion menuPlanetTextureRegion;
 
-    //Menu principal
-    private BitmapTextureAtlas buttonTextureAtlas;
-
-    public ITiledTextureRegion buttonTextureRegion_play;
-    public ITiledTextureRegion buttonTextureRegion_backpack;
-    public ITiledTextureRegion buttonTextureRegion_settings;
-    public ITiledTextureRegion buttonTextureRegion_about;
-
-    //Overlay de los menús
+    // ============== Overlay Submenús ===========================
     private BitmapTextureAtlas menuOverlayTextureAtlas;
     public ITextureRegion menuOverlayTextureRegion;
 
-    //Administrador de Sonido y música para la escena
-    public SoundManager soundManager;
-    public MusicManager musicManager;
+    // ============== Bocina Mute ================================
+    private BitmapTextureAtlas menuToggleAudioButtonTextureAtlas;
+    public ITiledTextureRegion menuToggleAudioButtonTextureRegion;
 
-    //Música
-    public Music music;
+    // ============== Menú Principal =============================
 
-    //Sonidos
-    public Sound sound_1;
-    public Sound sound_2;
-    public Sound sound_3;
+    // -------------- Botones ------------------------------------
+    private BitmapTextureAtlas mainMenuButtonTextureAtlas;
 
-    //Inicializa el Administrador de Recursos
+    public ITiledTextureRegion mainMenuButtonTextureRegion_play;
+    public ITiledTextureRegion mainMenuButtonTextureRegion_backpack;
+    public ITiledTextureRegion mainMenuButtonTextureRegion_settings;
+    public ITiledTextureRegion mainMenuButtonTextureRegion_about;
+
+    // ============== RECURSOS MUSICALES =========================
+    // ===========================================================
+    public Music menuMusic;
+
+    // =============================================================================================
+    //                                         M É T O D O S
+    // =============================================================================================
+
+    // ===========================================================
+    //    Inicializa la instancia única de el Adm. de Recursos
+    // ===========================================================
     public static void initialize(GameManager gameManager){
-        //Inicializando los
+
+        // ============== Inicializando los Adm. =================
         getInstance().gameManager = gameManager;
         getInstance().engine = gameManager.getEngine();
+        getInstance().sessionManager = SessionManager.getInstance();
 
-        //GFX
+        // ============== Inicializando cámara y adm. de text. ===
         getInstance().camera = gameManager.getEngine().getCamera();
         getInstance().textureManager = gameManager.getTextureManager();
 
-        //SFX & MFX
+        // ============== Inicializando los Adm. de SFX y MFX ====
         getInstance().soundManager = gameManager.getEngine().getSoundManager();
         getInstance().musicManager = gameManager.getEngine().getMusicManager();
         MusicFactory.setAssetBasePath("mfx/");
 
     }
 
-    //SPLASH
+    // =========================================================== *
+    //                        ESCENA SPLASH
+    // ===========================================================
+
+    // ============== Cargar Recursos Gráficos ===================
+    // ===========================================================
+
     public void loadSplashResourcesGFX(){
-        //Asignando el directorio de trabajo a gfx/splash/
+        // ============== Asignar el directorio base =============
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/splash/");
 
-        //Asignando espacio en memoria para las imágenes
+        // ============== Asignarndo espacio en memoria ==========
         splashTextureAtlas = new BitmapTextureAtlas(textureManager,2048,2048, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-        //Cargando las imágenes en el Atlas
+        // ============== Cargando las imágenes ==================
         splashTextureRegion_background = BitmapTextureAtlasTextureRegionFactory.createFromAsset(splashTextureAtlas,gameManager,"background.jpg",0,0);
         splashTextureRegion_logo = BitmapTextureAtlasTextureRegionFactory.createFromAsset(splashTextureAtlas,gameManager,"logo_itesm.png",0,720);
-        
-        //Cargando a memoria el atlas
+
+        // ============== Cargar el atlas de imágenes ============
         splashTextureAtlas.load();
     }
 
+    // ============== Cargar Recursos Musicales ==================
+    // ===========================================================
+
     public void loadSplashResourcesMFX(){
-        try {music = MusicFactory.createMusicFromAsset(musicManager,gameManager,"splash.ogg");}
+        // ============== Intentar cargar desde archivo ==========
+        try {splashMusic = MusicFactory.createMusicFromAsset(musicManager,gameManager,"splash.ogg");}
         catch (IOException e) {e.printStackTrace();}
-        music.setLooping(false);
+
+        // ============== Opciones de música =====================
+        splashMusic.setVolume(musicManager.getMasterVolume());
+        splashMusic.setLooping(false);
     }
 
+    // ============== Liberar Recursos ===========================
+    // ===========================================================
     public void unloadSplashResources(){
-        //GFX
+        // ============== Recursos Gráficos ======================
         splashTextureAtlas.unload();
         splashTextureAtlas = null;
         splashTextureRegion_logo = null;
         splashTextureRegion_background = null;
 
-        //SFX & MFX
-        music.stop();
-        music.release();
-        music = null;
+        // ============== Recursos  Musicales ====================
+        splashMusic.stop();
+        splashMusic.release();
+        splashMusic = null;
     }
 
-    //MENU
-    public void loadMenuResourcesGFX(){
-        //Obteniendo folder para el fondo y el logo
+    // =========================================================== *
+    //                        ESCENA MENÚ
+    // ===========================================================
+
+    // ============== Cargar Recursos Gráficos ===================
+    // ===========================================================
+    public void loadMenuResourcesGFX() {
+
+        // ============== Asignar el directorio base =============
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
-        menuBackgroundTextureAtlas = new BitmapTextureAtlas(textureManager,1280,800,TextureOptions.BILINEAR);
-        menuBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundTextureAtlas,gameManager,"fondomenu.jpg",0,0);
 
-        //Logo
-        menuLogoTextureAtlas = new BitmapTextureAtlas(textureManager,800,550,TextureOptions.BILINEAR);
-        menuLogoBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuLogoTextureAtlas,gameManager,"Logo.png",0,0);
+        // ============== Asignarndo espacio en memoria ==========
+        // -- Inicializar Contenedor --
+        menuBitmapTextureAtlasContainer = new ArrayList<BitmapTextureAtlas>();
+        // -- Fondo --
+        menuBackgroundTextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 800, TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(menuBackgroundTextureAtlas);
+        // -- Logotipo juego --
+        menuLogoTextureAtlas = new BitmapTextureAtlas(textureManager, 675, 475, TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(menuLogoTextureAtlas);
+        // -- Planeta --
+        menuPlanetTextureAtlas = new BitmapTextureAtlas(textureManager, 1600, 1600, TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(menuPlanetTextureAtlas);
+        // -- Overlay --
+        menuOverlayTextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 720, TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(menuOverlayTextureAtlas);
+        // -- Botones MenúPrincipal --
+        mainMenuButtonTextureAtlas = new BitmapTextureAtlas(textureManager, 512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        menuBitmapTextureAtlasContainer.add(mainMenuButtonTextureAtlas);
+        menuToggleAudioButtonTextureAtlas = new BitmapTextureAtlas(textureManager,128,64,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        menuBitmapTextureAtlasContainer.add(menuToggleAudioButtonTextureAtlas);
 
-        //Planeta
-        menuPlanetTextureAtlas = new BitmapTextureAtlas(textureManager,1280,800,TextureOptions.BILINEAR);
-        menuPlanetTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas,gameManager,"naveconplaneta.png",0,0);
+        // ============== Cargando las imágenes ==================
+        // -- Fondo --
+        menuBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundTextureAtlas, gameManager, "fondomenu.jpg", 0, 0);
+        // -- Logotipo juego --
+        menuLogoBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuLogoTextureAtlas, gameManager, "LogoSmall.png", 0, 0);
+        // -- Planeta --
+        menuPlanetTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "PlanetaGrande.png", 0, 0);
+        // -- Overlay --
+        menuOverlayTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuOverlayTextureAtlas, gameManager, "menuOverlay.png", 0, 0);
 
-        //Overlay del Menú
-        menuOverlayTextureAtlas = new BitmapTextureAtlas(textureManager,1280,720,TextureOptions.BILINEAR);
-        menuOverlayTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuOverlayTextureAtlas, gameManager, "menuOverlay.png",0,0);
+        // -- Botones MenúPrincipal --
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/buttons/"); // Cambiar directorio
+        mainMenuButtonTextureRegion_play = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mainMenuButtonTextureAtlas,gameManager,"playButton.png",0,0,2,1);
+        mainMenuButtonTextureRegion_backpack = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mainMenuButtonTextureAtlas,gameManager,"backpackButton.png",0,128,2,1);
+        mainMenuButtonTextureRegion_settings = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mainMenuButtonTextureAtlas,gameManager,"settingsButton.png",0,256,2,1);
+        mainMenuButtonTextureRegion_about = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mainMenuButtonTextureAtlas,gameManager,"aboutButton.png",0,384,2,1);
+        menuToggleAudioButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuToggleAudioButtonTextureAtlas,gameManager,"toggleSoundButton.png",0,0,2,1);
 
-        //Obteniendo folder e inicializando el atlas en memoria para los botones
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/buttons/");
-        buttonTextureAtlas = new BitmapTextureAtlas(textureManager,512,512,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-
-
-
-        //Inicializando los botones
-        buttonTextureRegion_play = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(buttonTextureAtlas,gameManager,"playButton.png",0,0,2,1);
-        buttonTextureRegion_backpack = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(buttonTextureAtlas,gameManager,"backpackButton.png",0,128,2,1);
-        buttonTextureRegion_settings = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(buttonTextureAtlas,gameManager,"settingsButton.png",0,256,2,1);
-        buttonTextureRegion_about = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(buttonTextureAtlas,gameManager,"aboutButton.png",0,384,2,1);
-
-
-        //Cargando a memoria las imágenes
-        menuBackgroundTextureAtlas.load();
-        menuLogoTextureAtlas.load();
-        menuPlanetTextureAtlas.load();
-        menuOverlayTextureAtlas.load();
-        buttonTextureAtlas.load();
+        // ============== Cargar el atlas de imágenes ============
+         for(BitmapTextureAtlas atlas : menuBitmapTextureAtlasContainer){
+             atlas.load();
+         }
 
     }
 
+    // ============== Cargar Recursos Musicales ==================
+    // ===========================================================
     public void loadMenuResourcesMFX(){
+        // ============== Intentar cargar desde archivo ==========
+        try {menuMusic = MusicFactory.createMusicFromAsset(musicManager,gameManager,"menu.ogg");}
+        catch (IOException e) {e.printStackTrace();}
+
+        // ============== Opciones de música =====================
+        menuMusic.setVolume(musicManager.getMasterVolume());
+        menuMusic.setLooping(true);
     }
 
+    // ============== Cargar Recursos de Sonido ==================
+    // ===========================================================
+    public void loadMenuResourcesSFX(){
+    }
+
+    // ============== Liberar Recursos ===========================
+    // ===========================================================
     public void unloadMenuResources(){
-        menuLogoTextureAtlas.unload();
-        menuLogoTextureAtlas = null;
-        menuBackgroundTextureAtlas.unload();
-        menuBackgroundTextureAtlas = null;
-        buttonTextureAtlas.unload();
-        buttonTextureAtlas = null;
+        for(BitmapTextureAtlas atlas : menuBitmapTextureAtlasContainer){
+            atlas.unload();
+            atlas = null;
+        }
     }
-    //Métodos auxiliares
 
+
+
+    // =============================================================================================
+    //                              M É T O D O S  A U X I L I A R E S
+    // =============================================================================================
+
+    // ===========================================================
+    //               Cargar una imágen de archivo
+    // ===========================================================
     public ITextureRegion loadImage(String filename){
         ITextureRegion region = null;
         try {
@@ -228,6 +298,9 @@ public class ResourceManager {
         return region;
     }
 
+    // ===========================================================
+    //         Cargar un sprite a partir de un ITextureRegion
+    // ===========================================================
     public Sprite loadSprite(float px, float py, final ITextureRegion region){
 
         return new Sprite(px, py, region, gameManager.getVertexBufferObjectManager()) {
@@ -239,7 +312,10 @@ public class ResourceManager {
         };
     }
 
+    // =============================================================================================
+    //                                G E T T E R S  &  S E T T E R S
+    // =============================================================================================
 
-    //GETTERS & SETTERS ELEMENTALES
+    // ============== REGRESA la INSTANCIA de este Adm. =========
     public static ResourceManager getInstance(){return INSTANCE;}
 }

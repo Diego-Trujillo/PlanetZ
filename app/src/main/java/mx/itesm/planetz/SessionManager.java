@@ -1,6 +1,7 @@
 package mx.itesm.planetz;
 
-import org.andengine.audio.music.MusicManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 /**
  *  Esta clase es un contenedor para el progreso del jugador.
@@ -17,17 +18,22 @@ public class SessionManager {
     private static SessionManager INSTANCE = new SessionManager();
 
     // ===========================================================
+    //          Referencia a las preferencias de usuario
+    // ===========================================================
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor sharedPreferencesEditor;
+
+    // ===========================================================
     //           Referencias a los demás elementos del juego
     // ===========================================================
     private GameManager gameManager;
-    private ResourceManager resourceManager;
 
     // ===========================================================
     //                   Variables Contenedoras
     // ===========================================================
 
     // ============== NOMBRE DE ARCHIVO con el progreso ==========
-    private String fileName;
+    private static final String preferenceName = "Progreso";
 
     // ============== Opciones de AUDIO ==========================
     public boolean musicEnabled, soundEnabled;
@@ -50,8 +56,53 @@ public class SessionManager {
     // ===========================================================
     public static void initialize(GameManager gameManager){
         getInstance().gameManager = gameManager;
-        getInstance().resourceManager = gameManager.resourceManager;
+
+        getInstance().sharedPreferences = getInstance().gameManager.getSharedPreferences(preferenceName, Context.MODE_PRIVATE);
+        getInstance().sharedPreferencesEditor = getInstance().sharedPreferences.edit();
+
+        // ============== Inicializa la sesión/progreso ==========
+        getInstance().initializePreferences();
     }
+    // ===========================================================
+    //      Inicializa la sesión/progreso de la aplicación
+    // ===========================================================
+    public void initializePreferences(){
+
+        // ============== Estado de los AFX's ===================
+        musicEnabled = sharedPreferences.getBoolean("musicEnabled", true);
+        soundEnabled = sharedPreferences.getBoolean("soundEnabled", true);
+
+        // ============== Volumen de AFX's =======================
+        musicVolume = sharedPreferences.getFloat("musicVolume",1f);
+        soundVolume = sharedPreferences.getFloat("soundVolume",1f);
+
+        // ============== Nivel actual de Adv. Mode ==============
+        currentLevel = sharedPreferences.getInt("currentLevel",0);
+    }
+
+    // ===========================================================
+    //  Escribe los cambios realizados a el archivo de Progreso
+    // ===========================================================
+    public void writeChanges() {
+
+        // ============== Estado de los AFX's ===================
+        sharedPreferencesEditor.putBoolean("musicEnabled",musicEnabled);
+        sharedPreferencesEditor.putBoolean("soundEnabled", soundEnabled);
+
+        // ============== Volumen de AFX's =======================
+        sharedPreferencesEditor.putFloat("musicVolume", musicVolume);
+        sharedPreferencesEditor.putFloat("soundVolume", soundVolume);
+
+        // ============== Nivel actual de Adv. Mode ==============
+        sharedPreferencesEditor.putInt("currentLevel",0);
+
+        // ============== Escribir los Cambios ===================
+        sharedPreferencesEditor.commit();
+
+    }
+
+
+
     // =============================================================================================
     //                                G E T T E R S  &  S E T T E R S
     // =============================================================================================
@@ -60,4 +111,6 @@ public class SessionManager {
     public static SessionManager getInstance() {
         return INSTANCE;
     }
+
+
 }

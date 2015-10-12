@@ -30,6 +30,7 @@ public abstract class BaseScene extends Scene {
     protected GameManager gameManager;          // Administrador de Juego
     protected SceneManager sceneManager;        // Administrador de Escenas
     protected ResourceManager resourceManager;  // Administrador de Recursos
+    protected SessionManager sessionManager;    // Administrador de Sesión/Progreso
 
     // ===========================================================
     //          Referencias a elementos del motor
@@ -46,6 +47,7 @@ public abstract class BaseScene extends Scene {
         this.sceneManager =  SceneManager.getInstance();
         this.gameManager = sceneManager.gameManager;
         this.resourceManager = ResourceManager.getInstance();
+        this.sessionManager = SessionManager.getInstance();
 
         // ============== Obtiene referencias a elem. del motor =
         this.engine = gameManager.getEngine();

@@ -91,7 +91,7 @@ public class GameManager extends BaseGameActivity {
         SessionManager.initialize(this);
         sessionManager = SessionManager.getInstance();
 
-        // ============== Terminar
+        // ============== Terminar ===============================
         pOnCreateResourcesCallback.onCreateResourcesFinished();
     }
 
@@ -101,6 +101,11 @@ public class GameManager extends BaseGameActivity {
     // -- En ese caso necesitamos la pantalla de splash y el menú
     @Override
     public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws IOException {
+        // ============== Obtenemos la configuración de AFX ======
+        getMusicManager().setMasterVolume((sessionManager.musicEnabled) ? sessionManager.musicVolume : 0);
+        getSoundManager().setMasterVolume((sessionManager.soundEnabled)?sessionManager.soundVolume:0);
+
+
         // ============== Cargamos y corremos el Splash ==========
         sceneManager.createScene(SceneType.SPLASH);
         sceneManager.setScene(SceneType.SPLASH);
@@ -136,13 +141,8 @@ public class GameManager extends BaseGameActivity {
     //   Define qué hacer cuando se presiona la tecla "Back"
     // ===========================================================
     public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            if(sceneManager.getCurrentSceneType() == SceneType.MENU){
-                finish();
-            }
-            else{
-                sceneManager.getCurrentScene().onBackKeyPressed();
-            }
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            sceneManager.getCurrentScene().onBackKeyPressed();
         }
         return super.onKeyDown(keyCode, event);
     }

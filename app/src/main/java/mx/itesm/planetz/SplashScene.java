@@ -74,7 +74,7 @@ public class SplashScene extends BaseScene{
     @Override
     public void createScene() {
         // ============== Reproducimos el sonido de Bienvenida ===
-        resourceManager.music.play();
+        resourceManager.splashMusic.play();
 
         // ============== Adjuntamos el fondo de la escena =======
         this.setBackground(backgroundSprite);
