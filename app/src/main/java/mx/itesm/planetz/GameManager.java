@@ -143,6 +143,7 @@ public class GameManager extends BaseGameActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if(keyCode == KeyEvent.KEYCODE_BACK) {
             sceneManager.getCurrentScene().onBackKeyPressed();
+            return true;
         }
         return super.onKeyDown(keyCode, event);
     }

@@ -99,6 +99,10 @@ public class ResourceManager {
     private BitmapTextureAtlas menuOverlayTextureAtlas;
     public ITextureRegion menuOverlayTextureRegion;
 
+    // ============== Botón Back Submenús ========================
+    private BitmapTextureAtlas menuSubmenuBackButtonTextureAtlas;
+    public ITextureRegion menuSubmenuBackButtonTextureRegion;
+
     // ============== Bocina Mute ================================
     private BitmapTextureAtlas menuToggleAudioButtonTextureAtlas;
     public ITiledTextureRegion menuToggleAudioButtonTextureRegion;
@@ -218,6 +222,9 @@ public class ResourceManager {
         // -- Overlay --
         menuOverlayTextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 720, TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(menuOverlayTextureAtlas);
+        // -- Botón Back --
+        menuSubmenuBackButtonTextureAtlas = new BitmapTextureAtlas(textureManager,128,128,TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(menuSubmenuBackButtonTextureAtlas);
         // -- Botones MenúPrincipal --
         mainMenuButtonTextureAtlas = new BitmapTextureAtlas(textureManager, 512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         menuBitmapTextureAtlasContainer.add(mainMenuButtonTextureAtlas);
@@ -242,6 +249,8 @@ public class ResourceManager {
         mainMenuButtonTextureRegion_about = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mainMenuButtonTextureAtlas,gameManager,"aboutButton.png",0,384,2,1);
         menuToggleAudioButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuToggleAudioButtonTextureAtlas,gameManager,"toggleSoundButton.png",0,0,2,1);
 
+        // -- Submenú back --
+        menuSubmenuBackButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuSubmenuBackButtonTextureAtlas,gameManager,"backArrow.png",0,0);
         // ============== Cargar el atlas de imágenes ============
          for(BitmapTextureAtlas atlas : menuBitmapTextureAtlasContainer){
              atlas.load();

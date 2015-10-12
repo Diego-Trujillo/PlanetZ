@@ -1,5 +1,6 @@
 package mx.itesm.planetz;
 
+import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.scene.background.AutoParallaxBackground;
@@ -13,6 +14,7 @@ import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.TiledSpriteMenuItem;
 import org.andengine.entity.scene.menu.item.ToggleSpriteMenuItem;
+import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.sprite.TiledSprite;
@@ -53,6 +55,9 @@ public class MenuScene extends BaseScene {
     private ITextureRegion menuOverlayTextureRegion;
     private Sprite menuOverlaySprite;
 
+    // =============== Botón Back para Submenús =================
+    private ITextureRegion menuSubmenuBackButtonRegion;
+
     // ===========================================================
     //                   MENÚ PRINCIPAL
     // ===========================================================
@@ -77,12 +82,6 @@ public class MenuScene extends BaseScene {
     private ITiledTextureRegion mainMenuAboutButtonRegion;
     private ITiledTextureRegion mainMenuToggleAudioButtonRegion;
 
-    // =============== Botones como items de menú =================
-    private IMenuItem mainMenuPlayButton;
-    private IMenuItem mainMenuBackpackButton;
-    private IMenuItem mainMenuSettingsButton;
-    private IMenuItem mainMenuAboutButton;
-    private IMenuItem mainMenuToggleAudioButton;
 
     // =============== OPCIÓN REGRESAR DE SUBMENUS =================
     // =============================================================
@@ -91,8 +90,13 @@ public class MenuScene extends BaseScene {
     // ===========================================================
     //                   SUBMENÚ PLAY
     // ===========================================================
+
+    // =============== El Contenedor =============================
+    private org.andengine.entity.scene.menu.MenuScene playMenuScene;
+
     // =============== Bandera sobre disponibilidad ==============
     private boolean playMenuEnabled;
+
 
     // =============== Opciones de Botones =======================
     private static final int PLAY_ADVENTURE_MODE = 1;
@@ -100,6 +104,7 @@ public class MenuScene extends BaseScene {
     private static final int PLAY_ADVENTURE_MODE_CONTINUE = 4;
     private static final int PLAY_INFINITE_MODE = 2;
 
+    // =============== Texturas de Botones ==============
 
     // =============================================================================================
     //                                    C O N S T R U C T O R
@@ -144,6 +149,9 @@ public class MenuScene extends BaseScene {
         menuOverlayTextureRegion = resourceManager.menuOverlayTextureRegion;
         menuOverlaySprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,menuOverlayTextureRegion);
 
+        // ============== Botón Back Submenús ========================
+        menuSubmenuBackButtonRegion = resourceManager.menuSubmenuBackButtonTextureRegion;
+
         // =======================================================
         //                  Menú principal
         // =======================================================
@@ -155,6 +163,9 @@ public class MenuScene extends BaseScene {
         mainMenuAboutButtonRegion = resourceManager.mainMenuButtonTextureRegion_about;
         mainMenuToggleAudioButtonRegion = resourceManager.menuToggleAudioButtonTextureRegion;
 
+        // =======================================================
+        //                  Submenú Play
+        // =======================================================
 
 
 
@@ -186,8 +197,10 @@ public class MenuScene extends BaseScene {
         // =============== Adjuntar el planeta y darle rotación ==
         attachChild(planetSprite);
         planetSprite.setPosition(gameManager.CAMERA_WIDTH / 2, -gameManager.CAMERA_HEIGHT + 200);
-        attachChild(logoSprite);
-        planetSprite.registerEntityModifier(new LoopEntityModifier(new RotationModifier(360, 0, -360)));
+        planetSprite.registerEntityModifier(new LoopEntityModifier(new RotationModifier(250, 0, -360)));
+
+        // =============== Adjuntar y esconder el overlay ========
+        attachChild(menuOverlaySprite);
 
         // =============== Agregar la sub-escena del menú ========
         addMainMenu();
@@ -196,7 +209,7 @@ public class MenuScene extends BaseScene {
 
         // =============== Reproducir música de fondo ============
         resourceManager.menuMusic.play();
-
+        addPlayMenu();
     }
 
     // ===========================================================
@@ -208,12 +221,12 @@ public class MenuScene extends BaseScene {
         mainMenuScene.setPosition(0,0);
 
         // =============== Creando los botones ===================
-        mainMenuPlayButton = new TiledSpriteMenuItem(MAIN_PLAY,mainMenuPlayButtonRegion,vertexBufferObjectManager);
-        mainMenuBackpackButton = new TiledSpriteMenuItem(MAIN_BACKPACK, mainMenuBackpackButtonRegion, vertexBufferObjectManager);
-        mainMenuSettingsButton = new TiledSpriteMenuItem(MAIN_SETTINGS, mainMenuSettingsButtonRegion, vertexBufferObjectManager);
-        mainMenuAboutButton = new TiledSpriteMenuItem(MAIN_ABOUT,mainMenuAboutButtonRegion,vertexBufferObjectManager);
-        mainMenuToggleAudioButton = new ToggleSpriteMenuItem(MAIN_TOGGLE_AUDIO,mainMenuToggleAudioButtonRegion,vertexBufferObjectManager);
-        ((ToggleSpriteMenuItem)mainMenuToggleAudioButton).setCurrentTileIndex((sessionManager.musicEnabled && sessionManager.soundEnabled)?0:1);
+        IMenuItem mainMenuPlayButton = new TiledSpriteMenuItem(MAIN_PLAY,mainMenuPlayButtonRegion,vertexBufferObjectManager);
+        IMenuItem mainMenuBackpackButton = new TiledSpriteMenuItem(MAIN_BACKPACK, mainMenuBackpackButtonRegion, vertexBufferObjectManager);
+        IMenuItem mainMenuSettingsButton = new TiledSpriteMenuItem(MAIN_SETTINGS, mainMenuSettingsButtonRegion, vertexBufferObjectManager);
+        IMenuItem mainMenuAboutButton = new TiledSpriteMenuItem(MAIN_ABOUT,mainMenuAboutButtonRegion,vertexBufferObjectManager);
+        IMenuItem mainMenuToggleAudioButton = new ToggleSpriteMenuItem(MAIN_TOGGLE_AUDIO,mainMenuToggleAudioButtonRegion,vertexBufferObjectManager);
+        ((ToggleSpriteMenuItem) mainMenuToggleAudioButton).setCurrentTileIndex((sessionManager.musicEnabled && sessionManager.soundEnabled) ? 0 : 1);
 
         // =============== Agregando los botones =================
         mainMenuScene.addMenuItem(mainMenuPlayButton);
@@ -224,7 +237,11 @@ public class MenuScene extends BaseScene {
 
         // =============== Configurando las animaciones =========
         mainMenuScene.buildAnimations();
+        menuOverlaySprite.setVisible(false);
         mainMenuScene.setBackgroundEnabled(false);
+
+        // =============== Ubicando los botones =================
+        mainMenuScene.attachChild(logoSprite);
 
         // =============== Ubicando los botones =================
         mainMenuPlayButton.setPosition(179,100);
@@ -244,9 +261,8 @@ public class MenuScene extends BaseScene {
                 switch (pMenuItem.getID()) {
                     case MAIN_PLAY:
                         System.out.println("OPCION PLAY");
-                        setEnableMainMenuButtons(false);
-                        attachChild(menuOverlaySprite);
-                        break;
+                        setChildScene(playMenuScene);
+                        menuOverlaySprite.setVisible(true);
                     case MAIN_BACKPACK:
                         System.out.println("OPCION BACKPACK");
                         break;
@@ -260,7 +276,7 @@ public class MenuScene extends BaseScene {
                         // == Cuando cualquiera de los dos canales de audio está habilitado ==
                         if(sessionManager.musicEnabled || sessionManager.soundEnabled){
                             // -- Cambiar al sprite de la bocina
-                            ((ToggleSpriteMenuItem)mainMenuToggleAudioButton).setCurrentTileIndex(1);
+                            ((ToggleSpriteMenuItem)mainMenuScene.getMenuItem(MAIN_TOGGLE_AUDIO)).setCurrentTileIndex(1);
 
                             // -- Enmudecer los canales de AFX
                             resourceManager.musicManager.setMasterVolume(0);
@@ -270,7 +286,7 @@ public class MenuScene extends BaseScene {
                         // == Cuando ningún canal de audio está habilitado ====================
                         else{
                             // -- Cambiar el sprite de la bocina
-                            ((ToggleSpriteMenuItem)mainMenuToggleAudioButton).setCurrentTileIndex(0);
+                            ((ToggleSpriteMenuItem)mainMenuScene.getMenuItem(MAIN_TOGGLE_AUDIO)).setCurrentTileIndex(0);
 
                             // --Desenmudecer los canales de AFX
                             resourceManager.musicManager.setMasterVolume(sessionManager.musicVolume);
@@ -300,29 +316,42 @@ public class MenuScene extends BaseScene {
     }
 
     // ===========================================================
-    //         Habilitar/deshabilitar el MENÚ PRINCIPAL
+    //                Crear el menú Play
     // ===========================================================
+    public void addPlayMenu(){
+        // =============== Inicializando la subEscena ============
+        playMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
+        playMenuScene.setPosition(0, 0);
 
-    public void setEnableMainMenuButtons(boolean condition){
-        if(condition){
-            mainMenuScene.registerTouchArea(mainMenuPlayButton);
-            mainMenuScene.registerTouchArea(mainMenuBackpackButton);
-            mainMenuScene.registerTouchArea(mainMenuSettingsButton);
-            mainMenuScene.registerTouchArea(mainMenuAboutButton);
-            mainMenuScene.setVisible(true);
-            logoSprite.setVisible(true);
-        }
-        else{
-            mainMenuScene.unregisterTouchArea(mainMenuPlayButton);
-            mainMenuScene.unregisterTouchArea(mainMenuBackpackButton);
-            mainMenuScene.unregisterTouchArea(mainMenuSettingsButton);
-            mainMenuScene.unregisterTouchArea(mainMenuAboutButton);
-            mainMenuScene.setVisible(false);
-            logoSprite.setVisible(false);
-        }
+        // =============== Creando los botones ===================
+       IMenuItem playMenuBackButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,menuSubmenuBackButtonRegion,vertexBufferObjectManager),0.8f,1f);
 
+        // =============== Agregando los botones =================
+        playMenuScene.addMenuItem(playMenuBackButton);
 
+        // =============== Configurando las animaciones =========
+        playMenuScene.buildAnimations();
+        playMenuScene.setBackgroundEnabled(false);
+
+        // =============== Ubicando los botones =================
+        playMenuBackButton.setPosition(150,GameManager.CAMERA_HEIGHT - 125 );
+
+        playMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
+                switch (pMenuItem.getID()){
+                    case SUBMENU_BACK:
+                        setChildScene(mainMenuScene);
+                        menuOverlaySprite.setVisible(false);
+                        break;
+                }
+                return true;
+            }
+        });
     }
+
+
+
 
     // ===========================================================
     //                          Condición Update
@@ -339,14 +368,16 @@ public class MenuScene extends BaseScene {
     @Override
     public void onBackKeyPressed() {
 
-        if(mainMenuEnabled){
+        if(this.getChildScene() == mainMenuScene){
             // =============== Salir del Juego ===================
             destroyScene();
             gameManager.quit();
         }
         else{
             // =============== Habilitar el menú ==================
-            setEnableMainMenuButtons(true);
+            setChildScene(mainMenuScene);
+            menuOverlaySprite.setVisible(false);
+
         }
     }
 
