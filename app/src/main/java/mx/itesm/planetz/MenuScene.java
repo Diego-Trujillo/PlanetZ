@@ -65,9 +65,6 @@ public class MenuScene extends BaseScene {
     // =============== El Contenedor =============================
     private org.andengine.entity.scene.menu.MenuScene mainMenuScene;
 
-    // =============== Bandera sobre disponibilidad ==============
-    private boolean mainMenuEnabled;
-
     // =============== Opciones de Botones =======================
     private static final int MAIN_PLAY = 0;
     private static final int MAIN_BACKPACK = 1;
@@ -87,6 +84,7 @@ public class MenuScene extends BaseScene {
     // =============================================================
     private static final int SUBMENU_BACK = 0;
 
+
     // ===========================================================
     //                   SUBMENÚ PLAY
     // ===========================================================
@@ -94,17 +92,29 @@ public class MenuScene extends BaseScene {
     // =============== El Contenedor =============================
     private org.andengine.entity.scene.menu.MenuScene playMenuScene;
 
-    // =============== Bandera sobre disponibilidad ==============
-    private boolean playMenuEnabled;
-
-
     // =============== Opciones de Botones =======================
     private static final int PLAY_ADVENTURE_MODE = 1;
     private static final int PLAY_ADVENTURE_MODE_NEWGAME = 3;
     private static final int PLAY_ADVENTURE_MODE_CONTINUE = 4;
     private static final int PLAY_INFINITE_MODE = 2;
 
+    // =============== Texturas de Botones ======================
+
+
+    // ===========================================================
+    //                   SUBMENÚ BACKPACK
+    // ===========================================================
+
+    // =============== El Contenedor =============================
+    private org.andengine.entity.scene.menu.MenuScene backPackMenuScene;
+
+    // =============== Opciones de Botones =======================
+
     // =============== Texturas de Botones ==============
+
+    // ===========================================================
+    //                   SUBMENÚ SETTINGS
+    // ===========================================================
 
     // =============================================================================================
     //                                    C O N S T R U C T O R
@@ -202,14 +212,16 @@ public class MenuScene extends BaseScene {
         // =============== Adjuntar y esconder el overlay ========
         attachChild(menuOverlaySprite);
 
-        // =============== Agregar la sub-escena del menú ========
+        // =============== Agregar los menus y subemnús =========
         addMainMenu();
-        mainMenuEnabled = true;
+        addPlayMenu();
+
+        // ============== Asignar el menú principal =============
+
         setChildScene(mainMenuScene);
 
         // =============== Reproducir música de fondo ============
         resourceManager.menuMusic.play();
-        addPlayMenu();
     }
 
     // ===========================================================
@@ -316,7 +328,7 @@ public class MenuScene extends BaseScene {
     }
 
     // ===========================================================
-    //                Crear el menú Play
+    //                Crear el Submenú Play
     // ===========================================================
     public void addPlayMenu(){
         // =============== Inicializando la subEscena ============
@@ -341,8 +353,7 @@ public class MenuScene extends BaseScene {
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
                 switch (pMenuItem.getID()){
                     case SUBMENU_BACK:
-                        setChildScene(mainMenuScene);
-                        menuOverlaySprite.setVisible(false);
+                        returnToMainMenu();
                         break;
                 }
                 return true;
@@ -350,9 +361,21 @@ public class MenuScene extends BaseScene {
         });
     }
 
+    // ===========================================================
+    //                Crear el Submenú Backpack
+    // ===========================================================
+    public void addBackpackMenu(){
 
+    }
 
-
+    // ===========================================================
+    //      Realiza lo necesario para regresar al menú principal
+    // ===========================================================
+    public void returnToMainMenu(){
+        setChildScene(mainMenuScene);
+        menuOverlaySprite.setVisible(false);
+        ((ToggleSpriteMenuItem)(mainMenuScene.getMenuItem(MAIN_TOGGLE_AUDIO))).setCurrentTileIndex((sessionManager.musicEnabled && sessionManager.soundEnabled) ? 0 : 1);
+    }
     // ===========================================================
     //                          Condición Update
     // ===========================================================
@@ -375,8 +398,7 @@ public class MenuScene extends BaseScene {
         }
         else{
             // =============== Habilitar el menú ==================
-            setChildScene(mainMenuScene);
-            menuOverlaySprite.setVisible(false);
+            returnToMainMenu();
 
         }
     }
