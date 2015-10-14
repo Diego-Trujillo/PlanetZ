@@ -103,41 +103,11 @@ public class ResourceManager {
     private BitmapTextureAtlas menuSubmenuBackButtonTextureAtlas;
     public ITextureRegion menuSubmenuBackButtonTextureRegion;
 
-    // ============== Mochila cosas ==============
-    private BitmapTextureAtlas menuSubmenuMochilaTextureAtlas;
-    public ITextureRegion menuSubmenuMochilaTextureRegion;
-           //----Gemas-----
-    private BitmapTextureAtlas menuSubmenuGema1TextureAtlas;
-    public ITextureRegion menuSubmenuGema1TextureRegion;
-    private BitmapTextureAtlas menuSubmenuGema2TextureAtlas;
-    public ITextureRegion menuSubmenuGema2TextureRegion;
-    private BitmapTextureAtlas menuSubmenuGema3TextureAtlas;
-    public ITextureRegion menuSubmenuGema3TextureRegion;
-    private BitmapTextureAtlas menuSubmenuGema4TextureAtlas;
-    public ITextureRegion menuSubmenuGema4TextureRegion;
-
-    // ============== Menu About ==============
-    // Dibujos caritas
-    private BitmapTextureAtlas menuSubmenuDrawTextureAtlas;
-    public ITextureRegion menuSubmenuDraw1TextureRegion;
-    public ITextureRegion menuSubmenuDraw2TextureRegion;
-    public ITextureRegion menuSubmenuDraw3TextureRegion;
-    public ITextureRegion menuSubmenuDraw4TextureRegion;
-    public ITextureRegion menuSubmenuDraw5TextureRegion;
-    //Credenciales
-    private BitmapTextureAtlas menuSubmenuIDTextureAtlas;
-    public ITextureRegion menuSubmenuID1TextureRegion;
-    public ITextureRegion menuSubmenuID2TextureRegion;
-    public ITextureRegion menuSubmenuID3TextureRegion;
-    public ITextureRegion menuSubmenuID4TextureRegion;
-    public ITextureRegion menuSubmenuID5TextureRegion;
-
-
     // ============== Bocina Mute ================================
     private BitmapTextureAtlas menuToggleAudioButtonTextureAtlas;
     public ITiledTextureRegion menuToggleAudioButtonTextureRegion;
 
-    // ============== Menú Principal =============================
+    // ============== MENÚ PRINCIPAL =============================
 
     // -------------- Botones ------------------------------------
     private BitmapTextureAtlas mainMenuButtonTextureAtlas;
@@ -147,6 +117,38 @@ public class ResourceManager {
     public ITiledTextureRegion mainMenuButtonTextureRegion_settings;
     public ITiledTextureRegion mainMenuButtonTextureRegion_about;
 
+    // ============== SUBMENU PLAY ===============================
+    // ============== SUBMENU BACKPACK ===========================
+
+    // -------------- Mochila cosas ------------------------------
+    private BitmapTextureAtlas menuSubmenuMochilaTextureAtlas;
+    public ITextureRegion menuSubmenuMochilaTextureRegion;
+    // -------------- Gemas --------------------------------------
+    private BitmapTextureAtlas menuSubmenuGema1TextureAtlas;
+    public ITextureRegion menuSubmenuGema1TextureRegion;
+    private BitmapTextureAtlas menuSubmenuGema2TextureAtlas;
+    public ITextureRegion menuSubmenuGema2TextureRegion;
+    private BitmapTextureAtlas menuSubmenuGema3TextureAtlas;
+    public ITextureRegion menuSubmenuGema3TextureRegion;
+    private BitmapTextureAtlas menuSubmenuGema4TextureAtlas;
+    public ITextureRegion menuSubmenuGema4TextureRegion;
+
+    // ============== SUBMENU SETTINGS ===========================
+    // ============== SUBMENU ABOUT ==============================
+    // -------------- Bolitas con Nombres ------------------------
+    private BitmapTextureAtlas menuSubmenuDrawTextureAtlas;
+    public ITextureRegion menuSubmenuDraw1TextureRegion;
+    public ITextureRegion menuSubmenuDraw2TextureRegion;
+    public ITextureRegion menuSubmenuDraw3TextureRegion;
+    public ITextureRegion menuSubmenuDraw4TextureRegion;
+    public ITextureRegion menuSubmenuDraw5TextureRegion;
+    // -------------- ID's y descripción -------------------------
+    private BitmapTextureAtlas menuSubmenuIDTextureAtlas;
+    public ITextureRegion menuSubmenuID1TextureRegion;
+    public ITextureRegion menuSubmenuID2TextureRegion;
+    public ITextureRegion menuSubmenuID3TextureRegion;
+    public ITextureRegion menuSubmenuID4TextureRegion;
+    public ITextureRegion menuSubmenuID5TextureRegion;
     // ============== RECURSOS MUSICALES =========================
     // ===========================================================
     public Music menuMusic;
@@ -269,11 +271,11 @@ public class ResourceManager {
         menuSubmenuGema3TextureAtlas = new BitmapTextureAtlas(textureManager, 512,512,TextureOptions.BILINEAR);
         menuSubmenuGema4TextureAtlas = new BitmapTextureAtlas(textureManager, 512,512,TextureOptions.BILINEAR);
     */
-        //--Menu about
-        menuSubmenuDrawTextureAtlas =  new BitmapTextureAtlas(textureManager, 1280,720,TextureOptions.BILINEAR);
+        // -- Botones About --
+        menuSubmenuDrawTextureAtlas =  new BitmapTextureAtlas(textureManager, 384,256,TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(menuSubmenuDrawTextureAtlas);
-
-        menuSubmenuIDTextureAtlas = new BitmapTextureAtlas(textureManager, 1280,720,TextureOptions.BILINEAR);
+        // -- ID's --
+        menuSubmenuIDTextureAtlas = new BitmapTextureAtlas(textureManager, 1024,1024,TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(menuSubmenuIDTextureAtlas);
 
 

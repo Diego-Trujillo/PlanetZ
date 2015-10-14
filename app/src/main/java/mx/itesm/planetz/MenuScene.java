@@ -102,32 +102,24 @@ public class MenuScene extends BaseScene {
     // ===========================================================
     //                   SUBMENÚ PLAY
     // ===========================================================
-    private ITextureRegion AndyTextureRegion;
-    private ITextureRegion RebeTextureRegion;
-    private ITextureRegion BrianTextureRegion;
-    private ITextureRegion DiegoTextureRegion;
-    private ITextureRegion DanyTextureRegion;
-    /*
-    private Sprite Andy;
-    private Sprite Rebe;
-    private Sprite Brian;
-    private Sprite Diego;
-    private Sprite Dany; */
-    private ITextureRegion ID1TextureRegion;
-    private ITextureRegion ID2TextureRegion;
-    private ITextureRegion ID3TextureRegion;
-    private ITextureRegion ID4TextureRegion;
-    private ITextureRegion ID5TextureRegion;
 
-    private Sprite ID1;
-    private Sprite ID2;
-    private Sprite ID3;
-    private Sprite ID4;
-    private Sprite ID5;
+    // =============== El Contenedor =============================
+    private org.andengine.entity.scene.menu.MenuScene playMenuScene;
+
+    // =============== Opciones de Botones =======================
+    private static final int PLAY_ADVENTURE_MODE = 1;
+    private static final int PLAY_ADVENTURE_MODE_NEWGAME = 3;
+    private static final int PLAY_ADVENTURE_MODE_CONTINUE = 4;
+    private static final int PLAY_INFINITE_MODE = 2;
+
+    // =============== Texturas de Botones ==============
 
     // ===========================================================
-    //                      BACKPACK
+    //                      SUBMENÚ BACKPACK
     // ===========================================================
+    // =============== El Contenedor =============================
+    private org.andengine.entity.scene.menu.MenuScene backpackMenuScene;
+
     protected static int FONT_SIZE = 24;
     protected static int PADDING = 50;
     protected static int MENUITEMS = 3;
@@ -156,22 +148,40 @@ public class MenuScene extends BaseScene {
     private List<TextureRegion> columns = new ArrayList<TextureRegion>();
 
 
+
+
+    // ===========================================================
+    //                      SUBMENÚ ABOUT
+    // ===========================================================
+
     // =============== El Contenedor =============================
-    private org.andengine.entity.scene.menu.MenuScene playMenuScene;
-    private org.andengine.entity.scene.menu.MenuScene BackPackMenuScene;
-    private org.andengine.entity.scene.menu.MenuScene AboutMenuScene;
-
-    // =============== Bandera sobre disponibilidad ==============
-    private boolean playMenuEnabled;
-
-
-    // =============== Opciones de Botones =======================
-    private static final int PLAY_ADVENTURE_MODE = 1;
-    private static final int PLAY_ADVENTURE_MODE_NEWGAME = 3;
-    private static final int PLAY_ADVENTURE_MODE_CONTINUE = 4;
-    private static final int PLAY_INFINITE_MODE = 2;
+    private org.andengine.entity.scene.menu.MenuScene aboutMenuScene;
 
     // =============== Texturas de Botones ==============
+    private ITextureRegion AndyTextureRegion;
+    private ITextureRegion RebeTextureRegion;
+    private ITextureRegion BrianTextureRegion;
+    private ITextureRegion DiegoTextureRegion;
+    private ITextureRegion DanyTextureRegion;
+    /*
+    private Sprite Andy;
+    private Sprite Rebe;
+    private Sprite Brian;
+    private Sprite Diego;
+    private Sprite Dany; */
+    // =============== Texturas de ID's==================
+    private ITextureRegion ID1TextureRegion;
+    private ITextureRegion ID2TextureRegion;
+    private ITextureRegion ID3TextureRegion;
+    private ITextureRegion ID4TextureRegion;
+    private ITextureRegion ID5TextureRegion;
+
+    // =============== Sprites de ID's =================
+    private Sprite ID1;
+    private Sprite ID2;
+    private Sprite ID3;
+    private Sprite ID4;
+    private Sprite ID5;
 
     // =============================================================================================
     //                                    C O N S T R U C T O R
@@ -348,14 +358,14 @@ public class MenuScene extends BaseScene {
                         menuOverlaySprite.setVisible(true);
                     case MAIN_BACKPACK:
                         System.out.println("OPCION BACKPACK");
-                        setChildScene(BackPackMenuScene);
+                        setChildScene(backpackMenuScene);
                         menuOverlaySprite.setVisible(true);
                     case MAIN_SETTINGS:
                         System.out.println("OPCION SETTINGS");
                         break;
                     case MAIN_ABOUT:
                         System.out.println("OPCION ABOUT");
-                        setChildScene(AboutMenuScene);
+                        setChildScene(aboutMenuScene);
                         menuOverlaySprite.setVisible(true);
                     case MAIN_TOGGLE_AUDIO:
                         // == Cuando cualquiera de los dos canales de audio está habilitado ==
@@ -441,25 +451,25 @@ public class MenuScene extends BaseScene {
     // ===========================================================
     public void addBackpack(){
         // =============== Inicializando la subEscena ============
-        BackPackMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
-        BackPackMenuScene.setPosition(0, 0);
+        backpackMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
+        backpackMenuScene.setPosition(0, 0);
 
         // =============== Creando los botones ===================
         IMenuItem playMenuBackButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,menuSubmenuBackButtonRegion,vertexBufferObjectManager),0.8f,1f);
 
         // =============== Agregando los botones =================
-        BackPackMenuScene.addMenuItem(playMenuBackButton);
+        backpackMenuScene.addMenuItem(playMenuBackButton);
 
         // =============== Configurando las animaciones =========
-        BackPackMenuScene.buildAnimations();
-        BackPackMenuScene.setBackgroundEnabled(false);
+        backpackMenuScene.buildAnimations();
+        backpackMenuScene.setBackgroundEnabled(false);
 
         //
 
         // =============== Ubicando los botones =================
         playMenuBackButton.setPosition(150,GameManager.CAMERA_HEIGHT - 125 );
 
-        BackPackMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
+        backpackMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
                 switch (pMenuItem.getID()){
@@ -478,17 +488,17 @@ public class MenuScene extends BaseScene {
     // ===========================================================
     public void addAbout(){
         // =============== Inicializando la subEscena ============
-        AboutMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
-        AboutMenuScene.setPosition(0, 0);
+        aboutMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
+        aboutMenuScene.setPosition(0, 0);
 
         // =============== Creando los botones ===================
         IMenuItem playMenuBackButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,menuSubmenuBackButtonRegion,vertexBufferObjectManager),0.8f,1f);
         // =============== Agregando los botones =================
-        AboutMenuScene.addMenuItem(playMenuBackButton);
+        aboutMenuScene.addMenuItem(playMenuBackButton);
 
         // =============== Configurando las animaciones =========
-        AboutMenuScene.buildAnimations();
-        AboutMenuScene.setBackgroundEnabled(false);
+        aboutMenuScene.buildAnimations();
+        aboutMenuScene.setBackgroundEnabled(false);
 
         // =============== Ubicando los botones =================
         playMenuBackButton.setPosition(150,GameManager.CAMERA_HEIGHT - 125 );
@@ -523,11 +533,11 @@ public class MenuScene extends BaseScene {
 
 
 
-        AboutMenuScene.addMenuItem(Andy);
-        AboutMenuScene.addMenuItem(Rebe);
-        AboutMenuScene.addMenuItem(Brian);
-        AboutMenuScene.addMenuItem(Diego);
-        AboutMenuScene.addMenuItem(Dany);
+        aboutMenuScene.addMenuItem(Andy);
+        aboutMenuScene.addMenuItem(Rebe);
+        aboutMenuScene.addMenuItem(Brian);
+        aboutMenuScene.addMenuItem(Diego);
+        aboutMenuScene.addMenuItem(Dany);
 
 
 
@@ -546,13 +556,13 @@ public class MenuScene extends BaseScene {
 
         ID1 = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,logoTextureRegion);
 
-        AboutMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
+        aboutMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
                 switch(pMenuItem.getID()) {
                     case 11:
                         System.out.println("ANDY");
-                        AboutMenuScene.attachChild(ID1);
+                        aboutMenuScene.attachChild(ID1);
                     case 22:
                         System.out.println("REBE");
                     case 33:
