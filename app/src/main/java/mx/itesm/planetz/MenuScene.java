@@ -3,6 +3,7 @@ package mx.itesm.planetz;
 import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.RotationModifier;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.background.IBackground;
@@ -18,10 +19,18 @@ import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.sprite.TiledSprite;
+import org.andengine.input.touch.detector.ClickDetector;
+import org.andengine.input.touch.detector.SurfaceScrollDetector;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.SocketUtils;
 import org.andengine.util.modifier.ParallelModifier;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *  Contiene la escena del menú principal.
@@ -65,6 +74,9 @@ public class MenuScene extends BaseScene {
     // =============== El Contenedor =============================
     private org.andengine.entity.scene.menu.MenuScene mainMenuScene;
 
+    // =============== Bandera sobre disponibilidad ==============
+    private boolean mainMenuEnabled;
+
     // =============== Opciones de Botones =======================
     private static final int MAIN_PLAY = 0;
     private static final int MAIN_BACKPACK = 1;
@@ -84,13 +96,71 @@ public class MenuScene extends BaseScene {
     // =============================================================
     private static final int SUBMENU_BACK = 0;
 
-
     // ===========================================================
     //                   SUBMENÚ PLAY
     // ===========================================================
+    private ITextureRegion AndyTextureRegion;
+    private ITextureRegion RebeTextureRegion;
+    private ITextureRegion BrianTextureRegion;
+    private ITextureRegion DiegoTextureRegion;
+    private ITextureRegion DanyTextureRegion;
+    /*
+    private Sprite Andy;
+    private Sprite Rebe;
+    private Sprite Brian;
+    private Sprite Diego;
+    private Sprite Dany; */
+    private ITextureRegion ID1TextureRegion;
+    private ITextureRegion ID2TextureRegion;
+    private ITextureRegion ID3TextureRegion;
+    private ITextureRegion ID4TextureRegion;
+    private ITextureRegion ID5TextureRegion;
+    /*
+    private Sprite ID1;
+    private Sprite ID2;
+    private Sprite ID3;
+    private Sprite ID4;
+    private Sprite ID5;
+    */
+    // ===========================================================
+    //                      BACKPACK
+    // ===========================================================
+    protected static int FONT_SIZE = 24;
+    protected static int PADDING = 50;
+    protected static int MENUITEMS = 3;
+    /*
+    private Font mFont;
+    private BitmapTextureAtlas mFontTexture;
+
+    private BitmapTextureAtlas mMenuTextureAtlas;
+    private TextureRegion mMenuLeftTextureRegion;
+    private TextureRegion mMenuRightTextureRegion;
+
+    private Sprite menuleft;
+    private Sprite menuright;
+    */
+
+    // Scrolling
+    private SurfaceScrollDetector mScrollDetector;
+    private ClickDetector mClickDetector;
+
+    private float mMinX = 0;
+    private float mMaxX = 0;
+    private float mCurrentX = 0;
+    private int iItemClicked = -1;
+
+    private Rectangle scrollBar;
+    private List<TextureRegion> columns = new ArrayList<TextureRegion>();
+
 
     // =============== El Contenedor =============================
     private org.andengine.entity.scene.menu.MenuScene playMenuScene;
+    private org.andengine.entity.scene.menu.MenuScene BackPackMenuScene;
+    private org.andengine.entity.scene.menu.MenuScene AboutMenuScene;
+
+    // =============== Bandera sobre disponibilidad ==============
+    private boolean playMenuEnabled;
+
 
     // =============== Opciones de Botones =======================
     private static final int PLAY_ADVENTURE_MODE = 1;
@@ -98,23 +168,7 @@ public class MenuScene extends BaseScene {
     private static final int PLAY_ADVENTURE_MODE_CONTINUE = 4;
     private static final int PLAY_INFINITE_MODE = 2;
 
-    // =============== Texturas de Botones ======================
-
-
-    // ===========================================================
-    //                   SUBMENÚ BACKPACK
-    // ===========================================================
-
-    // =============== El Contenedor =============================
-    private org.andengine.entity.scene.menu.MenuScene backPackMenuScene;
-
-    // =============== Opciones de Botones =======================
-
     // =============== Texturas de Botones ==============
-
-    // ===========================================================
-    //                   SUBMENÚ SETTINGS
-    // ===========================================================
 
     // =============================================================================================
     //                                    C O N S T R U C T O R
@@ -177,6 +231,19 @@ public class MenuScene extends BaseScene {
         //                  Submenú Play
         // =======================================================
 
+        // =======================================================
+        //                  Submenú About
+        // =======================================================
+        AndyTextureRegion = resourceManager.menuSubmenuDraw1TextureRegion;
+        RebeTextureRegion = resourceManager.menuSubmenuDraw2TextureRegion;
+        BrianTextureRegion = resourceManager.menuSubmenuDraw3TextureRegion;
+        DiegoTextureRegion = resourceManager.menuSubmenuDraw4TextureRegion;
+        DanyTextureRegion = resourceManager.menuSubmenuDraw5TextureRegion;
+        ID1TextureRegion = resourceManager.menuSubmenuID1TextureRegion;
+        ID2TextureRegion = resourceManager.menuSubmenuID2TextureRegion;
+        ID3TextureRegion = resourceManager.menuSubmenuID3TextureRegion;
+        ID4TextureRegion = resourceManager.menuSubmenuID4TextureRegion;
+        ID5TextureRegion = resourceManager.menuSubmenuID5TextureRegion;
 
 
     }
@@ -212,16 +279,17 @@ public class MenuScene extends BaseScene {
         // =============== Adjuntar y esconder el overlay ========
         attachChild(menuOverlaySprite);
 
-        // =============== Agregar los menus y subemnús =========
+        // =============== Agregar la sub-escena del menú ========
         addMainMenu();
-        addPlayMenu();
-
-        // ============== Asignar el menú principal =============
-
+        mainMenuEnabled = true;
         setChildScene(mainMenuScene);
 
         // =============== Reproducir música de fondo ============
         resourceManager.menuMusic.play();
+
+        addPlayMenu();
+        addBackpack();
+        addAbout();
     }
 
     // ===========================================================
@@ -277,13 +345,15 @@ public class MenuScene extends BaseScene {
                         menuOverlaySprite.setVisible(true);
                     case MAIN_BACKPACK:
                         System.out.println("OPCION BACKPACK");
-                        break;
+                        setChildScene(BackPackMenuScene);
+                        menuOverlaySprite.setVisible(true);
                     case MAIN_SETTINGS:
                         System.out.println("OPCION SETTINGS");
                         break;
                     case MAIN_ABOUT:
                         System.out.println("OPCION ABOUT");
-                        break;
+                        setChildScene(AboutMenuScene);
+                        menuOverlaySprite.setVisible(true);
                     case MAIN_TOGGLE_AUDIO:
                         // == Cuando cualquiera de los dos canales de audio está habilitado ==
                         if(sessionManager.musicEnabled || sessionManager.soundEnabled){
@@ -328,7 +398,7 @@ public class MenuScene extends BaseScene {
     }
 
     // ===========================================================
-    //                Crear el Submenú Play
+    //                Crear el menú Play
     // ===========================================================
     public void addPlayMenu(){
         // =============== Inicializando la subEscena ============
@@ -353,7 +423,46 @@ public class MenuScene extends BaseScene {
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
                 switch (pMenuItem.getID()){
                     case SUBMENU_BACK:
-                        returnToMainMenu();
+                        setChildScene(mainMenuScene);
+                        menuOverlaySprite.setVisible(false);
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
+
+    // ===========================================================
+    //                Crear el menú Mochila
+    // ===========================================================
+    public void addBackpack(){
+        // =============== Inicializando la subEscena ============
+        BackPackMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
+        BackPackMenuScene.setPosition(0, 0);
+
+        // =============== Creando los botones ===================
+        IMenuItem playMenuBackButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,menuSubmenuBackButtonRegion,vertexBufferObjectManager),0.8f,1f);
+
+        // =============== Agregando los botones =================
+        BackPackMenuScene.addMenuItem(playMenuBackButton);
+
+        // =============== Configurando las animaciones =========
+        BackPackMenuScene.buildAnimations();
+        BackPackMenuScene.setBackgroundEnabled(false);
+
+        //
+
+        // =============== Ubicando los botones =================
+        playMenuBackButton.setPosition(150,GameManager.CAMERA_HEIGHT - 125 );
+
+        BackPackMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
+                switch (pMenuItem.getID()){
+                    case SUBMENU_BACK:
+                        setChildScene(mainMenuScene);
+                        menuOverlaySprite.setVisible(false);
                         break;
                 }
                 return true;
@@ -362,20 +471,106 @@ public class MenuScene extends BaseScene {
     }
 
     // ===========================================================
-    //                Crear el Submenú Backpack
+    //                Crear el menú About
     // ===========================================================
-    public void addBackpackMenu(){
+    public void addAbout(){
+        // =============== Inicializando la subEscena ============
+        AboutMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
+        AboutMenuScene.setPosition(0, 0);
 
+        // =============== Creando los botones ===================
+        IMenuItem playMenuBackButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,menuSubmenuBackButtonRegion,vertexBufferObjectManager),0.8f,1f);
+        // =============== Agregando los botones =================
+        AboutMenuScene.addMenuItem(playMenuBackButton);
+
+        // =============== Configurando las animaciones =========
+        AboutMenuScene.buildAnimations();
+        AboutMenuScene.setBackgroundEnabled(false);
+
+        // =============== Ubicando los botones =================
+        playMenuBackButton.setPosition(150,GameManager.CAMERA_HEIGHT - 125 );
+
+
+        // ------------------------
+
+        //Andy = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,AndyTextureRegion);
+        final IMenuItem Andy = new ScaleMenuItemDecorator(new SpriteMenuItem(1,AndyTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        //Rebe = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,RebeTextureRegion);
+        IMenuItem Rebe = new ScaleMenuItemDecorator(new SpriteMenuItem(2,RebeTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        //Brian = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,BrianTextureRegion);
+        IMenuItem Brian = new ScaleMenuItemDecorator(new SpriteMenuItem(3,BrianTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        //Diego = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,DiegoTextureRegion);
+        IMenuItem Diego = new ScaleMenuItemDecorator(new SpriteMenuItem(4,DiegoTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        //Dany = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,DanyTextureRegion);
+        IMenuItem Dany = new ScaleMenuItemDecorator(new SpriteMenuItem(5,DanyTextureRegion,vertexBufferObjectManager),0.8f,1f);
+
+        final IMenuItem ID1 = new ScaleMenuItemDecorator(new SpriteMenuItem(6,ID1TextureRegion,vertexBufferObjectManager),0.8f,1f);
+        final IMenuItem ID2 = new ScaleMenuItemDecorator(new SpriteMenuItem(7,ID1TextureRegion,vertexBufferObjectManager),0.8f,1f);
+        final IMenuItem ID3 = new ScaleMenuItemDecorator(new SpriteMenuItem(8,ID1TextureRegion,vertexBufferObjectManager),0.8f,1f);
+        final IMenuItem ID4 = new ScaleMenuItemDecorator(new SpriteMenuItem(9,ID1TextureRegion,vertexBufferObjectManager),0.8f,1f);
+        final IMenuItem ID5 = new ScaleMenuItemDecorator(new SpriteMenuItem(10,ID1TextureRegion,vertexBufferObjectManager),0.8f,1f);
+        AboutMenuScene.addMenuItem(Andy);
+        AboutMenuScene.addMenuItem(Rebe);
+        AboutMenuScene.addMenuItem(Brian);
+        AboutMenuScene.addMenuItem(Diego);
+        AboutMenuScene.addMenuItem(Dany);
+
+        AboutMenuScene.addMenuItem(ID1);
+        AboutMenuScene.addMenuItem(ID2);
+        AboutMenuScene.addMenuItem(ID3);
+        AboutMenuScene.addMenuItem(ID4);
+        AboutMenuScene.addMenuItem(ID5);
+
+        //---ubicacion
+
+        Andy.setPosition(100,GameManager.CAMERA_HEIGHT/4);
+        Rebe.setPosition(350,GameManager.CAMERA_HEIGHT/4);
+        Brian.setPosition(600,GameManager.CAMERA_HEIGHT/4);
+        Diego.setPosition(850,GameManager.CAMERA_HEIGHT/4);
+        Dany.setPosition(1100,GameManager.CAMERA_HEIGHT/4);
+        ID1.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
+        ID2.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
+        ID3.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
+        ID4.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
+        ID5.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
+
+        AboutMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
+                switch (pMenuItem.getID()){
+                    case 1:
+                        attachChild(ID1);
+                    case 2:
+                        attachChild(ID2);
+                    case 3:
+                        attachChild(ID3);
+                    case 4:
+                        attachChild(ID4);
+                    case 5:
+                        attachChild(ID5);
+                    case 6:
+                        detachChild(ID1);
+                    case 7:
+                        detachChild(ID2);
+                    case 8:
+                        detachChild(ID3);
+                    case 9:
+                        detachChild(ID4);
+                    case 10:
+                        detachChild(ID5);
+
+                    case SUBMENU_BACK:
+                        setChildScene(mainMenuScene);
+                        menuOverlaySprite.setVisible(false);
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
-    // ===========================================================
-    //      Realiza lo necesario para regresar al menú principal
-    // ===========================================================
-    public void returnToMainMenu(){
-        setChildScene(mainMenuScene);
-        menuOverlaySprite.setVisible(false);
-        ((ToggleSpriteMenuItem)(mainMenuScene.getMenuItem(MAIN_TOGGLE_AUDIO))).setCurrentTileIndex((sessionManager.musicEnabled && sessionManager.soundEnabled) ? 0 : 1);
-    }
+
+
     // ===========================================================
     //                          Condición Update
     // ===========================================================
@@ -398,7 +593,8 @@ public class MenuScene extends BaseScene {
         }
         else{
             // =============== Habilitar el menú ==================
-            returnToMainMenu();
+            setChildScene(mainMenuScene);
+            menuOverlaySprite.setVisible(false);
 
         }
     }
