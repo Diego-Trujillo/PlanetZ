@@ -1,5 +1,7 @@
 package mx.itesm.planetz;
 
+import android.widget.Switch;
+
 import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.RotationModifier;
@@ -19,6 +21,7 @@ import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.sprite.TiledSprite;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.ClickDetector;
 import org.andengine.input.touch.detector.SurfaceScrollDetector;
 import org.andengine.opengl.font.Font;
@@ -115,13 +118,13 @@ public class MenuScene extends BaseScene {
     private ITextureRegion ID3TextureRegion;
     private ITextureRegion ID4TextureRegion;
     private ITextureRegion ID5TextureRegion;
-    /*
+
     private Sprite ID1;
     private Sprite ID2;
     private Sprite ID3;
     private Sprite ID4;
     private Sprite ID5;
-    */
+
     // ===========================================================
     //                      BACKPACK
     // ===========================================================
@@ -494,32 +497,21 @@ public class MenuScene extends BaseScene {
         // ------------------------
 
         //Andy = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,AndyTextureRegion);
-        final IMenuItem Andy = new ScaleMenuItemDecorator(new SpriteMenuItem(1,AndyTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        final IMenuItem Andy = new ScaleMenuItemDecorator(new SpriteMenuItem(11,AndyTextureRegion,vertexBufferObjectManager),0.8f,1f);
         //Rebe = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,RebeTextureRegion);
-        IMenuItem Rebe = new ScaleMenuItemDecorator(new SpriteMenuItem(2,RebeTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        IMenuItem Rebe = new ScaleMenuItemDecorator(new SpriteMenuItem(22,RebeTextureRegion,vertexBufferObjectManager),0.8f,1f);
         //Brian = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,BrianTextureRegion);
-        IMenuItem Brian = new ScaleMenuItemDecorator(new SpriteMenuItem(3,BrianTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        IMenuItem Brian = new ScaleMenuItemDecorator(new SpriteMenuItem(33,BrianTextureRegion,vertexBufferObjectManager),0.8f,1f);
         //Diego = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,DiegoTextureRegion);
-        IMenuItem Diego = new ScaleMenuItemDecorator(new SpriteMenuItem(4,DiegoTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        IMenuItem Diego = new ScaleMenuItemDecorator(new SpriteMenuItem(44,DiegoTextureRegion,vertexBufferObjectManager),0.8f,1f);
         //Dany = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,DanyTextureRegion);
-        IMenuItem Dany = new ScaleMenuItemDecorator(new SpriteMenuItem(5,DanyTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        IMenuItem Dany = new ScaleMenuItemDecorator(new SpriteMenuItem(55,DanyTextureRegion,vertexBufferObjectManager),0.8f,1f);
 
-        final IMenuItem ID1 = new ScaleMenuItemDecorator(new SpriteMenuItem(6,ID1TextureRegion,vertexBufferObjectManager),0.8f,1f);
-        final IMenuItem ID2 = new ScaleMenuItemDecorator(new SpriteMenuItem(7,ID1TextureRegion,vertexBufferObjectManager),0.8f,1f);
-        final IMenuItem ID3 = new ScaleMenuItemDecorator(new SpriteMenuItem(8,ID1TextureRegion,vertexBufferObjectManager),0.8f,1f);
-        final IMenuItem ID4 = new ScaleMenuItemDecorator(new SpriteMenuItem(9,ID1TextureRegion,vertexBufferObjectManager),0.8f,1f);
-        final IMenuItem ID5 = new ScaleMenuItemDecorator(new SpriteMenuItem(10,ID1TextureRegion,vertexBufferObjectManager),0.8f,1f);
-        AboutMenuScene.addMenuItem(Andy);
-        AboutMenuScene.addMenuItem(Rebe);
-        AboutMenuScene.addMenuItem(Brian);
-        AboutMenuScene.addMenuItem(Diego);
-        AboutMenuScene.addMenuItem(Dany);
-
-        AboutMenuScene.addMenuItem(ID1);
-        AboutMenuScene.addMenuItem(ID2);
-        AboutMenuScene.addMenuItem(ID3);
-        AboutMenuScene.addMenuItem(ID4);
-        AboutMenuScene.addMenuItem(ID5);
+        //final IMenuItem ID1 = new ScaleMenuItemDecorator(new SpriteMenuItem(6,ID1TextureRegion,vertexBufferObjectManager),0.8f,1f);
+        //final IMenuItem ID2 = new ScaleMenuItemDecorator(new SpriteMenuItem(7,ID2TextureRegion,vertexBufferObjectManager),0.8f,1f);
+        //final IMenuItem ID3 = new ScaleMenuItemDecorator(new SpriteMenuItem(8,ID3TextureRegion,vertexBufferObjectManager),0.8f,1f);
+        //final IMenuItem ID4 = new ScaleMenuItemDecorator(new SpriteMenuItem(9,ID4TextureRegion,vertexBufferObjectManager),0.8f,1f);
+        //final IMenuItem ID5 = new ScaleMenuItemDecorator(new SpriteMenuItem(10,ID5TextureRegion,vertexBufferObjectManager),0.8f,1f);
 
         //---ubicacion
 
@@ -528,37 +520,51 @@ public class MenuScene extends BaseScene {
         Brian.setPosition(600,GameManager.CAMERA_HEIGHT/4);
         Diego.setPosition(850,GameManager.CAMERA_HEIGHT/4);
         Dany.setPosition(1100,GameManager.CAMERA_HEIGHT/4);
-        ID1.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
-        ID2.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
-        ID3.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
-        ID4.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
-        ID5.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
+
+
+
+        AboutMenuScene.addMenuItem(Andy);
+        AboutMenuScene.addMenuItem(Rebe);
+        AboutMenuScene.addMenuItem(Brian);
+        AboutMenuScene.addMenuItem(Diego);
+        AboutMenuScene.addMenuItem(Dany);
+
+
+
+        //ID1.setAlpha(0);ID2.setAlpha(0);ID3.setAlpha(0);ID4.setAlpha(0);ID5.setAlpha(0);
+        /*AboutMenuScene.addMenuItem(ID1);
+        AboutMenuScene.addMenuItem(ID2);
+        AboutMenuScene.addMenuItem(ID3);
+        AboutMenuScene.addMenuItem(ID4);
+        AboutMenuScene.addMenuItem(ID5);*/
+        //ID1.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
+        //ID2.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
+        //ID3.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
+        //ID4.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
+        //ID5.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
+
+
+        ID1 = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,logoTextureRegion);
 
         AboutMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
-                switch (pMenuItem.getID()){
-                    case 1:
-                        attachChild(ID1);
-                    case 2:
-                        attachChild(ID2);
-                    case 3:
-                        attachChild(ID3);
-                    case 4:
-                        attachChild(ID4);
-                    case 5:
-                        attachChild(ID5);
-                    case 6:
-                        detachChild(ID1);
-                    case 7:
-                        detachChild(ID2);
-                    case 8:
-                        detachChild(ID3);
-                    case 9:
-                        detachChild(ID4);
-                    case 10:
-                        detachChild(ID5);
+                switch(pMenuItem.getID()) {
+                    case 11:
+                        System.out.println("ANDY");
+                        AboutMenuScene.attachChild(ID1);
+                    case 22:
+                        System.out.println("REBE");
+                    case 33:
+                        System.out.println("BRIAN");
+                    case 44:
+                        System.out.println("DIEGO");
 
+                    case 55:
+                        System.out.println("DANY");
+                }
+
+                switch (pMenuItem.getID()){
                     case SUBMENU_BACK:
                         setChildScene(mainMenuScene);
                         menuOverlaySprite.setVisible(false);
@@ -567,6 +573,8 @@ public class MenuScene extends BaseScene {
                 return true;
             }
         });
+
+
     }
 
 

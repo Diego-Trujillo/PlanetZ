@@ -118,26 +118,18 @@ public class ResourceManager {
 
     // ============== Menu About ==============
     // Dibujos caritas
-    private BitmapTextureAtlas menuSubmenuDraw1TextureAtlas;
+    private BitmapTextureAtlas menuSubmenuDrawTextureAtlas;
     public ITextureRegion menuSubmenuDraw1TextureRegion;
-    private BitmapTextureAtlas menuSubmenuDraw2TextureAtlas;
     public ITextureRegion menuSubmenuDraw2TextureRegion;
-    private BitmapTextureAtlas menuSubmenuDraw3TextureAtlas;
     public ITextureRegion menuSubmenuDraw3TextureRegion;
-    private BitmapTextureAtlas menuSubmenuDraw4TextureAtlas;
     public ITextureRegion menuSubmenuDraw4TextureRegion;
-    private BitmapTextureAtlas menuSubmenuDraw5TextureAtlas;
     public ITextureRegion menuSubmenuDraw5TextureRegion;
     //Credenciales
-    private BitmapTextureAtlas menuSubmenuID1TextureAtlas;
+    private BitmapTextureAtlas menuSubmenuIDTextureAtlas;
     public ITextureRegion menuSubmenuID1TextureRegion;
-    private BitmapTextureAtlas menuSubmenuID2TextureAtlas;
     public ITextureRegion menuSubmenuID2TextureRegion;
-    private BitmapTextureAtlas menuSubmenuID3TextureAtlas;
     public ITextureRegion menuSubmenuID3TextureRegion;
-    private BitmapTextureAtlas menuSubmenuID4TextureAtlas;
     public ITextureRegion menuSubmenuID4TextureRegion;
-    private BitmapTextureAtlas menuSubmenuID5TextureAtlas;
     public ITextureRegion menuSubmenuID5TextureRegion;
 
 
@@ -278,28 +270,11 @@ public class ResourceManager {
         menuSubmenuGema4TextureAtlas = new BitmapTextureAtlas(textureManager, 512,512,TextureOptions.BILINEAR);
     */
         //--Menu about
-        menuSubmenuDraw1TextureAtlas =  new BitmapTextureAtlas(textureManager, 60,60,TextureOptions.BILINEAR);
-        menuBitmapTextureAtlasContainer.add(menuSubmenuDraw1TextureAtlas);
-        menuSubmenuDraw2TextureAtlas =  new BitmapTextureAtlas(textureManager, 60,60,TextureOptions.BILINEAR);
-        menuBitmapTextureAtlasContainer.add(menuSubmenuDraw2TextureAtlas);
-        menuSubmenuDraw3TextureAtlas =  new BitmapTextureAtlas(textureManager, 60,60,TextureOptions.BILINEAR);
-        menuBitmapTextureAtlasContainer.add(menuSubmenuDraw3TextureAtlas);
-        menuSubmenuDraw4TextureAtlas =  new BitmapTextureAtlas(textureManager, 60,60,TextureOptions.BILINEAR);
-        menuBitmapTextureAtlasContainer.add(menuSubmenuDraw4TextureAtlas);
-        menuSubmenuDraw5TextureAtlas =  new BitmapTextureAtlas(textureManager, 60,60,TextureOptions.BILINEAR);
-        menuBitmapTextureAtlasContainer.add(menuSubmenuDraw5TextureAtlas);
+        menuSubmenuDrawTextureAtlas =  new BitmapTextureAtlas(textureManager, 1280,720,TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(menuSubmenuDrawTextureAtlas);
 
-        menuSubmenuID1TextureAtlas = new BitmapTextureAtlas(textureManager, 643,183,TextureOptions.BILINEAR);
-        menuBitmapTextureAtlasContainer.add(menuSubmenuID1TextureAtlas);
-        menuSubmenuID2TextureAtlas = new BitmapTextureAtlas(textureManager, 643,183,TextureOptions.BILINEAR);
-        menuBitmapTextureAtlasContainer.add(menuSubmenuID2TextureAtlas);
-        menuSubmenuID3TextureAtlas = new BitmapTextureAtlas(textureManager, 643,183,TextureOptions.BILINEAR);
-        menuBitmapTextureAtlasContainer.add(menuSubmenuID3TextureAtlas);
-        menuSubmenuID4TextureAtlas = new BitmapTextureAtlas(textureManager, 643,183,TextureOptions.BILINEAR);
-        menuBitmapTextureAtlasContainer.add(menuSubmenuID4TextureAtlas);
-        menuSubmenuID5TextureAtlas = new BitmapTextureAtlas(textureManager, 643,183,TextureOptions.BILINEAR);
-        menuBitmapTextureAtlasContainer.add(menuSubmenuID5TextureAtlas);
-
+        menuSubmenuIDTextureAtlas = new BitmapTextureAtlas(textureManager, 1280,720,TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(menuSubmenuIDTextureAtlas);
 
 
         // ============== Cargando las imágenes ==================
@@ -322,17 +297,17 @@ public class ResourceManager {
         //--About--
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/About/");
-        menuSubmenuDraw1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "Draw1.png", 0, 0);
-        menuSubmenuDraw2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "Draw2.png", 0, 0);
-        menuSubmenuDraw3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "Draw3.png", 0, 0);
-        menuSubmenuDraw4TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "Draw4.png", 0, 0);
-        menuSubmenuDraw5TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "Draw5.png", 0, 0);
+        menuSubmenuDraw1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuSubmenuDrawTextureAtlas, gameManager, "Draw1.png", 0, 0);
+        menuSubmenuDraw2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuSubmenuDrawTextureAtlas, gameManager, "Draw2.png", 0, 0);
+        menuSubmenuDraw3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuSubmenuDrawTextureAtlas, gameManager, "Draw3.png", 0, 0);
+        menuSubmenuDraw4TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuSubmenuDrawTextureAtlas, gameManager, "Draw4.png", 0, 0);
+        menuSubmenuDraw5TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuSubmenuDrawTextureAtlas, gameManager, "Draw5.png", 0, 0);
 
-        menuSubmenuID1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "ID1.png", 0, 0);
-        menuSubmenuID2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "ID2.png", 0, 0);
-        menuSubmenuID3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "ID3.png", 0, 0);
-        menuSubmenuID4TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "ID4.png", 0, 0);
-        menuSubmenuID5TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "ID5.png", 0, 0);
+        menuSubmenuID1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuSubmenuIDTextureAtlas, gameManager, "ID1.png", 0, 0);
+        menuSubmenuID2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuSubmenuIDTextureAtlas, gameManager, "ID2.png", 0, 0);
+        menuSubmenuID3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuSubmenuIDTextureAtlas, gameManager, "ID3.png", 0, 0);
+        menuSubmenuID4TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuSubmenuIDTextureAtlas, gameManager, "ID4.png", 0, 0);
+        menuSubmenuID5TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuSubmenuIDTextureAtlas, gameManager, "ID5.png", 0, 0);
 
 
 
