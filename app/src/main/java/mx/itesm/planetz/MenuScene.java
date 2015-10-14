@@ -247,16 +247,19 @@ public class MenuScene extends BaseScene {
         // =======================================================
         //                  Submenú About
         // =======================================================
+        // =============== Botones con caritas ===================
         AndyTextureRegion = resourceManager.menuSubmenuDraw1TextureRegion;
         RebeTextureRegion = resourceManager.menuSubmenuDraw2TextureRegion;
         BrianTextureRegion = resourceManager.menuSubmenuDraw3TextureRegion;
         DiegoTextureRegion = resourceManager.menuSubmenuDraw4TextureRegion;
         DanyTextureRegion = resourceManager.menuSubmenuDraw5TextureRegion;
-        ID1TextureRegion = resourceManager.menuSubmenuID1TextureRegion;
-        ID2TextureRegion = resourceManager.menuSubmenuID2TextureRegion;
-        ID3TextureRegion = resourceManager.menuSubmenuID3TextureRegion;
-        ID4TextureRegion = resourceManager.menuSubmenuID4TextureRegion;
-        ID5TextureRegion = resourceManager.menuSubmenuID5TextureRegion;
+
+        // =============== Regiones de ID'S ============
+        this.ID1TextureRegion = resourceManager.menuSubmenuID1TextureRegion;
+        this.ID2TextureRegion = resourceManager.menuSubmenuID2TextureRegion;
+        this.ID3TextureRegion = resourceManager.menuSubmenuID3TextureRegion;
+        this.ID4TextureRegion = resourceManager.menuSubmenuID4TextureRegion;
+        this.ID5TextureRegion = resourceManager.menuSubmenuID5TextureRegion;
 
 
     }
@@ -554,7 +557,7 @@ public class MenuScene extends BaseScene {
         //ID5.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
 
 
-        ID1 = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,logoTextureRegion);
+        ID1 = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,ID1TextureRegion);
 
         aboutMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
