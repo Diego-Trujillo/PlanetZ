@@ -14,6 +14,8 @@ import org.andengine.engine.options.MusicOptions;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.entity.text.Text;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
@@ -27,6 +29,7 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.opengl.util.GLState;
+import org.andengine.util.adt.color.Color;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,6 +61,12 @@ public class ResourceManager {
     TextureManager textureManager;      // Administrador de Texturas
     public MusicManager musicManager;   // Administrador de Música
     public SoundManager soundManager;   // Administrador de Sonido
+
+    // ===========================================================
+    //                     Creación de FONTS
+    // ===========================================================
+    public Font fontOne;
+
 
     // ===========================================================
     //                        ESCENA SPLASH
@@ -238,6 +247,10 @@ public class ResourceManager {
     // ===========================================================
     public void loadMenuResourcesGFX() {
 
+        // ============== Cargar Fuentes =============
+        fontOne = FontFactory.createFromAsset(gameManager.getFontManager(),textureManager,1024,1024,gameManager.getAssets(),"gfx/fonts/PetitFour.otf",100,true, Color.WHITE_ABGR_PACKED_INT);
+        fontOne.load();
+
         // ============== Asignar el directorio base =============
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
 
@@ -264,7 +277,6 @@ public class ResourceManager {
         menuBitmapTextureAtlasContainer.add(mainMenuButtonTextureAtlas);
         menuToggleAudioButtonTextureAtlas = new BitmapTextureAtlas(textureManager,128,64,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         menuBitmapTextureAtlasContainer.add(menuToggleAudioButtonTextureAtlas);
-
        //-- Objetos backpack --
         /*
         menuSubmenuMochilaTextureAtlas = new BitmapTextureAtlas(textureManager, 512,512,TextureOptions.BILINEAR);
@@ -273,14 +285,13 @@ public class ResourceManager {
         menuSubmenuGema3TextureAtlas = new BitmapTextureAtlas(textureManager, 512,512,TextureOptions.BILINEAR);
         menuSubmenuGema4TextureAtlas = new BitmapTextureAtlas(textureManager, 512,512,TextureOptions.BILINEAR);
         */
-
         // -- Botones About --
         aboutMenuButtonTextureAtlas =  new BitmapTextureAtlas(textureManager,512 ,256,TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(aboutMenuButtonTextureAtlas);
-
         // -- ID's --
         aboutMenuIDTextureAtlas = new BitmapTextureAtlas(textureManager, 1024,1024,TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(aboutMenuIDTextureAtlas);
+
 
 
         // ============== Cargando las imágenes ==================

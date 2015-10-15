@@ -21,6 +21,7 @@ import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.sprite.TiledSprite;
+import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.ClickDetector;
 import org.andengine.input.touch.detector.SurfaceScrollDetector;
@@ -357,10 +358,12 @@ public class MenuScene extends BaseScene {
                         System.out.println("OPCION PLAY");
                         setChildScene(playMenuScene);
                         menuOverlaySprite.setVisible(true);
+                        break;
                     case MAIN_BACKPACK:
                         System.out.println("OPCION BACKPACK");
                         setChildScene(backpackMenuScene);
                         menuOverlaySprite.setVisible(true);
+                        break;
                     case MAIN_SETTINGS:
                         System.out.println("OPCION SETTINGS");
                         break;
@@ -420,6 +423,8 @@ public class MenuScene extends BaseScene {
         playMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
         playMenuScene.setPosition(0, 0);
 
+
+
         // =============== Creando los botones ===================
        IMenuItem playMenuBackButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,menuSubmenuBackButtonRegion,vertexBufferObjectManager),0.8f,1f);
 
@@ -429,6 +434,10 @@ public class MenuScene extends BaseScene {
         // =============== Configurando las animaciones =========
         playMenuScene.buildAnimations();
         playMenuScene.setBackgroundEnabled(false);
+
+        // =============== Agregando el Texto "PLAY" =============
+        playMenuScene.attachChild(new Text(350, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "PLAY", vertexBufferObjectManager));
+
 
         // =============== Ubicando los botones =================
         playMenuBackButton.setPosition(150,GameManager.CAMERA_HEIGHT - 125 );
@@ -465,7 +474,8 @@ public class MenuScene extends BaseScene {
         backpackMenuScene.buildAnimations();
         backpackMenuScene.setBackgroundEnabled(false);
 
-        //
+        // =============== Agregando el Texto "BACKPACK" =========
+        backpackMenuScene.attachChild(new Text(400, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "BACKPACK", vertexBufferObjectManager));
 
         // =============== Ubicando los botones =================
         playMenuBackButton.setPosition(150,GameManager.CAMERA_HEIGHT - 125 );
@@ -511,13 +521,16 @@ public class MenuScene extends BaseScene {
         aboutMenuScene.buildAnimations();
         aboutMenuScene.setBackgroundEnabled(false);
 
+        // =============== Agregando el Texto "ABOUT" =============
+        aboutMenuScene.attachChild(new Text(350, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "ABOUT", vertexBufferObjectManager));
+
         // =============== Ubicando los botones =================
         aboutMenuBackButton.setPosition(150, GameManager.CAMERA_HEIGHT - 125);
-        buttonAndy.setPosition(192, GameManager.CAMERA_HEIGHT/2 + 75);
-        buttonDanni.setPosition(384, GameManager.CAMERA_HEIGHT/2 + 75);
-        buttonRebe.setPosition( 576, GameManager.CAMERA_HEIGHT/2 + 75);
-        buttonBrian.setPosition(768, GameManager.CAMERA_HEIGHT/2 + 75);
-        buttonDiego.setPosition(960,GameManager.CAMERA_HEIGHT/2  +75 );
+        buttonAndy.setPosition(152, GameManager.CAMERA_HEIGHT/2);
+        buttonDanni.setPosition(393, GameManager.CAMERA_HEIGHT/2 );
+        buttonRebe.setPosition(649, GameManager.CAMERA_HEIGHT/2);
+        buttonBrian.setPosition(905, GameManager.CAMERA_HEIGHT/2);
+        buttonDiego.setPosition(1141,GameManager.CAMERA_HEIGHT/2);
 
 
 
