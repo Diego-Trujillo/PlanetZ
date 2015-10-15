@@ -147,6 +147,12 @@ public class GameManager extends BaseGameActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
     // ===========================================================
     //          Función para salir de la aplicación
     // ===========================================================
