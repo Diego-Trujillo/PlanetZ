@@ -155,11 +155,23 @@ public class MenuScene extends BaseScene {
     private org.andengine.entity.scene.menu.MenuScene settingsMenuScene;
 
     // =============== Opciones de Botones =======================
+    private static final int MUSIC_DECREASE = 1;
+    private static final int MUSIC_INCREASE = 2;
+
+    // =============== Texturas de barras de sonido ==============
     private ITextureRegion settingsMenuAudioLevel_0_TextureRegion;
     private ITextureRegion settingsMenuAudioLevel_25_TextureRegion;
     private ITextureRegion settingsMenuAudioLevel_50_TextureRegion;
     private ITextureRegion settingsMenuAudioLevel_75_TextureRegion;
     private ITextureRegion settingsMenuAudioLevel_100_TextureRegion;
+
+    // =============== Sprites ===================
+    // --------------- Música --------------------
+    Sprite settingsMenuMusicLevel_0_Sprite;
+    Sprite settingsMenuMusicLevel_25_Sprite;
+    Sprite settingsMenuMusicLevel_50_Sprite;
+    Sprite settingsMenuMusicLevel_75_Sprite;
+    Sprite settingsMenuMusicLevel_100_Sprite;
 
     // ===========================================================
     //                      SUBMENÚ ABOUT
@@ -274,7 +286,7 @@ public class MenuScene extends BaseScene {
         settingsMenuAudioLevel_75_TextureRegion = resourceManager.settingsMenuAudioLevel_75_TextureRegion;
         settingsMenuAudioLevel_100_TextureRegion = resourceManager.settingsMenuAudioLevel_100_TextureRegion;
 
-        // =============== Botones con caritas ===================
+
 
 
         // =======================================================
@@ -535,9 +547,14 @@ public class MenuScene extends BaseScene {
 
         // =============== Creando los botones ===================
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,menuSubmenuBackButtonRegion,vertexBufferObjectManager),0.8f,1f);
+        IMenuItem musicDecrease = new ScaleMenuItemDecorator(new ToggleSpriteMenuItem(MUSIC_DECREASE,mainMenuToggleAudioButtonRegion,vertexBufferObjectManager),0.8f,1.0f);
+        IMenuItem musicIncrease = new ScaleMenuItemDecorator(new ToggleSpriteMenuItem(MUSIC_INCREASE,mainMenuToggleAudioButtonRegion,vertexBufferObjectManager),0.8f,1.0f);
+
 
         // =============== Agregando los botones =================
         settingsMenuScene.addMenuItem(backButton);
+        settingsMenuScene.addMenuItem(musicDecrease);
+        settingsMenuScene.addMenuItem(musicIncrease);
 
         // =============== Configurando las animaciones =========
         settingsMenuScene.buildAnimations();
@@ -548,12 +565,41 @@ public class MenuScene extends BaseScene {
 
         // =============== Ubicando los botones =================
         backButton.setPosition(150,GameManager.CAMERA_HEIGHT - 125 );
+        musicDecrease.setPosition(150,GameManager.CAMERA_HEIGHT/2);
+        musicIncrease.setPosition(1280 - 150,GameManager.CAMERA_HEIGHT/2);
 
         // =============== Creando los Sprites de Settings =================
+        settingsMenuMusicLevel_0_Sprite = resourceManager.loadSprite(300,GameManager.CAMERA_HEIGHT/2,settingsMenuAudioLevel_0_TextureRegion);
+        settingsMenuMusicLevel_25_Sprite = resourceManager.loadSprite(460,GameManager.CAMERA_HEIGHT/2,settingsMenuAudioLevel_25_TextureRegion);
+        settingsMenuMusicLevel_50_Sprite = resourceManager.loadSprite(620,GameManager.CAMERA_HEIGHT/2,settingsMenuAudioLevel_50_TextureRegion);
+        settingsMenuMusicLevel_75_Sprite = resourceManager.loadSprite(780,GameManager.CAMERA_HEIGHT/2,settingsMenuAudioLevel_75_TextureRegion);
+        settingsMenuMusicLevel_100_Sprite = resourceManager.loadSprite(940,GameManager.CAMERA_HEIGHT/2,settingsMenuAudioLevel_100_TextureRegion);
+
+
+        settingsMenuScene.attachChild(settingsMenuMusicLevel_0_Sprite);
+        settingsMenuScene.attachChild(settingsMenuMusicLevel_25_Sprite);
+        settingsMenuScene.attachChild(settingsMenuMusicLevel_50_Sprite);
+        settingsMenuScene.attachChild(settingsMenuMusicLevel_75_Sprite);
+        settingsMenuScene.attachChild(settingsMenuMusicLevel_100_Sprite);
+
+
+        // =============== Creando el listener =============================
         settingsMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
                 switch (pMenuItem.getID()){
+                    case MUSIC_DECREASE:
+                        if(sessionManager.musicVolume > 0f){
+                            sessionManager.musicVolume -= 0.25f;
+                        }
+                        System.out.println(sessionManager.musicVolume);
+                        break;
+                    case MUSIC_INCREASE:
+                        if(sessionManager.musicVolume < 1.0f){
+                            sessionManager.musicVolume += 0.25f;
+                        }
+                        System.out.println(sessionManager.musicVolume);
+                        break;
                     case SUBMENU_BACK:
                         returnToMenu();
                         break;
@@ -601,22 +647,6 @@ public class MenuScene extends BaseScene {
         buttonBrian.setPosition(905, GameManager.CAMERA_HEIGHT/2);
         buttonDiego.setPosition(1141,GameManager.CAMERA_HEIGHT/2);
 
-
-
-
-        //ID1.setAlpha(0);ID2.setAlpha(0);ID3.setAlpha(0);ID4.setAlpha(0);ID5.setAlpha(0);
-        /*AboutMenuScene.addMenuItem(ID1);
-        AboutMenuScene.addMenuItem(ID2);
-        AboutMenuScene.addMenuItem(ID3);
-        AboutMenuScene.addMenuItem(ID4);
-        AboutMenuScene.addMenuItem(ID5);*/
-        //ID1.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
-        //ID2.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
-        //ID3.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
-        //ID4.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
-        //ID5.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
-
-        flagIDup = false;
 
         // =============== Crear Sprites y Exlusividad al toque ==
         aboutMenuAndyIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuAndyButtonTextureRegion,vertexBufferObjectManager){
