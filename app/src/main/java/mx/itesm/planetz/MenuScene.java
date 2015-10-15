@@ -247,18 +247,18 @@ public class MenuScene extends BaseScene {
         //                  Submenú About
         // =======================================================
         // =============== Botones con caritas ===================
-        aboutMenuAndyButtonTextureRegion = resourceManager.menuSubmenuDraw1TextureRegion;
-        aboutMenuRebeButtonTextureRegion = resourceManager.menuSubmenuDraw2TextureRegion;
-        aboutMenuBrianButtonTextureRegion = resourceManager.menuSubmenuDraw3TextureRegion;
-        aboutMenuDiegoButtonTextureRegion = resourceManager.menuSubmenuDraw4TextureRegion;
-        aboutMenuDanniButtonTextureRegion = resourceManager.menuSubmenuDraw5TextureRegion;
+        aboutMenuAndyButtonTextureRegion = resourceManager.aboutMenuAndyButtonTextureRegion;
+        aboutMenuRebeButtonTextureRegion = resourceManager.aboutMenuRebeButtonTextureRegion;
+        aboutMenuBrianButtonTextureRegion = resourceManager.aboutMenuBrianButtonTextureRegion;
+        aboutMenuDiegoButtonTextureRegion = resourceManager.aboutMenuDiegoButtonTextureRegion;
+        aboutMenuDanniButtonTextureRegion = resourceManager.aboutMenuDanniButtonTexureRegion;
 
         // =============== Regiones de ID'S ============
-        aboutMenuAndyIDTextureRegion = resourceManager.menuSubmenuID1TextureRegion;
-        aboutMenuRebeIDTextureRegion = resourceManager.menuSubmenuID2TextureRegion;
-        aboutMenuDanniIDTextureRegion = resourceManager.menuSubmenuID3TextureRegion;
-        aboutMenuDiegoIDTextureRegion = resourceManager.menuSubmenuID4TextureRegion;
-        aboutMenuDanniIDTextureRegion = resourceManager.menuSubmenuID5TextureRegion;
+        aboutMenuAndyIDTextureRegion = resourceManager.aboutMenuAndyIDTextureRegion;
+        aboutMenuRebeIDTextureRegion = resourceManager.aboutMenuRebeIDTextureRegion;
+        aboutMenuBrianIDTextureRegion = resourceManager.aboutMenuBrianIDTextureRegion;
+        aboutMenuDiegoIDTextureRegion = resourceManager.aboutMenuDiegoIDTextureRegion;
+        aboutMenuDanniIDTextureRegion = resourceManager.aboutMenuDanniIDTextureRegion;
 
 
     }
@@ -513,11 +513,11 @@ public class MenuScene extends BaseScene {
 
         // =============== Ubicando los botones =================
         aboutMenuBackButton.setPosition(150, GameManager.CAMERA_HEIGHT - 125);
-        buttonAndy.setPosition(200, GameManager.CAMERA_HEIGHT/2);
-        buttonDanni.setPosition(450, 3 * GameManager.CAMERA_HEIGHT/2);
-        buttonRebe.setPosition(700, 3 * GameManager.CAMERA_HEIGHT/2);
-        buttonBrian.setPosition(950, 3 * GameManager.CAMERA_HEIGHT/2);
-        buttonDiego.setPosition(1100,3*GameManager.CAMERA_HEIGHT/2);
+        buttonAndy.setPosition(192, GameManager.CAMERA_HEIGHT/2 + 75);
+        buttonDanni.setPosition(384, GameManager.CAMERA_HEIGHT/2 + 75);
+        buttonRebe.setPosition( 576, GameManager.CAMERA_HEIGHT/2 + 75);
+        buttonBrian.setPosition(768, GameManager.CAMERA_HEIGHT/2 + 75);
+        buttonDiego.setPosition(960,GameManager.CAMERA_HEIGHT/2  +75 );
 
 
 
