@@ -154,7 +154,12 @@ public class MenuScene extends BaseScene {
     // =============== El Contenedor =============================
     private org.andengine.entity.scene.menu.MenuScene settingsMenuScene;
 
-
+    // =============== Opciones de Botones =======================
+    private ITextureRegion settingsMenuAudioLevel_0_TextureRegion;
+    private ITextureRegion settingsMenuAudioLevel_25_TextureRegion;
+    private ITextureRegion settingsMenuAudioLevel_50_TextureRegion;
+    private ITextureRegion settingsMenuAudioLevel_75_TextureRegion;
+    private ITextureRegion settingsMenuAudioLevel_100_TextureRegion;
 
     // ===========================================================
     //                      SUBMENÚ ABOUT
@@ -256,9 +261,26 @@ public class MenuScene extends BaseScene {
         // =======================================================
 
         // =======================================================
+        //                  Submenú Backpack
+        // =======================================================
+
+        // =======================================================
+        //                  Submenú Settings
+        // =======================================================
+        // =============== Regiones de Botones ===================
+        settingsMenuAudioLevel_0_TextureRegion = resourceManager.settingsMenuAudioLevel_0_TextureRegion;
+        settingsMenuAudioLevel_25_TextureRegion = resourceManager.settingsMenuAudioLevel_25_TextureRegion;
+        settingsMenuAudioLevel_50_TextureRegion = resourceManager.settingsMenuAudioLevel_50_TextureRegion;
+        settingsMenuAudioLevel_75_TextureRegion = resourceManager.settingsMenuAudioLevel_75_TextureRegion;
+        settingsMenuAudioLevel_100_TextureRegion = resourceManager.settingsMenuAudioLevel_100_TextureRegion;
+
+        // =============== Botones con caritas ===================
+
+
+        // =======================================================
         //                  Submenú About
         // =======================================================
-        // =============== Botones con caritas ===================
+        // =============== Regiones cde bolitas ==================
         aboutMenuAndyButtonTextureRegion = resourceManager.aboutMenuAndyButtonTextureRegion;
         aboutMenuRebeButtonTextureRegion = resourceManager.aboutMenuRebeButtonTextureRegion;
         aboutMenuBrianButtonTextureRegion = resourceManager.aboutMenuBrianButtonTextureRegion;
@@ -527,6 +549,7 @@ public class MenuScene extends BaseScene {
         // =============== Ubicando los botones =================
         backButton.setPosition(150,GameManager.CAMERA_HEIGHT - 125 );
 
+        // =============== Creando los Sprites de Settings =================
         settingsMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
