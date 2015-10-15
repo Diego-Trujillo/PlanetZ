@@ -157,22 +157,35 @@ public class MenuScene extends BaseScene {
     // =============== Opciones de Botones =======================
     private static final int MUSIC_DECREASE = 1;
     private static final int MUSIC_INCREASE = 2;
+    private static final int SOUND_DECREASE = 3;
+    private static final int SOUND_INCREASE = 4;
 
     // =============== Texturas de barras de sonido ==============
-    private ITextureRegion settingsMenuAudioLevel_0_TextureRegion;
-    private ITextureRegion settingsMenuAudioLevel_25_TextureRegion;
-    private ITextureRegion settingsMenuAudioLevel_50_TextureRegion;
-    private ITextureRegion settingsMenuAudioLevel_75_TextureRegion;
+    private ITextureRegion settingsMenuDecreaseMusicButtonTextureRegion;
+    private ITextureRegion settingsMenuIncreaseMusicButtonTextureRegion;
+    private ITextureRegion settingsMenuDecreaseSoundButtonTextureRegion;
+    private ITextureRegion settingsMenuIncreaseSoundButtonTextureRegion;
+
+
+    // =============== Texturas de botones de sonido =============
+    private ITextureRegion settingsMenuAudioLevel_20_TextureRegion;
+    private ITextureRegion settingsMenuAudioLevel_40_TextureRegion;
+    private ITextureRegion settingsMenuAudioLevel_60_TextureRegion;
+    private ITextureRegion settingsMenuAudioLevel_80_TextureRegion;
     private ITextureRegion settingsMenuAudioLevel_100_TextureRegion;
 
     // =============== Sprites ===================
-    // --------------- Música --------------------
-    Sprite settingsMenuMusicLevel_0_Sprite;
-    Sprite settingsMenuMusicLevel_25_Sprite;
-    Sprite settingsMenuMusicLevel_50_Sprite;
-    Sprite settingsMenuMusicLevel_75_Sprite;
+    // --------------- Contenedores ---------------
+    /*
+    Sprite settingsMenuMusicLevel_20_Sprite;
+    Sprite settingsMenuMusicLevel_40_Sprite;
+    Sprite settingsMenuMusicLevel_60_Sprite;
+    Sprite settingsMenuMusicLevel_80_Sprite;
     Sprite settingsMenuMusicLevel_100_Sprite;
+    */
 
+    ArrayList<Sprite> musicBarsArrayList;
+    ArrayList<Sprite> soundBarsArrayList;
     // ===========================================================
     //                      SUBMENÚ ABOUT
     // ===========================================================
@@ -280,13 +293,17 @@ public class MenuScene extends BaseScene {
         //                  Submenú Settings
         // =======================================================
         // =============== Regiones de Botones ===================
-        settingsMenuAudioLevel_0_TextureRegion = resourceManager.settingsMenuAudioLevel_0_TextureRegion;
-        settingsMenuAudioLevel_25_TextureRegion = resourceManager.settingsMenuAudioLevel_25_TextureRegion;
-        settingsMenuAudioLevel_50_TextureRegion = resourceManager.settingsMenuAudioLevel_50_TextureRegion;
-        settingsMenuAudioLevel_75_TextureRegion = resourceManager.settingsMenuAudioLevel_75_TextureRegion;
+        settingsMenuAudioLevel_20_TextureRegion = resourceManager.settingsMenuAudioLevel_20_TextureRegion;
+        settingsMenuAudioLevel_40_TextureRegion = resourceManager.settingsMenuAudioLevel_40_TextureRegion;
+        settingsMenuAudioLevel_60_TextureRegion = resourceManager.settingsMenuAudioLevel_60_TextureRegion;
+        settingsMenuAudioLevel_80_TextureRegion = resourceManager.settingsMenuAudioLevel_80_TextureRegion;
         settingsMenuAudioLevel_100_TextureRegion = resourceManager.settingsMenuAudioLevel_100_TextureRegion;
 
 
+        settingsMenuDecreaseMusicButtonTextureRegion = resourceManager.settingsMenuDecreaseMusicButtonTextureRegion;
+        settingsMenuIncreaseMusicButtonTextureRegion = resourceManager.settingsMenuIncreaseMusicButtonTextureRegion;
+        settingsMenuDecreaseSoundButtonTextureRegion = resourceManager.settingsMenuDecreaseSoundButtonTextureRegion;
+        settingsMenuIncreaseSoundButtonTextureRegion = resourceManager.settingsMenuIncreaseSoundButtonTextureRegion;
 
 
         // =======================================================
@@ -547,14 +564,18 @@ public class MenuScene extends BaseScene {
 
         // =============== Creando los botones ===================
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,menuSubmenuBackButtonRegion,vertexBufferObjectManager),0.8f,1f);
-        IMenuItem musicDecrease = new ScaleMenuItemDecorator(new ToggleSpriteMenuItem(MUSIC_DECREASE,mainMenuToggleAudioButtonRegion,vertexBufferObjectManager),0.8f,1.0f);
-        IMenuItem musicIncrease = new ScaleMenuItemDecorator(new ToggleSpriteMenuItem(MUSIC_INCREASE,mainMenuToggleAudioButtonRegion,vertexBufferObjectManager),0.8f,1.0f);
+        IMenuItem musicDecrease = new ScaleMenuItemDecorator(new SpriteMenuItem(MUSIC_DECREASE,settingsMenuDecreaseMusicButtonTextureRegion,vertexBufferObjectManager),0.8f,1.0f);
+        IMenuItem musicIncrease = new ScaleMenuItemDecorator(new SpriteMenuItem(MUSIC_INCREASE,settingsMenuIncreaseMusicButtonTextureRegion,vertexBufferObjectManager),0.8f,1.0f);
+        IMenuItem soundDecrease = new ScaleMenuItemDecorator(new SpriteMenuItem(SOUND_DECREASE,settingsMenuDecreaseSoundButtonTextureRegion,vertexBufferObjectManager),0.8f,1.0f);
+        IMenuItem soundIncrease = new ScaleMenuItemDecorator(new SpriteMenuItem(SOUND_INCREASE,settingsMenuIncreaseSoundButtonTextureRegion,vertexBufferObjectManager),0.8f,1.0f);
 
 
         // =============== Agregando los botones =================
         settingsMenuScene.addMenuItem(backButton);
         settingsMenuScene.addMenuItem(musicDecrease);
         settingsMenuScene.addMenuItem(musicIncrease);
+        settingsMenuScene.addMenuItem(soundDecrease);
+        settingsMenuScene.addMenuItem(soundIncrease);
 
         // =============== Configurando las animaciones =========
         settingsMenuScene.buildAnimations();
@@ -565,25 +586,37 @@ public class MenuScene extends BaseScene {
 
         // =============== Ubicando los botones =================
         backButton.setPosition(150,GameManager.CAMERA_HEIGHT - 125 );
-        musicDecrease.setPosition(150,GameManager.CAMERA_HEIGHT/2);
-        musicIncrease.setPosition(1280 - 150,GameManager.CAMERA_HEIGHT/2);
+        musicDecrease.setPosition(300,GameManager.CAMERA_HEIGHT/2 + 25);
+        musicIncrease.setPosition(GameManager.CAMERA_WIDTH - 300,GameManager.CAMERA_HEIGHT/2 + 25);
+        soundDecrease.setPosition(300,GameManager.CAMERA_HEIGHT/2 - 250);
+        soundIncrease.setPosition(GameManager.CAMERA_WIDTH - 300,GameManager.CAMERA_HEIGHT/2 -250);
 
         // =============== Creando los Sprites de Settings =================
-        settingsMenuMusicLevel_0_Sprite = resourceManager.loadSprite(300,GameManager.CAMERA_HEIGHT/2,settingsMenuAudioLevel_0_TextureRegion);
-        settingsMenuMusicLevel_25_Sprite = resourceManager.loadSprite(460,GameManager.CAMERA_HEIGHT/2,settingsMenuAudioLevel_25_TextureRegion);
-        settingsMenuMusicLevel_50_Sprite = resourceManager.loadSprite(620,GameManager.CAMERA_HEIGHT/2,settingsMenuAudioLevel_50_TextureRegion);
-        settingsMenuMusicLevel_75_Sprite = resourceManager.loadSprite(780,GameManager.CAMERA_HEIGHT/2,settingsMenuAudioLevel_75_TextureRegion);
-        settingsMenuMusicLevel_100_Sprite = resourceManager.loadSprite(940,GameManager.CAMERA_HEIGHT/2,settingsMenuAudioLevel_100_TextureRegion);
+        int barXOffset = 96;
+        int barXStart = 458;
+
+        musicBarsArrayList = new ArrayList<Sprite>();
+        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 0*barXOffset,GameManager.CAMERA_HEIGHT/2 + 75,settingsMenuAudioLevel_20_TextureRegion));
+        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 1*barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, settingsMenuAudioLevel_40_TextureRegion));
+        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 2*barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, settingsMenuAudioLevel_60_TextureRegion));
+        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 3*barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, settingsMenuAudioLevel_80_TextureRegion));
+        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 4*barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, settingsMenuAudioLevel_100_TextureRegion));
+
+        for(Sprite bar : musicBarsArrayList){settingsMenuScene.attachChild(bar);}
 
 
-        settingsMenuScene.attachChild(settingsMenuMusicLevel_0_Sprite);
-        settingsMenuScene.attachChild(settingsMenuMusicLevel_25_Sprite);
-        settingsMenuScene.attachChild(settingsMenuMusicLevel_50_Sprite);
-        settingsMenuScene.attachChild(settingsMenuMusicLevel_75_Sprite);
-        settingsMenuScene.attachChild(settingsMenuMusicLevel_100_Sprite);
+        soundBarsArrayList = new ArrayList<Sprite>();
+        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 0*barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, settingsMenuAudioLevel_20_TextureRegion));
+        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 1*barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, settingsMenuAudioLevel_40_TextureRegion));
+        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 2*barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, settingsMenuAudioLevel_60_TextureRegion));
+        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 3*barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, settingsMenuAudioLevel_80_TextureRegion));
+        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 4*barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, settingsMenuAudioLevel_100_TextureRegion));
 
-        setMusicVisibility();
+        for(Sprite bar : soundBarsArrayList){settingsMenuScene.attachChild(bar);}
 
+        sessionManager.musicVolume = sessionManager.soundVolume = 1f;
+        updateAudioVisibility(musicBarsArrayList, true);
+        updateAudioVisibility(soundBarsArrayList, false);
         // =============== Creando el listener =============================
         settingsMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
@@ -591,23 +624,23 @@ public class MenuScene extends BaseScene {
                 switch (pMenuItem.getID()) {
                     case MUSIC_DECREASE:
                         if (sessionManager.musicVolume > 0f) {
-                            sessionManager.musicVolume -= 0.25f;
+                            sessionManager.musicVolume -= 0.20f;
                         }
-                        System.out.println(sessionManager.musicVolume);
                         break;
                     case MUSIC_INCREASE:
                         if (sessionManager.musicVolume < 1.0f) {
-                            sessionManager.musicVolume += 0.25f;
+                            sessionManager.musicVolume += 0.20f;
                         }
-                        System.out.println(sessionManager.musicVolume);
                         break;
                     case SUBMENU_BACK:
                         returnToMenu();
                         break;
                 }
                 resourceManager.musicManager.setMasterVolume(sessionManager.musicVolume);
+                resourceManager.soundManager.setMasterVolume(sessionManager.soundVolume);
                 resourceManager.menuMusic.setVolume(resourceManager.musicManager.getMasterVolume());
-                setMusicVisibility();
+                updateAudioVisibility(musicBarsArrayList, true);
+                updateAudioVisibility(soundBarsArrayList, false);
                 return true;
             }
         });
@@ -616,13 +649,20 @@ public class MenuScene extends BaseScene {
     // ===========================================================
     //      Poner la visibiliad de las barras basado en Volumen
     // ===========================================================
-    public void setMusicVisibility(){
-        settingsMenuMusicLevel_0_Sprite.setVisible(sessionManager.musicVolume >= 0f);
-        settingsMenuMusicLevel_25_Sprite.setVisible(sessionManager.musicVolume >= 0.25f);
-        settingsMenuMusicLevel_50_Sprite.setVisible(sessionManager.musicVolume >= 0.5f);
-        settingsMenuMusicLevel_75_Sprite.setVisible(sessionManager.musicVolume >= 0.75f);
-        settingsMenuMusicLevel_100_Sprite.setVisible(sessionManager.musicVolume >= 1f);
+    public void updateAudioVisibility(ArrayList<Sprite> array, boolean music){
+        if(music){
+            for(int i = 0; i < array.size(); i++){
+                array.get(i).setVisible(sessionManager.musicVolume >= (0.2f)*i);
+            }
+        }
+        else{
+            for(int i = 0; i < array.size(); i++){
+                array.get(i).setVisible(sessionManager.soundVolume >= (0.2f)*i);
+            }
+        }
+
     }
+
     // ===========================================================
     //                Crear el menú About
     // ===========================================================
