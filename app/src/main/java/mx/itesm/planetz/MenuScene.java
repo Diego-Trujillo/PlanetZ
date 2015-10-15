@@ -582,20 +582,21 @@ public class MenuScene extends BaseScene {
         settingsMenuScene.attachChild(settingsMenuMusicLevel_75_Sprite);
         settingsMenuScene.attachChild(settingsMenuMusicLevel_100_Sprite);
 
+        setMusicVisibility();
 
         // =============== Creando el listener =============================
         settingsMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
-                switch (pMenuItem.getID()){
+                switch (pMenuItem.getID()) {
                     case MUSIC_DECREASE:
-                        if(sessionManager.musicVolume > 0f){
+                        if (sessionManager.musicVolume > 0f) {
                             sessionManager.musicVolume -= 0.25f;
                         }
                         System.out.println(sessionManager.musicVolume);
                         break;
                     case MUSIC_INCREASE:
-                        if(sessionManager.musicVolume < 1.0f){
+                        if (sessionManager.musicVolume < 1.0f) {
                             sessionManager.musicVolume += 0.25f;
                         }
                         System.out.println(sessionManager.musicVolume);
@@ -604,9 +605,23 @@ public class MenuScene extends BaseScene {
                         returnToMenu();
                         break;
                 }
+                resourceManager.musicManager.setMasterVolume(sessionManager.musicVolume);
+                resourceManager.menuMusic.setVolume(resourceManager.musicManager.getMasterVolume());
+                setMusicVisibility();
                 return true;
             }
         });
+    }
+
+    // ===========================================================
+    //      Poner la visibiliad de las barras basado en Volumen
+    // ===========================================================
+    public void setMusicVisibility(){
+        settingsMenuMusicLevel_0_Sprite.setVisible(sessionManager.musicVolume >= 0f);
+        settingsMenuMusicLevel_25_Sprite.setVisible(sessionManager.musicVolume >= 0.25f);
+        settingsMenuMusicLevel_50_Sprite.setVisible(sessionManager.musicVolume >= 0.5f);
+        settingsMenuMusicLevel_75_Sprite.setVisible(sessionManager.musicVolume >= 0.75f);
+        settingsMenuMusicLevel_100_Sprite.setVisible(sessionManager.musicVolume >= 1f);
     }
     // ===========================================================
     //                Crear el menú About
@@ -649,7 +664,7 @@ public class MenuScene extends BaseScene {
 
 
         // =============== Crear Sprites y Exlusividad al toque ==
-        aboutMenuAndyIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuAndyButtonTextureRegion,vertexBufferObjectManager){
+        aboutMenuAndyIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuAndyIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
@@ -658,7 +673,7 @@ public class MenuScene extends BaseScene {
             }
         };
 
-        aboutMenuDanniIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuDanniButtonTextureRegion,vertexBufferObjectManager){
+        aboutMenuDanniIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuDanniIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
@@ -667,7 +682,7 @@ public class MenuScene extends BaseScene {
             }
         };
 
-        aboutMenuRebeIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuRebeButtonTextureRegion,vertexBufferObjectManager){
+        aboutMenuRebeIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuRebeIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
@@ -676,7 +691,7 @@ public class MenuScene extends BaseScene {
             }
         };
 
-        aboutMenuBrianIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuBrianButtonTextureRegion,vertexBufferObjectManager){
+        aboutMenuBrianIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuBrianIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
@@ -685,7 +700,7 @@ public class MenuScene extends BaseScene {
             }
         };
 
-        aboutMenuDiegoIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuDiegoButtonTextureRegion,vertexBufferObjectManager){
+        aboutMenuDiegoIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuDiegoIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
@@ -748,7 +763,7 @@ public class MenuScene extends BaseScene {
     }
 
     // ===========================================================
-    //          Deshabilita los botones de el Submenú About
+    //   Deshabilita que el jugador toque otra área de la pantalla
     // ===========================================================
 
     public void setAboutID(Sprite sprite, boolean enable){

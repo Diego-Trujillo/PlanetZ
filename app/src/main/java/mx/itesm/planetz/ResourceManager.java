@@ -299,7 +299,7 @@ public class ResourceManager {
         aboutMenuButtonTextureAtlas =  new BitmapTextureAtlas(textureManager,512 ,256,TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(aboutMenuButtonTextureAtlas);
         // -- ID's --
-        aboutMenuIDTextureAtlas = new BitmapTextureAtlas(textureManager, 1024,1024,TextureOptions.BILINEAR);
+        aboutMenuIDTextureAtlas = new BitmapTextureAtlas(textureManager, 1280,800,TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(aboutMenuIDTextureAtlas);
 
 
@@ -349,12 +349,12 @@ public class ResourceManager {
         aboutMenuDiegoButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutMenuButtonTextureAtlas, gameManager, "aboutButton_Diego.png", 128, 128);
 
         // -- Regiones ID's about --
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/About/");
-        aboutMenuAndyIDTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutMenuIDTextureAtlas, gameManager, "ID1.png", 0, 0);
-        aboutMenuDanniIDTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutMenuIDTextureAtlas, gameManager, "ID2.png", 0, 0);
-        aboutMenuRebeIDTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutMenuIDTextureAtlas, gameManager, "ID3.png", 0, 0);
-        aboutMenuBrianIDTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutMenuIDTextureAtlas, gameManager, "ID4.png", 0, 0);
-        aboutMenuDiegoIDTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutMenuIDTextureAtlas, gameManager, "ID5.png", 0, 0);
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/About/Cards/");
+        aboutMenuAndyIDTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutMenuIDTextureAtlas, gameManager, "Andrea.png", 0, 0);
+        aboutMenuDanniIDTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutMenuIDTextureAtlas, gameManager, "Danni.png", 0, 0);
+        aboutMenuRebeIDTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutMenuIDTextureAtlas, gameManager, "Rebe.png", 0, 0);
+        aboutMenuBrianIDTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutMenuIDTextureAtlas, gameManager, "Brian.png", 0, 0);
+        aboutMenuDiegoIDTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutMenuIDTextureAtlas, gameManager, "Diego.png", 0, 0);
 
 
 
