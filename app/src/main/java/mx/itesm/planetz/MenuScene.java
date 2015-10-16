@@ -221,6 +221,9 @@ public class MenuScene extends BaseScene {
     private Sprite aboutMenuDiegoIDSprite;
     private Sprite aboutMenuDanniIDSprite;
 
+    //Logo tec
+    private Sprite aboutMenuLogoSprite;
+    private ITextureRegion aboutMenuLogoTextureRegion;
     // =============== Bandera de Credencial Seleccionada=
     boolean flagIDup;
 
@@ -309,6 +312,9 @@ public class MenuScene extends BaseScene {
         // =======================================================
         //                  Submenú About
         // =======================================================
+
+        // Logo
+        aboutMenuLogoTextureRegion = resourceManager.aboutMenuLogoTextureRegion;
         // =============== Regiones cde bolitas ==================
         aboutMenuAndyButtonTextureRegion = resourceManager.aboutMenuAndyButtonTextureRegion;
         aboutMenuRebeButtonTextureRegion = resourceManager.aboutMenuRebeButtonTextureRegion;
@@ -702,9 +708,14 @@ public class MenuScene extends BaseScene {
         buttonBrian.setPosition(905, GameManager.CAMERA_HEIGHT/2);
         buttonDiego.setPosition(1141,GameManager.CAMERA_HEIGHT/2);
 
+        // ===============  Logo y otros items===============
+        aboutMenuLogoSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2-200, aboutMenuLogoTextureRegion,vertexBufferObjectManager);
+        aboutMenuScene.attachChild(aboutMenuLogoSprite);
 
-        // =============== Crear Sprites y Exlusividad al toque ==
-        aboutMenuAndyIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuAndyIDTextureRegion,vertexBufferObjectManager){
+            // =============== Crear Sprites y Exlusividad al toque ==
+
+
+        aboutMenuAndyIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, aboutMenuAndyIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
@@ -713,7 +724,7 @@ public class MenuScene extends BaseScene {
             }
         };
 
-        aboutMenuDanniIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuDanniIDTextureRegion,vertexBufferObjectManager){
+        aboutMenuDanniIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, aboutMenuDanniIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
@@ -722,7 +733,7 @@ public class MenuScene extends BaseScene {
             }
         };
 
-        aboutMenuRebeIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuRebeIDTextureRegion,vertexBufferObjectManager){
+        aboutMenuRebeIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, aboutMenuRebeIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
@@ -731,7 +742,7 @@ public class MenuScene extends BaseScene {
             }
         };
 
-        aboutMenuBrianIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuBrianIDTextureRegion,vertexBufferObjectManager){
+        aboutMenuBrianIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, aboutMenuBrianIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
@@ -740,7 +751,7 @@ public class MenuScene extends BaseScene {
             }
         };
 
-        aboutMenuDiegoIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2 + 200,600, aboutMenuDiegoIDTextureRegion,vertexBufferObjectManager){
+        aboutMenuDiegoIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, aboutMenuDiegoIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
