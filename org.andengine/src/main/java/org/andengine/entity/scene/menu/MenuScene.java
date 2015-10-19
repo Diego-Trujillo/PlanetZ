@@ -213,7 +213,10 @@ public class MenuScene extends CameraScene implements IOnAreaTouchListener, IOnS
 		this.mMenuSceneAnimator.resetMenuSceneAnimations(this);
 	}
 
-	// ===========================================================
+
+
+
+    // ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
 

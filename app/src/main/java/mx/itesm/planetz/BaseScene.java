@@ -3,7 +3,10 @@ package mx.itesm.planetz;
 import org.andengine.audio.music.MusicManager;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
+import org.andengine.input.touch.detector.ClickDetector;
+import org.andengine.input.touch.detector.ScrollDetector;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.io.IOException;
@@ -13,7 +16,7 @@ import java.io.IOException;
  *
  * Created by Diego on 03/10/2015.
  */
-public abstract class BaseScene extends Scene {
+public abstract class BaseScene extends Scene implements ScrollDetector.IScrollDetectorListener, IOnSceneTouchListener, ClickDetector.IClickDetectorListener{
 
     // =============================================================================================
     //                          D E C L A R A C I Ó N  D E  V A R I A B L E S

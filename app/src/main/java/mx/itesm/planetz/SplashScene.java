@@ -1,9 +1,13 @@
 package mx.itesm.planetz;
 
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.background.IBackground;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.input.touch.TouchEvent;
+import org.andengine.input.touch.detector.ClickDetector;
+import org.andengine.input.touch.detector.ScrollDetector;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.util.adt.color.Color;
 
@@ -111,5 +115,30 @@ public class SplashScene extends BaseScene{
         this.unregisterTouchArea(this);
         this.detachSelf();
         this.dispose();
+    }
+
+    @Override
+    public void onClick(ClickDetector pClickDetector, int pPointerID, float pSceneX, float pSceneY) {
+
+    }
+
+    @Override
+    public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+        return false;
+    }
+
+    @Override
+    public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
+
+    }
+
+    @Override
+    public void onScroll(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
+
+    }
+
+    @Override
+    public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
+
     }
 }
