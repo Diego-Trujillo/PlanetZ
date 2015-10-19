@@ -30,7 +30,10 @@ public class SurfaceScrollDetector extends ScrollDetector {
 		super(pScrollDetectorListener);
 	}
 
-	// ===========================================================
+
+
+
+    // ===========================================================
 	// Getter & Setter
 	// ===========================================================
 

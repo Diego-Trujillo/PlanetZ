@@ -4,16 +4,11 @@ import android.util.Log;
 
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
-import org.andengine.audio.music.MusicLibrary;
 import org.andengine.audio.music.MusicManager;
-import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundManager;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
-import org.andengine.engine.options.MusicOptions;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.sprite.TiledSprite;
-import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.ITexture;
@@ -21,12 +16,9 @@ import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
-import org.andengine.opengl.texture.atlas.bitmap.source.AssetBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.bitmap.AssetBitmapTexture;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
-import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.opengl.util.GLState;
 import org.andengine.util.adt.color.Color;
@@ -128,19 +120,29 @@ public class ResourceManager {
 
     // ============== SUBMENU PLAY ===============================
     // ============== SUBMENU BACKPACK ===========================
+    private BitmapTextureAtlas backpackMenuButtonTextureAtlas;
+    public ITextureRegion backpackMenuLeftArrowTextureRegion;
+    public ITextureRegion backpackMenuRightArrowTextureRegion;
+
 
     // -------------- Mochila cosas ------------------------------
-    private BitmapTextureAtlas menuSubmenuMochilaTextureAtlas;
-    public ITextureRegion menuSubmenuMochilaTextureRegion;
+    private BitmapTextureAtlas  backpackMenuMochilaTextureAtlas;
+    public ITextureRegion  backpackMenuMochilaTextureRegion;
     // -------------- Gemas --------------------------------------
-    private BitmapTextureAtlas menuSubmenuGema1TextureAtlas;
-    public ITextureRegion menuSubmenuGema1TextureRegion;
-    private BitmapTextureAtlas menuSubmenuGema2TextureAtlas;
-    public ITextureRegion menuSubmenuGema2TextureRegion;
-    private BitmapTextureAtlas menuSubmenuGema3TextureAtlas;
-    public ITextureRegion menuSubmenuGema3TextureRegion;
-    private BitmapTextureAtlas menuSubmenuGema4TextureAtlas;
-    public ITextureRegion menuSubmenuGema4TextureRegion;
+    private BitmapTextureAtlas backpackMenuGemasTextureAtlas;
+    public ITextureRegion backpackMenuGemBlue1TextureRegion;
+    public ITextureRegion backpackMenuGemBlue2TextureRegion;
+    public ITextureRegion backpackMenuGemBlue3TextureRegion;
+    public ITextureRegion backpackMenuGemPink1TextureRegion;
+    public ITextureRegion backpackMenuGemPink2TextureRegion;
+    public ITextureRegion backpackMenuGemPink3TextureRegion;
+    public ITextureRegion backpackMenuGemYellow1TextureRegion;
+    public ITextureRegion backpackMenuGemYellow2TextureRegion;
+    public ITextureRegion backpackMenuGemYellow3TextureRegion;
+    public ITextureRegion backpackMenuGemLocked1TextureRegion;
+    public ITextureRegion backpackMenuGemLocked2TextureRegion;
+    public ITextureRegion backpackMenuGemLocked3TextureRegion;
+
 
     // ============== SUBMENU SETTINGS ===========================
     // -------------- Las barras de audio ------------------------
@@ -297,13 +299,16 @@ public class ResourceManager {
         menuToggleAudioButtonTextureAtlas = new BitmapTextureAtlas(textureManager,128,64,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         menuBitmapTextureAtlasContainer.add(menuToggleAudioButtonTextureAtlas);
        //-- Objetos backpack --
-        /*
-        menuSubmenuMochilaTextureAtlas = new BitmapTextureAtlas(textureManager, 512,512,TextureOptions.BILINEAR);
-        menuSubmenuGema1TextureAtlas = new BitmapTextureAtlas(textureManager, 512,512,TextureOptions.BILINEAR);
-        menuSubmenuGema2TextureAtlas = new BitmapTextureAtlas(textureManager, 512,512,TextureOptions.BILINEAR);
-        menuSubmenuGema3TextureAtlas = new BitmapTextureAtlas(textureManager, 512,512,TextureOptions.BILINEAR);
-        menuSubmenuGema4TextureAtlas = new BitmapTextureAtlas(textureManager, 512,512,TextureOptions.BILINEAR);
-        */
+
+        backpackMenuButtonTextureAtlas = new BitmapTextureAtlas(textureManager, 450,450,TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(backpackMenuButtonTextureAtlas);
+
+        backpackMenuMochilaTextureAtlas =  new BitmapTextureAtlas(textureManager, 450,450,TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(backpackMenuMochilaTextureAtlas);
+
+        backpackMenuGemasTextureAtlas = new BitmapTextureAtlas(textureManager, 7500,7000,TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(backpackMenuGemasTextureAtlas);
+
         // -- Submenú Settings --
         settingsMenuAudioLevelTextureAtlas = new BitmapTextureAtlas(textureManager,320,154,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         menuBitmapTextureAtlasContainer.add(settingsMenuAudioLevelTextureAtlas);
@@ -332,14 +337,6 @@ public class ResourceManager {
         // -- Overlay --
         menuOverlayTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuOverlayTextureAtlas, gameManager, "menuOverlay.png", 0, 0);
 
-        // -- Mochila --
-        /*
-        menuSubmenuMochilaTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "Mochila.png", 0, 0);
-        menuSubmenuGema1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "gemabloqueada.png", 0, 0);
-        menuSubmenuGema2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "gemaamarilla.png", 0, 0);
-        menuSubmenuGema3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "gemaazul.png", 0, 0);
-        menuSubmenuGema4TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "gemarosa.png", 0, 0);
-        */
 
         // -- Botones MenúPrincipal --
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/buttons/"); // Cambiar directorio
@@ -350,9 +347,32 @@ public class ResourceManager {
         menuToggleAudioButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuToggleAudioButtonTextureAtlas, gameManager, "toggleSoundButton.png", 0, 0, 2, 1);
 
         // -- Submenú back --
+
+        //botones
         menuSubmenuBackButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuSubmenuBackButtonTextureAtlas, gameManager, "backArrow.png", 0, 0);
+        backpackMenuLeftArrowTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuButtonTextureAtlas, gameManager, "arrow_left.png", 0, 0);
+        backpackMenuRightArrowTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuButtonTextureAtlas, gameManager, "arrow_right.png", 150, 0);
+        //gemas
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Backpack/");
+        backpackMenuGemBlue1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemBlue.png", 0, 0);
+        //backpackMenuGemBlue2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemBlue2.png", 550, 0);
+        backpackMenuGemBlue3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemBlue3.png", 1100, 0);
+        backpackMenuGemPink1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemPink.png",1650, 0);
+        //backpackMenuGemPink2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemPink2.png", 2200, 0);
+        backpackMenuGemPink3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemPink3.png", 2750, 0);
+        backpackMenuGemYellow1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemYellow.png", 3300, 0);
+        //backpackMenuGemYellow2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemYellow2.png", 3850, 0);
+        backpackMenuGemYellow3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemYellow3.png", 4400, 0);
+        backpackMenuGemLocked1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemLocked.png", 4950, 0);
+        //backpackMenuGemLocked2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemLocked2.png", 5500, 0);
+        backpackMenuGemLocked3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemLocked3.png", 6050, 0);
+
+         //mochila
+        backpackMenuMochilaTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuMochilaTextureAtlas, gameManager, "mochila.png", 0, 0);
+
 
         // -- Submenú settings --
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/buttons/"); // Cambiar directorio
         settingsMenuAudioLevel_20_TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuAudioLevelTextureAtlas,gameManager,"Bar5.png",0,0);
         settingsMenuAudioLevel_40_TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuAudioLevelTextureAtlas,gameManager,"Bar4.png",64,0);
         settingsMenuAudioLevel_60_TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuAudioLevelTextureAtlas,gameManager,"Bar3.png",128,0);

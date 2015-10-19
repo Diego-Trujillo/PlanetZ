@@ -8,6 +8,8 @@ import org.andengine.entity.modifier.FadeOutModifier;
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.background.IBackground;
@@ -26,6 +28,7 @@ import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.ClickDetector;
+import org.andengine.input.touch.detector.ScrollDetector;
 import org.andengine.input.touch.detector.SurfaceScrollDetector;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -43,7 +46,7 @@ import java.util.List;
  *
  * Created by Diego on 04/10/2015.
  */
-public class MenuScene extends BaseScene {
+public class MenuScene extends BaseScene{
 
     // =============================================================================================
     //                     D E C L A R A C I Ó N  D E  V A R I A B L E S
@@ -119,25 +122,38 @@ public class MenuScene extends BaseScene {
     // ===========================================================
     // =============== El Contenedor =============================
     private org.andengine.entity.scene.menu.MenuScene backpackMenuScene;
+    private Scene backpackScene;
+
 
     protected static int FONT_SIZE = 24;
     protected static int PADDING = 50;
     protected static int MENUITEMS = 3;
-    /*
-    private Font mFont;
-    private BitmapTextureAtlas mFontTexture;
 
-    private BitmapTextureAtlas mMenuTextureAtlas;
-    private TextureRegion mMenuLeftTextureRegion;
-    private TextureRegion mMenuRightTextureRegion;
+    private ITextureRegion menuLeftTextureRegion;
+    private ITextureRegion menuRightTextureRegion;
 
     private Sprite menuleft;
     private Sprite menuright;
-    */
+    //gemas
+    private ITextureRegion gemBlue1TextureRegion;
+    //private ITextureRegion gemBlue2TextureRegion;
+    private ITextureRegion gemBlue3TextureRegion;
+    private ITextureRegion gemPink1TextureRegion;
+    //private ITextureRegion gemPink2TextureRegion;
+    private ITextureRegion gemPink3TextureRegion;
+    private ITextureRegion gemYellow1TextureRegion;
+    //private ITextureRegion gemYellow2TextureRegion;
+    private ITextureRegion gemYellow3TextureRegion;
+    private ITextureRegion gemLocked1TextureRegion;
+    //private ITextureRegion gemLocked2TextureRegion;
+    private ITextureRegion gemLocked3TextureRegion;
+    //mochila
+    private ITextureRegion mochilaTextureRegion;
 
     // Scrolling
     private SurfaceScrollDetector mScrollDetector;
     private ClickDetector mClickDetector;
+
 
     private float mMinX = 0;
     private float mMaxX = 0;
@@ -145,7 +161,7 @@ public class MenuScene extends BaseScene {
     private int iItemClicked = -1;
 
     private Rectangle scrollBar;
-    private List<TextureRegion> columns = new ArrayList<TextureRegion>();
+    private List<ITextureRegion> columns = new ArrayList<ITextureRegion>();
 
     // ===========================================================
     //                      SUBMENÚ SETTINGS
@@ -291,6 +307,25 @@ public class MenuScene extends BaseScene {
         // =======================================================
         //                  Submenú Backpack
         // =======================================================
+        menuLeftTextureRegion = resourceManager.backpackMenuLeftArrowTextureRegion;
+        menuRightTextureRegion = resourceManager.backpackMenuRightArrowTextureRegion;
+        //gemas
+        gemBlue1TextureRegion = resourceManager.backpackMenuGemBlue1TextureRegion;
+        //gemBlue2TextureRegion =resourceManager.backpackMenuGemBlue2TextureRegion;
+        gemBlue3TextureRegion = resourceManager.backpackMenuGemBlue3TextureRegion;
+        gemPink1TextureRegion = resourceManager.backpackMenuGemPink1TextureRegion;
+        //gemPink2TextureRegion = resourceManager.backpackMenuGemPink2TextureRegion;
+        gemPink3TextureRegion = resourceManager.backpackMenuGemPink3TextureRegion;
+        gemYellow1TextureRegion = resourceManager.backpackMenuGemYellow1TextureRegion;
+        //gemYellow2TextureRegion = resourceManager.backpackMenuGemYellow2TextureRegion;
+        gemYellow3TextureRegion = resourceManager.backpackMenuGemYellow3TextureRegion;
+        gemLocked1TextureRegion = resourceManager.backpackMenuGemLocked1TextureRegion;
+        //gemLocked2TextureRegion = resourceManager.backpackMenuGemLocked2TextureRegion;
+        gemLocked3TextureRegion = resourceManager.backpackMenuGemLocked3TextureRegion;
+
+        //columns.add(gemBlue2TextureRegion);columns.add(gemPink2TextureRegion);columns.add(gemYellow2TextureRegion);columns.add(gemLocked2TextureRegion);
+        //mochila
+
 
         // =======================================================
         //                  Submenú Settings
@@ -352,6 +387,7 @@ public class MenuScene extends BaseScene {
     // ===========================================================
     @Override
     public void createScene() {
+
         // =============== Adjuntar el fondo móvil ===============
         setBackground(movingParallaxBackground);
 
@@ -369,11 +405,18 @@ public class MenuScene extends BaseScene {
 
         // =============== Reproducir música de fondo ============
         resourceManager.menuMusic.play();
+        backpackScene = (Scene)backpackMenuScene;
+        this.mScrollDetector = new SurfaceScrollDetector(this);
+        this.mClickDetector = new ClickDetector(this);
+
+
 
         addPlayMenu();
         addBackpack();
         addSettings();
         addAbout();
+
+
     }
 
     // ===========================================================
@@ -526,14 +569,22 @@ public class MenuScene extends BaseScene {
     // ===========================================================
     //                Crear el menú Backpack
     // ===========================================================
-    public void addBackpack(){
+    public void addBackpack() {
         // =============== Inicializando la subEscena ============
         backpackMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
+        //backpackScene = (Scene)backpackMenuScene;
         backpackMenuScene.setPosition(0, 0);
 
-        // =============== Creando los botones ===================
-        IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,menuSubmenuBackButtonRegion,vertexBufferObjectManager),0.8f,1f);
-
+        // =============== Creando los botones e imagenes ===================
+        IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK, menuSubmenuBackButtonRegion, vertexBufferObjectManager), 0.8f, 1f);
+        columns.add(gemBlue1TextureRegion);
+        columns.add(gemBlue3TextureRegion);
+        columns.add(gemPink1TextureRegion);
+        columns.add(gemPink3TextureRegion);
+        columns.add(gemYellow1TextureRegion);
+        columns.add(gemYellow3TextureRegion);
+        columns.add(gemLocked1TextureRegion);
+        columns.add(gemLocked3TextureRegion);
         // =============== Agregando los botones =================
         backpackMenuScene.addMenuItem(backButton);
 
@@ -550,7 +601,7 @@ public class MenuScene extends BaseScene {
         backpackMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
-                switch (pMenuItem.getID()){
+                switch (pMenuItem.getID()) {
                     case SUBMENU_BACK:
                         returnToMenu();
                         break;
@@ -558,7 +609,125 @@ public class MenuScene extends BaseScene {
                 return true;
             }
         });
+
+        mScrollDetector = new SurfaceScrollDetector(this);
+        mClickDetector = new ClickDetector(this);
+
+        backpackMenuScene.setOnSceneTouchListener(this);
+        backpackMenuScene.setTouchAreaBindingOnActionDownEnabled(true);
+        //backpackMenuScene.isOnSceneTouchListenerBindingOnActionDownEnabled();
+        final TouchEvent pTouchEvent = new TouchEvent();
+
+        CreateMenuBoxes();
+        onScroll(mScrollDetector,pTouchEvent, 0,0);
     }
+
+    @Override
+    public boolean onSceneTouchEvent(final Scene backpackScene, final TouchEvent pSceneTouchEvent) {
+        this.mClickDetector.onTouchEvent(pSceneTouchEvent);
+        this.mScrollDetector.onTouchEvent(pSceneTouchEvent);
+        return true;
+    }
+
+        public void onScroll(final ScrollDetector pScollDetector, final TouchEvent pTouchEvent, final float pDistanceX, final float pDistanceY) {
+
+            //Disable the menu arrows left and right (15px padding)
+            if(backpackMenuScene.getCamera().getXMin()<=15)
+                menuleft.setVisible(false);
+            else
+                menuleft.setVisible(true);
+
+            if(backpackMenuScene.getCamera().getXMin()>mMaxX-15)
+                menuright.setVisible(false);
+            else
+                menuright.setVisible(true);
+
+            //Return if ends are reached
+            if ( ((mCurrentX - pDistanceX) < mMinX)  ){
+                return;
+            }else if((mCurrentX - pDistanceX) > mMaxX){
+
+                return;
+            }
+
+            //Center camera to the current point
+            backpackMenuScene.getCamera().offsetCenter(-pDistanceX,0 );
+            mCurrentX -= pDistanceX;
+
+
+            //Set the scrollbar with the camera
+            float tempX =backpackMenuScene.getCamera().getCenterX()-GameManager.CAMERA_WIDTH/2;
+            // add the % part to the position
+            tempX+= (tempX/(mMaxX+GameManager.CAMERA_WIDTH))*GameManager.CAMERA_WIDTH;
+            //set the position
+            scrollBar.setPosition(tempX, scrollBar.getY());
+
+            //set the arrows for left and right
+            menuright.setPosition(backpackMenuScene.getCamera().getCenterX()+GameManager.CAMERA_WIDTH/2-menuright.getWidth(),menuright.getY());
+            menuleft.setPosition(backpackMenuScene.getCamera().getCenterX()-GameManager.CAMERA_WIDTH/2,menuleft.getY());
+
+
+
+            //Because Camera can have negativ X values, so set to 0
+            if(backpackMenuScene.getCamera().getXMin()<0){
+                backpackMenuScene.getCamera().offsetCenter(0,0 );
+                mCurrentX=0;
+            }
+    }
+       /*
+    @Override
+    public void onClick(ClickDetector pClickDetector, TouchEvent pTouchEvent) {
+        loadLevel(iItemClicked);
+    };
+    */
+
+    // ===========================================================
+    // Methods
+    // ===========================================================
+
+    private void CreateMenuBoxes() {
+
+        int spriteX = PADDING;
+        int spriteY = PADDING;
+
+        //current item counter
+        int iItem = 1;
+
+        for (int x = 0; x < columns.size(); x++) {
+
+            //On Touch, save the clicked item in case it's a click and not a scroll.
+            final int itemToLoad = iItem;
+
+            Sprite sprite = new Sprite(spriteX,spriteY,columns.get(x),vertexBufferObjectManager){
+
+                public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+                    iItemClicked = itemToLoad;
+                    return false;
+                }
+            };
+            iItem++;
+
+            backpackMenuScene.attachChild(sprite);
+            backpackMenuScene.registerTouchArea(sprite);
+
+            spriteX += 20 + PADDING+sprite.getWidth();
+        }
+
+        mMaxX = spriteX - GameManager.CAMERA_WIDTH;
+
+        //set the size of the scrollbar
+        float scrollbarsize = GameManager.CAMERA_WIDTH/((mMaxX+GameManager.CAMERA_WIDTH)/GameManager.CAMERA_WIDTH);
+        scrollBar = new Rectangle(0,GameManager.CAMERA_HEIGHT-20,scrollbarsize, 20,vertexBufferObjectManager);
+        scrollBar.setColor(1,0,0);
+        backpackMenuScene.attachChild(scrollBar);
+
+        menuleft = new Sprite(0,GameManager.CAMERA_HEIGHT/2-menuLeftTextureRegion.getHeight()/2,menuLeftTextureRegion,vertexBufferObjectManager);
+        menuright = new Sprite(GameManager.CAMERA_WIDTH-menuRightTextureRegion.getWidth(),GameManager.CAMERA_HEIGHT/2-menuRightTextureRegion.getHeight()/2,menuRightTextureRegion,vertexBufferObjectManager);
+        backpackMenuScene.attachChild(menuright);
+        menuleft.setVisible(false);
+        backpackMenuScene.attachChild(menuleft);
+    }
+
 
     // ===========================================================
     //                Crear el menú Settings
@@ -876,4 +1045,23 @@ public class MenuScene extends BaseScene {
         this.dispose();
     }
 
+    @Override
+    public void onClick(ClickDetector pClickDetector, int pPointerID, float pSceneX, float pSceneY) {
+
+    }
+
+    @Override
+    public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
+
+    }
+
+    @Override
+    public void onScroll(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
+
+    }
+
+    @Override
+    public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
+
+    }
 }

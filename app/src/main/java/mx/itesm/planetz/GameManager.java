@@ -70,7 +70,7 @@ public class GameManager extends BaseGameActivity {
         engineOptions.getAudioOptions().setNeedsMusic(true); //Declaramos que el juego usará música
         engineOptions.getAudioOptions().setNeedsSound(true); //Declaramos que el juego usará sfx
         engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON); //Declaramos que no se apague la pantalla
-
+        engineOptions.getTouchOptions().setNeedsMultiTouch(true);
         return engineOptions;
     }
 
