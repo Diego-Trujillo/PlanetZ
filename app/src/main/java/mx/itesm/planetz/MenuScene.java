@@ -406,9 +406,6 @@ public class MenuScene extends BaseScene{
         // =============== Reproducir música de fondo ============
         resourceManager.menuMusic.play();
         backpackScene = (Scene)backpackMenuScene;
-        this.mScrollDetector = new SurfaceScrollDetector(this);
-        this.mClickDetector = new ClickDetector(this);
-
 
 
         addPlayMenu();
@@ -577,14 +574,23 @@ public class MenuScene extends BaseScene{
 
         // =============== Creando los botones e imagenes ===================
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK, menuSubmenuBackButtonRegion, vertexBufferObjectManager), 0.8f, 1f);
-        columns.add(gemBlue1TextureRegion);
-        columns.add(gemBlue3TextureRegion);
-        columns.add(gemPink1TextureRegion);
-        columns.add(gemPink3TextureRegion);
-        columns.add(gemYellow1TextureRegion);
-        columns.add(gemYellow3TextureRegion);
-        columns.add(gemLocked1TextureRegion);
-        columns.add(gemLocked3TextureRegion);
+        IMenuItem leftArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(300, menuLeftTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        IMenuItem rightArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(600, menuRightTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        //gemas
+        IMenuItem gem1 = new ScaleMenuItemDecorator(new SpriteMenuItem(1, gemBlue1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        IMenuItem gem2 = new ScaleMenuItemDecorator(new SpriteMenuItem(2, gemBlue1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        IMenuItem gem3 = new ScaleMenuItemDecorator(new SpriteMenuItem(3, gemBlue3TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        IMenuItem gem4 = new ScaleMenuItemDecorator(new SpriteMenuItem(4, gemPink1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        IMenuItem gem5 = new ScaleMenuItemDecorator(new SpriteMenuItem(5, gemPink1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        IMenuItem gem6 = new ScaleMenuItemDecorator(new SpriteMenuItem(6, gemPink3TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        IMenuItem gem7 = new ScaleMenuItemDecorator(new SpriteMenuItem(7, gemYellow1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        IMenuItem gem8 = new ScaleMenuItemDecorator(new SpriteMenuItem(8, gemYellow1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        IMenuItem gem9 = new ScaleMenuItemDecorator(new SpriteMenuItem(9, gemYellow3TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        IMenuItem gemL1 = new ScaleMenuItemDecorator(new SpriteMenuItem(10, gemLocked1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        IMenuItem gemL2 = new ScaleMenuItemDecorator(new SpriteMenuItem(11, gemLocked1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        IMenuItem gemL3 = new ScaleMenuItemDecorator(new SpriteMenuItem(12, gemLocked3TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+
+
         // =============== Agregando los botones =================
         backpackMenuScene.addMenuItem(backButton);
 
@@ -598,6 +604,7 @@ public class MenuScene extends BaseScene{
         // =============== Ubicando los botones =================
         backButton.setPosition(150, GameManager.CAMERA_HEIGHT - 125);
 
+        final int countPosition= 0;
         backpackMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
@@ -609,87 +616,24 @@ public class MenuScene extends BaseScene{
                 return true;
             }
         });
-
-        mScrollDetector = new SurfaceScrollDetector(this);
-        mClickDetector = new ClickDetector(this);
-
-        backpackMenuScene.setOnSceneTouchListener(this);
-        backpackMenuScene.setTouchAreaBindingOnActionDownEnabled(true);
-        //backpackMenuScene.isOnSceneTouchListenerBindingOnActionDownEnabled();
-        final TouchEvent pTouchEvent = new TouchEvent();
-
-        CreateMenuBoxes();
-        onScroll(mScrollDetector,pTouchEvent, 0,0);
-    }
-
-    @Override
-    public boolean onSceneTouchEvent(final Scene backpackScene, final TouchEvent pSceneTouchEvent) {
-        this.mClickDetector.onTouchEvent(pSceneTouchEvent);
-        this.mScrollDetector.onTouchEvent(pSceneTouchEvent);
-        return true;
-    }
-
-        public void onScroll(final ScrollDetector pScollDetector, final TouchEvent pTouchEvent, final float pDistanceX, final float pDistanceY) {
-
-            //Disable the menu arrows left and right (15px padding)
-            if(backpackMenuScene.getCamera().getXMin()<=15)
-                menuleft.setVisible(false);
-            else
-                menuleft.setVisible(true);
-
-            if(backpackMenuScene.getCamera().getXMin()>mMaxX-15)
-                menuright.setVisible(false);
-            else
-                menuright.setVisible(true);
-
-            //Return if ends are reached
-            if ( ((mCurrentX - pDistanceX) < mMinX)  ){
-                return;
-            }else if((mCurrentX - pDistanceX) > mMaxX){
-
-                return;
+        backpackMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
+                switch (pMenuItem.getID()) {
+                    case 300:
+                        agregarGemas(countPosition+1);
+                    case 600:
+                        agregarGemas(countPosition-1);
+                }
+                return true;
             }
-
-            //Center camera to the current point
-            backpackMenuScene.getCamera().offsetCenter(-pDistanceX,0 );
-            mCurrentX -= pDistanceX;
+        });
 
 
-            //Set the scrollbar with the camera
-            float tempX =backpackMenuScene.getCamera().getCenterX()-GameManager.CAMERA_WIDTH/2;
-            // add the % part to the position
-            tempX+= (tempX/(mMaxX+GameManager.CAMERA_WIDTH))*GameManager.CAMERA_WIDTH;
-            //set the position
-            scrollBar.setPosition(tempX, scrollBar.getY());
+        menuright.setPosition(backpackMenuScene.getCamera().getCenterX() + GameManager.CAMERA_WIDTH / 2 - menuright.getWidth(), menuright.getY());
+        menuleft.setPosition(backpackMenuScene.getCamera().getCenterX() - GameManager.CAMERA_WIDTH / 2, menuleft.getY());
 
-            //set the arrows for left and right
-            menuright.setPosition(backpackMenuScene.getCamera().getCenterX()+GameManager.CAMERA_WIDTH/2-menuright.getWidth(),menuright.getY());
-            menuleft.setPosition(backpackMenuScene.getCamera().getCenterX()-GameManager.CAMERA_WIDTH/2,menuleft.getY());
-
-
-
-            //Because Camera can have negativ X values, so set to 0
-            if(backpackMenuScene.getCamera().getXMin()<0){
-                backpackMenuScene.getCamera().offsetCenter(0,0 );
-                mCurrentX=0;
-            }
-    }
-       /*
-    @Override
-    public void onClick(ClickDetector pClickDetector, TouchEvent pTouchEvent) {
-        loadLevel(iItemClicked);
-    };
-    */
-
-    // ===========================================================
-    // Methods
-    // ===========================================================
-
-    private void CreateMenuBoxes() {
-
-        int spriteX = PADDING;
-        int spriteY = PADDING;
-
+        /*
         //current item counter
         int iItem = 1;
 
@@ -698,37 +642,22 @@ public class MenuScene extends BaseScene{
             //On Touch, save the clicked item in case it's a click and not a scroll.
             final int itemToLoad = iItem;
 
-            Sprite sprite = new Sprite(spriteX,spriteY,columns.get(x),vertexBufferObjectManager){
+            Sprite sprite = new Sprite(spriteX, spriteY, columns.get(x), vertexBufferObjectManager);
 
-                public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-                    iItemClicked = itemToLoad;
-                    return false;
-                }
-            };
             iItem++;
 
-            backpackMenuScene.attachChild(sprite);
-            backpackMenuScene.registerTouchArea(sprite);
-
-            spriteX += 20 + PADDING+sprite.getWidth();
-        }
-
-        mMaxX = spriteX - GameManager.CAMERA_WIDTH;
-
-        //set the size of the scrollbar
-        float scrollbarsize = GameManager.CAMERA_WIDTH/((mMaxX+GameManager.CAMERA_WIDTH)/GameManager.CAMERA_WIDTH);
-        scrollBar = new Rectangle(0,GameManager.CAMERA_HEIGHT-20,scrollbarsize, 20,vertexBufferObjectManager);
-        scrollBar.setColor(1,0,0);
-        backpackMenuScene.attachChild(scrollBar);
-
-        menuleft = new Sprite(0,GameManager.CAMERA_HEIGHT/2-menuLeftTextureRegion.getHeight()/2,menuLeftTextureRegion,vertexBufferObjectManager);
-        menuright = new Sprite(GameManager.CAMERA_WIDTH-menuRightTextureRegion.getWidth(),GameManager.CAMERA_HEIGHT/2-menuRightTextureRegion.getHeight()/2,menuRightTextureRegion,vertexBufferObjectManager);
-        backpackMenuScene.attachChild(menuright);
-        menuleft.setVisible(false);
-        backpackMenuScene.attachChild(menuleft);
+        }*/
     }
 
+    //int levels= 3;
+    public void agregarGemas(int level){
 
+
+        if(level==1){
+
+        }
+
+    }
     // ===========================================================
     //                Crear el menú Settings
     // ===========================================================
@@ -1045,23 +974,4 @@ public class MenuScene extends BaseScene{
         this.dispose();
     }
 
-    @Override
-    public void onClick(ClickDetector pClickDetector, int pPointerID, float pSceneX, float pSceneY) {
-
-    }
-
-    @Override
-    public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
-
-    }
-
-    @Override
-    public void onScroll(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
-
-    }
-
-    @Override
-    public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
-
-    }
 }

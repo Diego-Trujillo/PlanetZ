@@ -16,7 +16,7 @@ import java.io.IOException;
  *
  * Created by Diego on 03/10/2015.
  */
-public abstract class BaseScene extends Scene implements ScrollDetector.IScrollDetectorListener, IOnSceneTouchListener, ClickDetector.IClickDetectorListener{
+public abstract class BaseScene extends Scene{
 
     // =============================================================================================
     //                          D E C L A R A C I Ó N  D E  V A R I A B L E S

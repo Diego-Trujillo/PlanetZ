@@ -117,28 +117,4 @@ public class SplashScene extends BaseScene{
         this.dispose();
     }
 
-    @Override
-    public void onClick(ClickDetector pClickDetector, int pPointerID, float pSceneX, float pSceneY) {
-
-    }
-
-    @Override
-    public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-        return false;
-    }
-
-    @Override
-    public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
-
-    }
-
-    @Override
-    public void onScroll(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
-
-    }
-
-    @Override
-    public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
-
-    }
 }
