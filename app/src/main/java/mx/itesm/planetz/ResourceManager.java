@@ -129,7 +129,10 @@ public class ResourceManager {
     private BitmapTextureAtlas  backpackMenuMochilaTextureAtlas;
     public ITextureRegion  backpackMenuMochilaTextureRegion;
     // -------------- Gemas --------------------------------------
-    private BitmapTextureAtlas backpackMenuGemasTextureAtlas;
+    private BitmapTextureAtlas backpackMenuGems1TextureAtlas;
+    private BitmapTextureAtlas backpackMenuGems2TextureAtlas;
+    private BitmapTextureAtlas backpackMenuGems3TextureAtlas;
+    private BitmapTextureAtlas backpackMenuGems4TextureAtlas;
     public ITextureRegion backpackMenuGemBlue1TextureRegion;
     public ITextureRegion backpackMenuGemBlue2TextureRegion;
     public ITextureRegion backpackMenuGemBlue3TextureRegion;
@@ -306,8 +309,14 @@ public class ResourceManager {
         backpackMenuMochilaTextureAtlas =  new BitmapTextureAtlas(textureManager, 450,450,TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(backpackMenuMochilaTextureAtlas);
 
-        backpackMenuGemasTextureAtlas = new BitmapTextureAtlas(textureManager, 7500,7000,TextureOptions.BILINEAR);
-        menuBitmapTextureAtlasContainer.add(backpackMenuGemasTextureAtlas);
+        backpackMenuGems1TextureAtlas = new BitmapTextureAtlas(textureManager, 1300,500,TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(backpackMenuGems1TextureAtlas);
+        backpackMenuGems2TextureAtlas = new BitmapTextureAtlas(textureManager, 1300,500,TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(backpackMenuGems2TextureAtlas);
+        backpackMenuGems3TextureAtlas = new BitmapTextureAtlas(textureManager, 1300,500,TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(backpackMenuGems3TextureAtlas);
+        backpackMenuGems4TextureAtlas = new BitmapTextureAtlas(textureManager, 1300,500,TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(backpackMenuGems4TextureAtlas);
 
         // -- Submenú Settings --
         settingsMenuAudioLevelTextureAtlas = new BitmapTextureAtlas(textureManager,320,154,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
@@ -354,18 +363,18 @@ public class ResourceManager {
         backpackMenuRightArrowTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuButtonTextureAtlas, gameManager, "arrow_right.png", 150, 0);
         //gemas
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Backpack/");
-        backpackMenuGemBlue1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemBlue.png", 0, 0);
-        //backpackMenuGemBlue2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemBlue2.png", 550, 0);
-        backpackMenuGemBlue3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemBlue3.png", 1100, 0);
-        backpackMenuGemPink1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemPink.png",1650, 0);
-        //backpackMenuGemPink2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemPink2.png", 2200, 0);
-        backpackMenuGemPink3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemPink3.png", 2750, 0);
-        backpackMenuGemYellow1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemYellow.png", 3300, 0);
-        //backpackMenuGemYellow2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemYellow2.png", 3850, 0);
-        backpackMenuGemYellow3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemYellow3.png", 4400, 0);
-        backpackMenuGemLocked1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemLocked.png", 4950, 0);
-        //backpackMenuGemLocked2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemLocked2.png", 5500, 0);
-        backpackMenuGemLocked3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGemasTextureAtlas, gameManager, "GemLocked3.png", 6050, 0);
+        backpackMenuGemBlue1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGems1TextureAtlas, gameManager, "GemBlue1.png", 0, 0);
+        backpackMenuGemBlue2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGems1TextureAtlas, gameManager, "GemBlue2.png", 400, 0);
+        backpackMenuGemBlue3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGems1TextureAtlas, gameManager, "GemBlue3.png", 800, 0);
+        backpackMenuGemPink1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGems2TextureAtlas, gameManager, "GemPink1.png",0, 0);
+        backpackMenuGemPink2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGems2TextureAtlas, gameManager, "GemPink2.png", 400, 0);
+        backpackMenuGemPink3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGems2TextureAtlas, gameManager, "GemPink3.png", 800, 0);
+        backpackMenuGemYellow1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGems3TextureAtlas, gameManager, "GemYellow1.png", 0, 0);
+        backpackMenuGemYellow2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGems3TextureAtlas, gameManager, "GemYellow2.png", 400, 0);
+        backpackMenuGemYellow3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGems3TextureAtlas, gameManager, "GemYellow3.png", 800, 0);
+        backpackMenuGemLocked1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGems4TextureAtlas, gameManager, "GemLocked1.png", 0, 0);
+        backpackMenuGemLocked2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGems4TextureAtlas, gameManager, "GemLocked2.png", 400, 0);
+        backpackMenuGemLocked3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGems4TextureAtlas, gameManager, "GemLocked3.png", 800, 0);
 
          //mochila
         backpackMenuMochilaTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuMochilaTextureAtlas, gameManager, "mochila.png", 0, 0);

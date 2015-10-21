@@ -1,11 +1,16 @@
 package mx.itesm.planetz;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.transition.Fade;
 import android.widget.Switch;
 
+import org.andengine.entity.Entity;
 import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.modifier.FadeOutModifier;
 import org.andengine.entity.modifier.LoopEntityModifier;
+import org.andengine.entity.modifier.MoveModifier;
+import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
@@ -123,11 +128,10 @@ public class MenuScene extends BaseScene{
     // =============== El Contenedor =============================
     private org.andengine.entity.scene.menu.MenuScene backpackMenuScene;
     private Scene backpackScene;
-
-
-    protected static int FONT_SIZE = 24;
-    protected static int PADDING = 50;
-    protected static int MENUITEMS = 3;
+    //texto niveles
+    Text level1Text;
+    Text level2Text;
+    Text level3Text;
 
     private ITextureRegion menuLeftTextureRegion;
     private ITextureRegion menuRightTextureRegion;
@@ -136,32 +140,32 @@ public class MenuScene extends BaseScene{
     private Sprite menuright;
     //gemas
     private ITextureRegion gemBlue1TextureRegion;
-    //private ITextureRegion gemBlue2TextureRegion;
+    private ITextureRegion gemBlue2TextureRegion;
     private ITextureRegion gemBlue3TextureRegion;
     private ITextureRegion gemPink1TextureRegion;
-    //private ITextureRegion gemPink2TextureRegion;
+    private ITextureRegion gemPink2TextureRegion;
     private ITextureRegion gemPink3TextureRegion;
     private ITextureRegion gemYellow1TextureRegion;
-    //private ITextureRegion gemYellow2TextureRegion;
+    private ITextureRegion gemYellow2TextureRegion;
     private ITextureRegion gemYellow3TextureRegion;
     private ITextureRegion gemLocked1TextureRegion;
-    //private ITextureRegion gemLocked2TextureRegion;
+    private ITextureRegion gemLocked2TextureRegion;
     private ITextureRegion gemLocked3TextureRegion;
     //mochila
     private ITextureRegion mochilaTextureRegion;
 
-    // Scrolling
-    private SurfaceScrollDetector mScrollDetector;
-    private ClickDetector mClickDetector;
+    Sprite gem1;Sprite gem2;Sprite gem3;Sprite gem4;Sprite gem5;Sprite gem6;
+    Sprite gem7;Sprite gem8;Sprite gem9;Sprite gemL1;Sprite gemL2;Sprite gemL3;
+    Sprite gemL4;Sprite gemL5;Sprite gemL6;Sprite gemL7;Sprite gemL8;Sprite gemL9;
+
+    //entidades
+    Entity level1;
+    Entity level2;
+    Entity level3;
+    //niveles contador
+    int countPosition;
 
 
-    private float mMinX = 0;
-    private float mMaxX = 0;
-    private float mCurrentX = 0;
-    private int iItemClicked = -1;
-
-    private Rectangle scrollBar;
-    private List<ITextureRegion> columns = new ArrayList<ITextureRegion>();
 
     // ===========================================================
     //                      SUBMENÚ SETTINGS
@@ -311,16 +315,16 @@ public class MenuScene extends BaseScene{
         menuRightTextureRegion = resourceManager.backpackMenuRightArrowTextureRegion;
         //gemas
         gemBlue1TextureRegion = resourceManager.backpackMenuGemBlue1TextureRegion;
-        //gemBlue2TextureRegion =resourceManager.backpackMenuGemBlue2TextureRegion;
+        gemBlue2TextureRegion =resourceManager.backpackMenuGemBlue2TextureRegion;
         gemBlue3TextureRegion = resourceManager.backpackMenuGemBlue3TextureRegion;
         gemPink1TextureRegion = resourceManager.backpackMenuGemPink1TextureRegion;
-        //gemPink2TextureRegion = resourceManager.backpackMenuGemPink2TextureRegion;
+        gemPink2TextureRegion = resourceManager.backpackMenuGemPink2TextureRegion;
         gemPink3TextureRegion = resourceManager.backpackMenuGemPink3TextureRegion;
         gemYellow1TextureRegion = resourceManager.backpackMenuGemYellow1TextureRegion;
-        //gemYellow2TextureRegion = resourceManager.backpackMenuGemYellow2TextureRegion;
+        gemYellow2TextureRegion = resourceManager.backpackMenuGemYellow2TextureRegion;
         gemYellow3TextureRegion = resourceManager.backpackMenuGemYellow3TextureRegion;
         gemLocked1TextureRegion = resourceManager.backpackMenuGemLocked1TextureRegion;
-        //gemLocked2TextureRegion = resourceManager.backpackMenuGemLocked2TextureRegion;
+        gemLocked2TextureRegion = resourceManager.backpackMenuGemLocked2TextureRegion;
         gemLocked3TextureRegion = resourceManager.backpackMenuGemLocked3TextureRegion;
 
         //columns.add(gemBlue2TextureRegion);columns.add(gemPink2TextureRegion);columns.add(gemYellow2TextureRegion);columns.add(gemLocked2TextureRegion);
@@ -574,25 +578,94 @@ public class MenuScene extends BaseScene{
 
         // =============== Creando los botones e imagenes ===================
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK, menuSubmenuBackButtonRegion, vertexBufferObjectManager), 0.8f, 1f);
-        IMenuItem leftArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(300, menuLeftTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        IMenuItem rightArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(600, menuRightTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        //gemas
-        IMenuItem gem1 = new ScaleMenuItemDecorator(new SpriteMenuItem(1, gemBlue1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        IMenuItem gem2 = new ScaleMenuItemDecorator(new SpriteMenuItem(2, gemBlue1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        IMenuItem gem3 = new ScaleMenuItemDecorator(new SpriteMenuItem(3, gemBlue3TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        IMenuItem gem4 = new ScaleMenuItemDecorator(new SpriteMenuItem(4, gemPink1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        IMenuItem gem5 = new ScaleMenuItemDecorator(new SpriteMenuItem(5, gemPink1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        IMenuItem gem6 = new ScaleMenuItemDecorator(new SpriteMenuItem(6, gemPink3TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        IMenuItem gem7 = new ScaleMenuItemDecorator(new SpriteMenuItem(7, gemYellow1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        IMenuItem gem8 = new ScaleMenuItemDecorator(new SpriteMenuItem(8, gemYellow1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        IMenuItem gem9 = new ScaleMenuItemDecorator(new SpriteMenuItem(9, gemYellow3TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        IMenuItem gemL1 = new ScaleMenuItemDecorator(new SpriteMenuItem(10, gemLocked1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        IMenuItem gemL2 = new ScaleMenuItemDecorator(new SpriteMenuItem(11, gemLocked1TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        IMenuItem gemL3 = new ScaleMenuItemDecorator(new SpriteMenuItem(12, gemLocked3TextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        final IMenuItem leftArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(300, menuLeftTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        final IMenuItem rightArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(600, menuRightTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
 
+
+        //gemas
+        gem1 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,gemBlue1TextureRegion, vertexBufferObjectManager);
+        gem2 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,gemBlue2TextureRegion, vertexBufferObjectManager);
+        gem3 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,gemBlue3TextureRegion, vertexBufferObjectManager);
+        gem4 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,gemPink1TextureRegion, vertexBufferObjectManager);
+        gem5 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,gemPink2TextureRegion, vertexBufferObjectManager);
+        gem6 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,gemPink3TextureRegion, vertexBufferObjectManager);
+        gem7 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,gemYellow1TextureRegion, vertexBufferObjectManager);
+        gem8 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,gemYellow2TextureRegion, vertexBufferObjectManager);
+        gem9 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,gemYellow3TextureRegion, vertexBufferObjectManager);
+        gemL1 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,gemLocked1TextureRegion, vertexBufferObjectManager);
+        gemL2 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,gemLocked2TextureRegion, vertexBufferObjectManager);
+        gemL3 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,gemLocked3TextureRegion, vertexBufferObjectManager);
+        gemL4 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,gemLocked1TextureRegion, vertexBufferObjectManager);
+        gemL5 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,gemLocked2TextureRegion, vertexBufferObjectManager);
+        gemL6 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,gemLocked3TextureRegion, vertexBufferObjectManager);
+        gemL7 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,gemLocked1TextureRegion, vertexBufferObjectManager);
+        gemL8 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,gemLocked2TextureRegion, vertexBufferObjectManager);
+        gemL9 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,gemLocked3TextureRegion, vertexBufferObjectManager);
+        level1 = new Entity();
+        level2 = new Entity();
+        level3 = new Entity();
+
+        //T E M P O R A L Esto y el metodo deben ser implementados en la clase del nivel para registrar su bloqueo
+
+        unlonkGem(1,AppContext.getAppContext(),true);
+        unlonkGem(2,AppContext.getAppContext(),false);
+        unlonkGem(3,AppContext.getAppContext(),true);
+        unlonkGem(4,AppContext.getAppContext(),true);
+        unlonkGem(5,AppContext.getAppContext(),false);
+        unlonkGem(6,AppContext.getAppContext(),false);
+        unlonkGem(7,AppContext.getAppContext(),false);
+        unlonkGem(8,AppContext.getAppContext(),false);
+        unlonkGem(9,AppContext.getAppContext(),false);
+
+        //A G R E G A R - agrega las gemas a entidades vacias dependiendo de su bloqueo
+
+        if(loadGems("gem1",AppContext.getAppContext())==true){
+                level1.attachChild(gem1);}
+            if(loadGems("gem1",AppContext.getAppContext())==false){
+                level1.attachChild(gemL1); }
+            if(loadGems("gem2",AppContext.getAppContext())==true){
+                level1.attachChild(gem2);}
+            if(loadGems("gem2",AppContext.getAppContext())==false){
+                level1.attachChild(gemL2);}
+            if(loadGems("gem3",AppContext.getAppContext())==true){
+                level1.attachChild(gem3);}
+            if(loadGems("gem3",AppContext.getAppContext())==false){
+                level1.attachChild(gemL3);}
+            if(loadGems("gem4",AppContext.getAppContext())==true){
+                level2.attachChild(gem4);}
+            if(loadGems("gem4",AppContext.getAppContext())==false){
+                level2.attachChild(gemL4); }
+            if(loadGems("gem5",AppContext.getAppContext())==true){
+                level2.attachChild(gem5);}
+            if(loadGems("gem5",AppContext.getAppContext())==false){
+                level2.attachChild(gemL5);}
+            if(loadGems("gem6",AppContext.getAppContext())==true){
+                level2.attachChild(gem6);}
+            if(loadGems("gem6",AppContext.getAppContext())==false){
+                level2.attachChild(gemL6);}
+            if(loadGems("gem7",AppContext.getAppContext())==true){
+                level3.attachChild(gem7);}
+            if(loadGems("gem7",AppContext.getAppContext())==false){
+                level3.attachChild(gemL7); }
+            if(loadGems("gem8",AppContext.getAppContext())==true){
+                level3.attachChild(gem8);}
+            if(loadGems("gem8",AppContext.getAppContext())==false){
+                level3.attachChild(gemL8);}
+            if(loadGems("gem9",AppContext.getAppContext())==true){
+                level3.attachChild(gem9);}
+            if(loadGems("gem9",AppContext.getAppContext())==false){
+                level3.attachChild(gemL9);}
 
         // =============== Agregando los botones =================
         backpackMenuScene.addMenuItem(backButton);
+        backpackMenuScene.addMenuItem(leftArrow);
+        backpackMenuScene.addMenuItem(rightArrow);
+        backpackMenuScene.attachChild(level1);
+        backpackMenuScene.attachChild(level2);
+        backpackMenuScene.attachChild(level3);
+        level1.setVisible(true);
+        level2.setVisible(false);
+        level3.setVisible(false);
 
         // =============== Configurando las animaciones =========
         backpackMenuScene.buildAnimations();
@@ -600,15 +673,52 @@ public class MenuScene extends BaseScene{
 
         // =============== Agregando el Texto "BACKPACK" =========
         backpackMenuScene.attachChild(new Text(425, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "BACKPACK", vertexBufferObjectManager));
+        backpackMenuScene.attachChild(level1Text= new Text(GameManager.CAMERA_WIDTH/2+400, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "Level 1", vertexBufferObjectManager));
+        backpackMenuScene.attachChild(level2Text = new Text(GameManager.CAMERA_WIDTH / 2 + 400, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "Level 2", vertexBufferObjectManager));
+        backpackMenuScene.attachChild(level3Text = new Text(GameManager.CAMERA_WIDTH / 2 + 400, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "Level 3", vertexBufferObjectManager));
+        level1Text.setVisible(true);
+        level2Text.setVisible(false);
+        level3Text.setVisible(false);
 
         // =============== Ubicando los botones =================
         backButton.setPosition(150, GameManager.CAMERA_HEIGHT - 125);
 
-        final int countPosition= 0;
+
+        countPosition= 1;
+        //quitar y poner las flechas
+        if(countPosition==1)
+            leftArrow.setVisible(false);
+
+
         backpackMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
                 switch (pMenuItem.getID()) {
+
+                    case 600:
+                        countPosition+=1;
+                        if(countPosition==1){
+                            leftArrow.setVisible(false);}
+                        if (countPosition==2){
+                            leftArrow.setVisible(true);
+                            rightArrow.setVisible(true);}
+                        if(countPosition==3){
+                            rightArrow.setVisible(false);}
+                        System.out.println("DERECHA " +countPosition);
+                        attachGems(countPosition,0);
+                        break;
+                    case 300:
+                        countPosition-=1;
+                        if(countPosition==1){
+                            leftArrow.setVisible(false);}
+                        if (countPosition==2){
+                            leftArrow.setVisible(true);
+                            rightArrow.setVisible(true);}
+                        if(countPosition==3){
+                            rightArrow.setVisible(false);}
+                        System.out.println("IZQUIERDA " +countPosition);
+                        attachGems(countPosition,1);
+                        break;
                     case SUBMENU_BACK:
                         returnToMenu();
                         break;
@@ -616,47 +726,60 @@ public class MenuScene extends BaseScene{
                 return true;
             }
         });
-        backpackMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
-                switch (pMenuItem.getID()) {
-                    case 300:
-                        agregarGemas(countPosition+1);
-                    case 600:
-                        agregarGemas(countPosition-1);
-                }
-                return true;
-            }
-        });
-
-
-        menuright.setPosition(backpackMenuScene.getCamera().getCenterX() + GameManager.CAMERA_WIDTH / 2 - menuright.getWidth(), menuright.getY());
-        menuleft.setPosition(backpackMenuScene.getCamera().getCenterX() - GameManager.CAMERA_WIDTH / 2, menuleft.getY());
-
-        /*
-        //current item counter
-        int iItem = 1;
-
-        for (int x = 0; x < columns.size(); x++) {
-
-            //On Touch, save the clicked item in case it's a click and not a scroll.
-            final int itemToLoad = iItem;
-
-            Sprite sprite = new Sprite(spriteX, spriteY, columns.get(x), vertexBufferObjectManager);
-
-            iItem++;
-
-        }*/
+        rightArrow.setPosition(GameManager.CAMERA_WIDTH-50, GameManager.CAMERA_HEIGHT/2 -200);
+        leftArrow.setPosition(100, GameManager.CAMERA_HEIGHT/2 -50);
     }
 
-    //int levels= 3;
-    public void agregarGemas(int level){
 
+    public void attachGems(int level,int lado){
+        if(level==1) {
+            level1Text.registerEntityModifier(new FadeInModifier(1.5f));
+            if(lado==0){
+                level1.registerEntityModifier(new MoveXModifier(1.5f,GameManager.CAMERA_WIDTH,0));}
+            else{
+                level1.registerEntityModifier(new MoveXModifier(1.5f,-GameManager.CAMERA_WIDTH,0));}
+            level1Text.setVisible(true);
+            level2Text.setVisible(false);
+            level1.setVisible(true) ;
+            level2.setVisible(false);}
+        if(level==2){
+            level2Text.registerEntityModifier(new FadeInModifier(1.5f));
+            if(lado==0){
+                level2.registerEntityModifier(new MoveXModifier(1.5f,GameManager.CAMERA_WIDTH,0));}
+            else{
+                level2.registerEntityModifier(new MoveXModifier(1.5f,-GameManager.CAMERA_WIDTH,0));}
+            level1Text.setVisible(false);
+            level2Text.setVisible(true);
+            level3Text.setVisible(false);
+            level1.setVisible(false);
+            level3.setVisible(false);
+            level2.setVisible(true);}
+        if(level==3){
+            level3Text.registerEntityModifier(new FadeInModifier(1.5f));
+            if(lado==0){
+                level3.registerEntityModifier(new MoveXModifier(1.5f,GameManager.CAMERA_WIDTH,0));}
+            else{
+                level3.registerEntityModifier(new MoveXModifier(1.5f,-GameManager.CAMERA_WIDTH,0));}
+            level2Text.setVisible(false);
+            level3Text.setVisible(true);
+            level2.setVisible(false);
+            level3.setVisible(true);
+            }
 
-        if(level==1){
-
-        }
-
+    }
+    //ESTO VA EN LA CLASE DE CADA NIVEL, SE PONE AQUI POR CUESTIONES DE PRUEBA
+    public static void unlonkGem(int i, Context context, boolean unlocked){
+        /*SharedPreferences sharedPreferences = context.getSharedPreferences("UNLOCKED_GEMS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("gem" + i, unlocked);
+        editor.commit(); */
+    }
+    //ESTO ES PARA ACCEDER AL VALOR QUE YA SE REGISTRO EN EL JUEGO
+    public static boolean loadGems(String gem,Context context){
+        /*SharedPreferences sharedPreferences = context.getSharedPreferences("UNLOCKED_GEMS", Context.MODE_PRIVATE);
+        boolean unlock = sharedPreferences.getBoolean(gem,true);
+        return unlock;*/
+        return true;
     }
     // ===========================================================
     //                Crear el menú Settings
