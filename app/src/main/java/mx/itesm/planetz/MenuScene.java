@@ -121,6 +121,7 @@ public class MenuScene extends BaseScene{
     private static final int PLAY_INFINITE_MODE = 2;
 
     // =============== Texturas de Botones ==============
+    private ITextureRegion playMenuAdventureModeTextureRegion;
 
     // ===========================================================
     //                      SUBMENÚ BACKPACK
@@ -194,18 +195,9 @@ public class MenuScene extends BaseScene{
     private ITextureRegion settingsMenuAudioLevel_80_TextureRegion;
     private ITextureRegion settingsMenuAudioLevel_100_TextureRegion;
 
-    // =============== Sprites ===================
-    // --------------- Contenedores ---------------
-    /*
-    Sprite settingsMenuMusicLevel_20_Sprite;
-    Sprite settingsMenuMusicLevel_40_Sprite;
-    Sprite settingsMenuMusicLevel_60_Sprite;
-    Sprite settingsMenuMusicLevel_80_Sprite;
-    Sprite settingsMenuMusicLevel_100_Sprite;
-    */
-
     ArrayList<Sprite> musicBarsArrayList;
     ArrayList<Sprite> soundBarsArrayList;
+
     // ===========================================================
     //                      SUBMENÚ ABOUT
     // ===========================================================
@@ -534,13 +526,16 @@ public class MenuScene extends BaseScene{
         playMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
         playMenuScene.setPosition(0, 0);
 
+        playMenuAdventureModeTextureRegion = resourceManager.loadImage("gfx/planeta_play.png");
 
 
         // =============== Creando los botones ===================
-       IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,menuSubmenuBackButtonRegion,vertexBufferObjectManager),0.8f,1f);
+        IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,menuSubmenuBackButtonRegion,vertexBufferObjectManager),0.8f,1f);
+        IMenuItem adventureMode = new ScaleMenuItemDecorator(new SpriteMenuItem(PLAY_ADVENTURE_MODE, playMenuAdventureModeTextureRegion,vertexBufferObjectManager),1.2f,1f);
 
         // =============== Agregando los botones =================
         playMenuScene.addMenuItem(backButton);
+        playMenuScene.addMenuItem(adventureMode);
 
         // =============== Configurando las animaciones =========
         playMenuScene.buildAnimations();
@@ -552,6 +547,7 @@ public class MenuScene extends BaseScene{
 
         // =============== Ubicando los botones =================
         backButton.setPosition(150,GameManager.CAMERA_HEIGHT - 125 );
+        adventureMode.setPosition(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2);
 
         playMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
@@ -560,6 +556,10 @@ public class MenuScene extends BaseScene{
                     case SUBMENU_BACK:
                         returnToMenu();
                         break;
+                    case PLAY_ADVENTURE_MODE:
+                        sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
+                        sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
+                        sceneManager.destroyScene(SceneType.MENU);
                 }
                 return true;
             }
@@ -779,7 +779,7 @@ public class MenuScene extends BaseScene{
         /*SharedPreferences sharedPreferences = context.getSharedPreferences("UNLOCKED_GEMS", Context.MODE_PRIVATE);
         boolean unlock = sharedPreferences.getBoolean(gem,true);
         return unlock;*/
-        return true;
+        return false;
     }
     // ===========================================================
     //                Crear el menú Settings
@@ -879,12 +879,12 @@ public class MenuScene extends BaseScene{
     public void updateAudioVisibility(ArrayList<Sprite> array, boolean music){
         if(music){
             for(int i = 0; i < array.size(); i++){
-                array.get(i).setVisible(sessionManager.musicVolume >= (0.2f)*i);
+                array.get(i).setVisible(sessionManager.musicVolume > (0.2f)*i);
             }
         }
         else{
             for(int i = 0; i < array.size(); i++){
-                array.get(i).setVisible(sessionManager.soundVolume >= (0.2f)*i);
+                array.get(i).setVisible(sessionManager.soundVolume > (0.2f)*i);
             }
         }
 

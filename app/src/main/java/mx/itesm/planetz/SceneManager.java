@@ -26,6 +26,7 @@ public class SceneManager {
     // ===========================================================
     private BaseScene splashScene;
     private BaseScene menuScene;
+    private BaseScene levelOneScene;
 
     // ===========================================================
     //  Referencia y ID de la escena en la que estamos actualmente
@@ -58,6 +59,9 @@ public class SceneManager {
             case MENU:
                 menuScene = new MenuScene();
                 break;
+            case ADVENTURE_LEVEL_1:
+                levelOneScene = new AdventureLevelOneScene();
+                break;
         }
     }
 
@@ -72,7 +76,10 @@ public class SceneManager {
                 break;
             case MENU:
                 currentScene = menuScene;
-
+                break;
+            case ADVENTURE_LEVEL_1:
+                currentScene = levelOneScene;
+                break;
             default:
                 currentScene = menuScene;
                 break;

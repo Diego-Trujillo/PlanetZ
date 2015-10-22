@@ -328,7 +328,7 @@ public class ResourceManager {
         aboutMenuButtonTextureAtlas =  new BitmapTextureAtlas(textureManager,450 ,450,TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(aboutMenuButtonTextureAtlas);
         // -- ID's --
-        aboutMenuIDTextureAtlas = new BitmapTextureAtlas(textureManager, 3000,3000,TextureOptions.BILINEAR);
+        aboutMenuIDTextureAtlas = new BitmapTextureAtlas(textureManager, 3000,2000,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         menuBitmapTextureAtlasContainer.add(aboutMenuIDTextureAtlas);
         // --Logo tec--
         aboutMenuLogoTextureAtlas = new BitmapTextureAtlas(textureManager, 550,150,TextureOptions.BILINEAR);
@@ -445,6 +445,12 @@ public class ResourceManager {
             atlas.unload();
             atlas = null;
         }
+
+        fontOne.unload();
+
+        menuMusic.stop();
+        menuMusic.release();
+        menuMusic = null;
     }
 
 
