@@ -80,11 +80,25 @@ public class SessionManager {
         musicVolume = sharedPreferences.getFloat("musicVolume",1f);
         soundVolume = sharedPreferences.getFloat("soundVolume", 1f);
 
-        // ============== Gemas Desbloqueadas ===================
-        // -------------- Nivel 1 -------------------------------
-        //gemsUnlocked[1][1] = sharedPreferences.getBoolean("gem_1_1", false);
-        //gemsUnlocked[1][2] = sharedPreferences.getBoolean("gem_1_2",false);
+        // ============== Infite Mode Unlocked ====================
+        infiniteModeUnlocked = sharedPreferences.getBoolean("infiniteModeUnlocked",false);
 
+        // ============== Gemas Desbloqueadas =====================
+        gemsUnlocked = new boolean[3][3];
+        // -------------- Nivel 1 -------------------------------
+        gemsUnlocked[1][1] = sharedPreferences.getBoolean("gem_1_1", false);
+        gemsUnlocked[1][2] = sharedPreferences.getBoolean("gem_1_2",false);
+        gemsUnlocked[1][3] = sharedPreferences.getBoolean("gem_1_3",false);
+
+        // -------------- Nivel 2 -------------------------------
+        gemsUnlocked[2][1] = sharedPreferences.getBoolean("gem_2_1",false);
+        gemsUnlocked[2][2] = sharedPreferences.getBoolean("gem_2_2",false);
+        gemsUnlocked[2][3] = sharedPreferences.getBoolean("gem_2_3",false);
+
+        // -------------- Nivel 3 -------------------------------
+        gemsUnlocked[3][1] = sharedPreferences.getBoolean("gem_3_1",false);
+        gemsUnlocked[3][2] = sharedPreferences.getBoolean("gem_3_2",false);
+        gemsUnlocked[3][3] = sharedPreferences.getBoolean("gem_3_3",false);
 
         // ============== Nivel actual de Adv. Mode ==============
         currentLevel = sharedPreferences.getInt("currentLevel",0);
@@ -103,10 +117,29 @@ public class SessionManager {
         sharedPreferencesEditor.putFloat("musicVolume", musicVolume);
         sharedPreferencesEditor.putFloat("soundVolume", soundVolume);
 
+        // ============== Infite Mode Unlocked ====================
+        sharedPreferencesEditor.putBoolean("infiniteModeUnlocked", infiniteModeUnlocked);
+
         // ============== Gemas Desbloqueadas ====================
 
         // ============== Nivel actual de Adv. Mode ==============
-        sharedPreferencesEditor.putInt("currentLevel",currentLevel);
+        sharedPreferencesEditor.putInt("currentLevel", currentLevel);
+
+        // ============== Gemas Desbloqueadas ===================
+        // -------------- Nivel 1 -------------------------------
+        sharedPreferencesEditor.putBoolean("gem_1_1",gemsUnlocked[1][1]);
+        sharedPreferencesEditor.putBoolean("gem_1_2",gemsUnlocked[1][2]);
+        sharedPreferencesEditor.putBoolean("gem_1_3", gemsUnlocked[1][3]);
+
+        // -------------- Nivel 2 -------------------------------
+        sharedPreferencesEditor.putBoolean("gem_2_1",gemsUnlocked[2][1]);
+        sharedPreferencesEditor.putBoolean("gem_2_2",gemsUnlocked[2][2]);
+        sharedPreferencesEditor.putBoolean("gem_2_3",gemsUnlocked[2][3]);
+
+        // -------------- Nivel 3 -------------------------------
+        sharedPreferencesEditor.putBoolean("gem_3_1",gemsUnlocked[3][1]);
+        sharedPreferencesEditor.putBoolean("gem_3_2",gemsUnlocked[3][2]);
+        sharedPreferencesEditor.putBoolean("gem_3_3",gemsUnlocked[3][3]);
 
         // ============== Escribir los Cambios ===================
         sharedPreferencesEditor.commit();
