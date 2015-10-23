@@ -63,7 +63,15 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
     @Override
     public void onAccelerationChanged(AccelerationData pAccelerationData) {
-        // naveSprite.setX(naveSprite.getX() + pAccelerationData.getX());
-        naveSprite.setY(naveSprite.getY() + pAccelerationData.getY());
+        if(naveSprite.getY() >= 0 && naveSprite.getY() <= GameManager.CAMERA_HEIGHT){
+            naveSprite.setY(naveSprite.getY() + pAccelerationData.getY()*5);
+        }
+        else if(naveSprite.getY() > GameManager.CAMERA_HEIGHT){
+            naveSprite.setY(GameManager.CAMERA_HEIGHT);
+        }
+        else {
+            naveSprite.setY(0);
+        }
+
     }
 }

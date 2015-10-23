@@ -78,7 +78,13 @@ public class SessionManager {
 
         // ============== Volumen de AFX's =======================
         musicVolume = sharedPreferences.getFloat("musicVolume",1f);
-        soundVolume = sharedPreferences.getFloat("soundVolume",1f);
+        soundVolume = sharedPreferences.getFloat("soundVolume", 1f);
+
+        // ============== Gemas Desbloqueadas ===================
+        // -------------- Nivel 1 -------------------------------
+        //gemsUnlocked[1][1] = sharedPreferences.getBoolean("gem_1_1", false);
+        //gemsUnlocked[1][2] = sharedPreferences.getBoolean("gem_1_2",false);
+
 
         // ============== Nivel actual de Adv. Mode ==============
         currentLevel = sharedPreferences.getInt("currentLevel",0);
@@ -90,18 +96,21 @@ public class SessionManager {
     public void writeChanges() {
 
         // ============== Estado de los AFX's ===================
-        sharedPreferencesEditor.putBoolean("musicEnabled",musicEnabled);
+        sharedPreferencesEditor.putBoolean("musicEnabled", musicEnabled);
         sharedPreferencesEditor.putBoolean("soundEnabled", soundEnabled);
 
         // ============== Volumen de AFX's =======================
         sharedPreferencesEditor.putFloat("musicVolume", musicVolume);
         sharedPreferencesEditor.putFloat("soundVolume", soundVolume);
 
+        // ============== Gemas Desbloqueadas ====================
+
         // ============== Nivel actual de Adv. Mode ==============
-        sharedPreferencesEditor.putInt("currentLevel",0);
+        sharedPreferencesEditor.putInt("currentLevel",currentLevel);
 
         // ============== Escribir los Cambios ===================
         sharedPreferencesEditor.commit();
+
 
     }
 
