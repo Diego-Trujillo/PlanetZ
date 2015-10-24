@@ -67,19 +67,13 @@ public class MenuScene extends BaseScene{
     private Sprite backgroundSprite;
 
     // =============== Planeta ===================================
-    private ITextureRegion planetTextureRegion;
     private Sprite planetSprite;
 
     // =============== Logotipo ==================================
-    private ITextureRegion logoTextureRegion;
     private Sprite logoSprite;
 
     // =============== Overlays para los submenús ===============
-    private ITextureRegion menuOverlayTextureRegion;
     private Sprite menuOverlaySprite;
-
-    // =============== Botón Back para Submenús =================
-    private ITextureRegion menuSubmenuBackButtonRegion;
 
     // ===========================================================
     //                   MENÚ PRINCIPAL
@@ -94,13 +88,6 @@ public class MenuScene extends BaseScene{
     private static final int MAIN_SETTINGS = 2;
     private static final int MAIN_ABOUT = 3;
     private static final int MAIN_TOGGLE_AUDIO = 4;
-
-    // =============== Texturas de los Botones ====================
-    private ITiledTextureRegion mainMenuPlayButtonRegion;
-    private ITiledTextureRegion mainMenuBackpackButtonRegion;
-    private ITiledTextureRegion mainMenuSettingsButtonRegion;
-    private ITiledTextureRegion mainMenuAboutButtonRegion;
-    private ITiledTextureRegion mainMenuToggleAudioButtonRegion;
 
 
     // =============== OPCIÓN REGRESAR DE SUBMENUS =================
@@ -120,40 +107,19 @@ public class MenuScene extends BaseScene{
     private static final int PLAY_ADVENTURE_MODE_CONTINUE = 4;
     private static final int PLAY_INFINITE_MODE = 2;
 
-    // =============== Texturas de Botones ==============
-    private ITextureRegion playMenuAdventureModeTextureRegion;
 
     // ===========================================================
     //                      SUBMENÚ BACKPACK
     // ===========================================================
     // =============== El Contenedor =============================
     private org.andengine.entity.scene.menu.MenuScene backpackMenuScene;
-    private Scene backpackScene;
-    //texto niveles
+
+    // =============== Cosas que necesitan sanitizarse ===========
     Text level1Text;
     Text level2Text;
     Text level3Text;
 
-    private ITextureRegion menuLeftTextureRegion;
-    private ITextureRegion menuRightTextureRegion;
 
-    private Sprite menuleft;
-    private Sprite menuright;
-    //gemas
-    private ITextureRegion gemBlue1TextureRegion;
-    private ITextureRegion gemBlue2TextureRegion;
-    private ITextureRegion gemBlue3TextureRegion;
-    private ITextureRegion gemPink1TextureRegion;
-    private ITextureRegion gemPink2TextureRegion;
-    private ITextureRegion gemPink3TextureRegion;
-    private ITextureRegion gemYellow1TextureRegion;
-    private ITextureRegion gemYellow2TextureRegion;
-    private ITextureRegion gemYellow3TextureRegion;
-    private ITextureRegion gemLocked1TextureRegion;
-    private ITextureRegion gemLocked2TextureRegion;
-    private ITextureRegion gemLocked3TextureRegion;
-    //mochila
-    private ITextureRegion mochilaTextureRegion;
 
     Sprite gem1;Sprite gem2;Sprite gem3;Sprite gem4;Sprite gem5;Sprite gem6;
     Sprite gem7;Sprite gem8;Sprite gem9;Sprite gemL1;Sprite gemL2;Sprite gemL3;
@@ -181,20 +147,7 @@ public class MenuScene extends BaseScene{
     private static final int SOUND_DECREASE = 3;
     private static final int SOUND_INCREASE = 4;
 
-    // =============== Texturas de barras de sonido ==============
-    private ITextureRegion settingsMenuDecreaseMusicButtonTextureRegion;
-    private ITextureRegion settingsMenuIncreaseMusicButtonTextureRegion;
-    private ITextureRegion settingsMenuDecreaseSoundButtonTextureRegion;
-    private ITextureRegion settingsMenuIncreaseSoundButtonTextureRegion;
-
-
-    // =============== Texturas de botones de sonido =============
-    private ITextureRegion settingsMenuAudioLevel_20_TextureRegion;
-    private ITextureRegion settingsMenuAudioLevel_40_TextureRegion;
-    private ITextureRegion settingsMenuAudioLevel_60_TextureRegion;
-    private ITextureRegion settingsMenuAudioLevel_80_TextureRegion;
-    private ITextureRegion settingsMenuAudioLevel_100_TextureRegion;
-
+    // =============== Contenedores de las barras de audio ========
     ArrayList<Sprite> musicBarsArrayList;
     ArrayList<Sprite> soundBarsArrayList;
 
@@ -212,20 +165,6 @@ public class MenuScene extends BaseScene{
     private static final int ABOUT_BRIAN = 4;
     private static final int ABOUT_DIEGO = 5;
 
-    // =============== Texturas de Botones ==============
-    private ITextureRegion aboutMenuAndyButtonTextureRegion;
-    private ITextureRegion aboutMenuRebeButtonTextureRegion;
-    private ITextureRegion aboutMenuBrianButtonTextureRegion;
-    private ITextureRegion aboutMenuDiegoButtonTextureRegion;
-    private ITextureRegion aboutMenuDanniButtonTextureRegion;
-
-    // =============== Texturas de ID's==================
-    private ITextureRegion aboutMenuAndyIDTextureRegion;
-    private ITextureRegion aboutMenuRebeIDTextureRegion;
-    private ITextureRegion aboutMenuBrianIDTextureRegion;
-    private ITextureRegion aboutMenuDiegoIDTextureRegion;
-    private ITextureRegion aboutMenuDanniIDTextureRegion;
-
     // =============== Sprites de ID's =================
     private Sprite aboutMenuAndyIDSprite;
     private Sprite aboutMenuRebeIDSprite;
@@ -233,11 +172,6 @@ public class MenuScene extends BaseScene{
     private Sprite aboutMenuDiegoIDSprite;
     private Sprite aboutMenuDanniIDSprite;
 
-    //Logo tec
-    private Sprite aboutMenuLogoSprite;
-    private ITextureRegion aboutMenuLogoTextureRegion;
-    // =============== Bandera de Credencial Seleccionada=
-    boolean flagIDup;
 
     // =============================================================================================
     //                                    C O N S T R U C T O R
@@ -257,109 +191,38 @@ public class MenuScene extends BaseScene{
     // ===========================================================
     @Override
     public void loadGFX() {
-        // =======================================================
-        //              Cargar los elementos del fondo
-        // =======================================================
         // =============== Llamar al administrador de recursos ===
         resourceManager.loadMenuResourcesGFX();
 
         // =============== Fondo de estrellas ====================
+        // -- Crea una entidad de fondo móvil
         movingParallaxBackground = new AutoParallaxBackground(0f,0,0,1);
+        // -- Crea el sprite del fondo
         backgroundSprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.menuBackgroundTextureRegion);
+        // -- Crea una entidad móvil que definirá movimiento del fondo
         movingParallaxEntity = new ParallaxBackground.ParallaxEntity(15f,backgroundSprite);
+        // -- Asigna la entidad móvil para que siga y de movimiento al fondo
         movingParallaxBackground.attachParallaxEntity(movingParallaxEntity);
 
         // =============== Planeta giratorio ====================
-        planetTextureRegion = resourceManager.menuPlanetTextureRegion;
-        planetSprite = resourceManager.loadSprite(0,0,planetTextureRegion);
+        // -- Carga el sprite
+        planetSprite = resourceManager.loadSprite(0,0,resourceManager.menuPlanetTextureRegion);
 
 
         // =============== Logotipo del juego ===================
-        logoTextureRegion = resourceManager.menuLogoBackgroundTextureRegion;
-        logoSprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2+100,logoTextureRegion);
+        // -- Carga el sprite
+        logoSprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2+100,resourceManager.menuLogoBackgroundTextureRegion);
 
         // =============== Overlay para los submenús ============
-        menuOverlayTextureRegion = resourceManager.menuOverlayTextureRegion;
-        menuOverlaySprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,menuOverlayTextureRegion);
+        // -- Carga el sprite
+        menuOverlaySprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.menuOverlayTextureRegion);
 
-        // ============== Botón Back Submenús ========================
-        menuSubmenuBackButtonRegion = resourceManager.menuSubmenuBackButtonTextureRegion;
-
-        // =======================================================
-        //                  Menú principal
-        // =======================================================
-
-        // =============== Botones del menú principal ============
-        mainMenuPlayButtonRegion = resourceManager.mainMenuButtonTextureRegion_play;
-        mainMenuBackpackButtonRegion = resourceManager.mainMenuButtonTextureRegion_backpack;
-        mainMenuSettingsButtonRegion = resourceManager.mainMenuButtonTextureRegion_settings;
-        mainMenuAboutButtonRegion = resourceManager.mainMenuButtonTextureRegion_about;
-        mainMenuToggleAudioButtonRegion = resourceManager.menuToggleAudioButtonTextureRegion;
-
-        // =======================================================
-        //                  Submenú Play
-        // =======================================================
-
-        // =======================================================
-        //                  Submenú Backpack
-        // =======================================================
-        menuLeftTextureRegion = resourceManager.backpackMenuLeftArrowTextureRegion;
-        menuRightTextureRegion = resourceManager.backpackMenuRightArrowTextureRegion;
-        //gemas
-        gemBlue1TextureRegion = resourceManager.backpackMenuGemBlue1TextureRegion;
-        gemBlue2TextureRegion =resourceManager.backpackMenuGemBlue2TextureRegion;
-        gemBlue3TextureRegion = resourceManager.backpackMenuGemBlue3TextureRegion;
-        gemPink1TextureRegion = resourceManager.backpackMenuGemPink1TextureRegion;
-        gemPink2TextureRegion = resourceManager.backpackMenuGemPink2TextureRegion;
-        gemPink3TextureRegion = resourceManager.backpackMenuGemPink3TextureRegion;
-        gemYellow1TextureRegion = resourceManager.backpackMenuGemYellow1TextureRegion;
-        gemYellow2TextureRegion = resourceManager.backpackMenuGemYellow2TextureRegion;
-        gemYellow3TextureRegion = resourceManager.backpackMenuGemYellow3TextureRegion;
-        gemLocked1TextureRegion = resourceManager.backpackMenuGemLocked1TextureRegion;
-        gemLocked2TextureRegion = resourceManager.backpackMenuGemLocked2TextureRegion;
-        gemLocked3TextureRegion = resourceManager.backpackMenuGemLocked3TextureRegion;
-
-        //columns.add(gemBlue2TextureRegion);columns.add(gemPink2TextureRegion);columns.add(gemYellow2TextureRegion);columns.add(gemLocked2TextureRegion);
-        //mochila
-
-
-        // =======================================================
-        //                  Submenú Settings
-        // =======================================================
-        // =============== Regiones de Botones ===================
-        settingsMenuAudioLevel_20_TextureRegion = resourceManager.settingsMenuAudioLevel_20_TextureRegion;
-        settingsMenuAudioLevel_40_TextureRegion = resourceManager.settingsMenuAudioLevel_40_TextureRegion;
-        settingsMenuAudioLevel_60_TextureRegion = resourceManager.settingsMenuAudioLevel_60_TextureRegion;
-        settingsMenuAudioLevel_80_TextureRegion = resourceManager.settingsMenuAudioLevel_80_TextureRegion;
-        settingsMenuAudioLevel_100_TextureRegion = resourceManager.settingsMenuAudioLevel_100_TextureRegion;
-
-
-        settingsMenuDecreaseMusicButtonTextureRegion = resourceManager.settingsMenuDecreaseMusicButtonTextureRegion;
-        settingsMenuIncreaseMusicButtonTextureRegion = resourceManager.settingsMenuIncreaseMusicButtonTextureRegion;
-        settingsMenuDecreaseSoundButtonTextureRegion = resourceManager.settingsMenuDecreaseSoundButtonTextureRegion;
-        settingsMenuIncreaseSoundButtonTextureRegion = resourceManager.settingsMenuIncreaseSoundButtonTextureRegion;
-
-
-        // =======================================================
-        //                  Submenú About
-        // =======================================================
-
-        // Logo
-        aboutMenuLogoTextureRegion = resourceManager.aboutMenuLogoTextureRegion;
-        // =============== Regiones cde bolitas ==================
-        aboutMenuAndyButtonTextureRegion = resourceManager.aboutMenuAndyButtonTextureRegion;
-        aboutMenuRebeButtonTextureRegion = resourceManager.aboutMenuRebeButtonTextureRegion;
-        aboutMenuBrianButtonTextureRegion = resourceManager.aboutMenuBrianButtonTextureRegion;
-        aboutMenuDiegoButtonTextureRegion = resourceManager.aboutMenuDiegoButtonTextureRegion;
-        aboutMenuDanniButtonTextureRegion = resourceManager.aboutMenuDanniButtonTexureRegion;
-
-        // =============== Regiones de ID'S ============
-        aboutMenuAndyIDTextureRegion = resourceManager.aboutMenuAndyIDTextureRegion;
-        aboutMenuRebeIDTextureRegion = resourceManager.aboutMenuRebeIDTextureRegion;
-        aboutMenuBrianIDTextureRegion = resourceManager.aboutMenuBrianIDTextureRegion;
-        aboutMenuDiegoIDTextureRegion = resourceManager.aboutMenuDiegoIDTextureRegion;
-        aboutMenuDanniIDTextureRegion = resourceManager.aboutMenuDanniIDTextureRegion;
-
+        // ============== Llama a la creación de los submenús ===
+        addMainMenu();
+        addPlayMenu();
+        addBackpack();
+        addSettings();
+        addAbout();
 
     }
 
@@ -369,6 +232,7 @@ public class MenuScene extends BaseScene{
 
     @Override
     public void loadMFX() {
+        // -- Llama al administrador de Recursos a cargar la música del nivel
         resourceManager.loadMenuResourcesMFX();
     }
 
@@ -388,28 +252,21 @@ public class MenuScene extends BaseScene{
         setBackground(movingParallaxBackground);
 
         // =============== Adjuntar el planeta y darle rotación ==
+        // -- Adjuntamos el Sprite del planeta
         attachChild(planetSprite);
+        // -- Ajustamos su posición a la parte inferior
         planetSprite.setPosition(gameManager.CAMERA_WIDTH / 2, -gameManager.CAMERA_HEIGHT + 200);
+        // -- Registramos un Modifier perpetuo que haga que el planeta gire
         planetSprite.registerEntityModifier(new LoopEntityModifier(new RotationModifier(250, 0, -360)));
 
         // =============== Adjuntar y esconder el overlay ========
         attachChild(menuOverlaySprite);
 
         // =============== Agregar la sub-escena del menú ========
-        addMainMenu();
         setChildScene(mainMenuScene);
 
         // =============== Reproducir música de fondo ============
         resourceManager.menuMusic.play();
-        backpackScene = (Scene)backpackMenuScene;
-
-
-        addPlayMenu();
-        addBackpack();
-        addSettings();
-        addAbout();
-
-
     }
 
     // ===========================================================
@@ -417,15 +274,24 @@ public class MenuScene extends BaseScene{
     // ===========================================================
     public void addMainMenu(){
         // ===============  Inicializando la subescena ===========
+        // -- Inicializar la instancia de escena
         mainMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
+        // -- Moificar la posición de la escena
         mainMenuScene.setPosition(0,0);
 
         // =============== Creando los botones ===================
-        IMenuItem mainMenuPlayButton = new TiledSpriteMenuItem(MAIN_PLAY,mainMenuPlayButtonRegion,vertexBufferObjectManager);
-        IMenuItem mainMenuBackpackButton = new TiledSpriteMenuItem(MAIN_BACKPACK, mainMenuBackpackButtonRegion, vertexBufferObjectManager);
-        IMenuItem mainMenuSettingsButton = new TiledSpriteMenuItem(MAIN_SETTINGS, mainMenuSettingsButtonRegion, vertexBufferObjectManager);
-        IMenuItem mainMenuAboutButton = new TiledSpriteMenuItem(MAIN_ABOUT,mainMenuAboutButtonRegion,vertexBufferObjectManager);
-        IMenuItem mainMenuToggleAudioButton = new ToggleSpriteMenuItem(MAIN_TOGGLE_AUDIO,mainMenuToggleAudioButtonRegion,vertexBufferObjectManager);
+        // -- Botón Play
+        IMenuItem mainMenuPlayButton = new TiledSpriteMenuItem(MAIN_PLAY,resourceManager.mainMenuButtonTextureRegion_play,vertexBufferObjectManager);
+        // -- Botón Backpack
+        IMenuItem mainMenuBackpackButton = new TiledSpriteMenuItem(MAIN_BACKPACK, resourceManager.mainMenuButtonTextureRegion_backpack, vertexBufferObjectManager);
+        // -- Botón Settings
+        IMenuItem mainMenuSettingsButton = new TiledSpriteMenuItem(MAIN_SETTINGS, resourceManager.mainMenuButtonTextureRegion_settings, vertexBufferObjectManager);
+        // -- Botón About
+        IMenuItem mainMenuAboutButton = new TiledSpriteMenuItem(MAIN_ABOUT,resourceManager.mainMenuButtonTextureRegion_about,vertexBufferObjectManager);
+
+        // -- Botón para habilitar/deshabilitar el audio
+        IMenuItem mainMenuToggleAudioButton = new ToggleSpriteMenuItem(MAIN_TOGGLE_AUDIO,resourceManager.menuToggleAudioButtonTextureRegion,vertexBufferObjectManager);
+        // -- Cambiamos la imagen de el botoón de hab/deshab audio según la configuración guardada en Session Manager
         ((ToggleSpriteMenuItem) mainMenuToggleAudioButton).setCurrentTileIndex((sessionManager.musicEnabled && sessionManager.soundEnabled) ? 0 : 1);
 
         // =============== Agregando los botones =================
@@ -436,11 +302,14 @@ public class MenuScene extends BaseScene{
         mainMenuScene.addMenuItem(mainMenuToggleAudioButton);
 
         // =============== Configurando las animaciones =========
+        // -- Construimos las animaciones del menú
         mainMenuScene.buildAnimations();
+        // -- Ocultamos el overlay de los Submenús
         menuOverlaySprite.setVisible(false);
+        // -- No registramos fondo
         mainMenuScene.setBackgroundEnabled(false);
 
-        // =============== Ubicando los botones =================
+        // =============== Adjuntamos el logotipo del juego =====
         mainMenuScene.attachChild(logoSprite);
 
         // =============== Ubicando los botones =================
@@ -526,12 +395,10 @@ public class MenuScene extends BaseScene{
         playMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
         playMenuScene.setPosition(0, 0);
 
-        playMenuAdventureModeTextureRegion = resourceManager.loadImage("gfx/planeta_play.png");
-
 
         // =============== Creando los botones ===================
-        IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,menuSubmenuBackButtonRegion,vertexBufferObjectManager),0.8f,1f);
-        IMenuItem adventureMode = new ScaleMenuItemDecorator(new SpriteMenuItem(PLAY_ADVENTURE_MODE, playMenuAdventureModeTextureRegion,vertexBufferObjectManager),1.2f,1f);
+        IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,resourceManager.menuSubmenuBackButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        IMenuItem adventureMode = new ScaleMenuItemDecorator(new SpriteMenuItem(PLAY_ADVENTURE_MODE,resourceManager.loadImage("gfx/planeta_play.png") ,vertexBufferObjectManager),1.2f,1f); /*******/
 
         // =============== Agregando los botones =================
         playMenuScene.addMenuItem(backButton);
@@ -554,11 +421,15 @@ public class MenuScene extends BaseScene{
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
                 switch (pMenuItem.getID()){
                     case SUBMENU_BACK:
+                        // -- Regresamos al menú principal
                         returnToMenu();
                         break;
                     case PLAY_ADVENTURE_MODE:
+                        // -- Creamos la escena del primer nivel
                         sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
+                        // -- Corremos la escena del primer nivel
                         sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
+                        // -- Liberamos la escena actual
                         sceneManager.destroyScene(SceneType.MENU);
                 }
                 return true;
@@ -577,37 +448,39 @@ public class MenuScene extends BaseScene{
         backpackMenuScene.setPosition(0, 0);
 
         // =============== Creando los botones e imagenes ===================
-        IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK, menuSubmenuBackButtonRegion, vertexBufferObjectManager), 0.8f, 1f);
-        final IMenuItem leftArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(300, menuLeftTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        final IMenuItem rightArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(600, menuRightTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK, resourceManager.menuSubmenuBackButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        final IMenuItem leftArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(300, resourceManager.backpackMenuLeftArrowTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        final IMenuItem rightArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(600, resourceManager.backpackMenuRightArrowTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
 
 
         //gemas
-        gem1 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,gemBlue1TextureRegion, vertexBufferObjectManager);
-        gem2 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,gemBlue2TextureRegion, vertexBufferObjectManager);
-        gem3 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,gemBlue3TextureRegion, vertexBufferObjectManager);
-        gem4 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,gemPink1TextureRegion, vertexBufferObjectManager);
-        gem5 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,gemPink2TextureRegion, vertexBufferObjectManager);
-        gem6 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,gemPink3TextureRegion, vertexBufferObjectManager);
-        gem7 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,gemYellow1TextureRegion, vertexBufferObjectManager);
-        gem8 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,gemYellow2TextureRegion, vertexBufferObjectManager);
-        gem9 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,gemYellow3TextureRegion, vertexBufferObjectManager);
-        gemL1 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,gemLocked1TextureRegion, vertexBufferObjectManager);
-        gemL2 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,gemLocked2TextureRegion, vertexBufferObjectManager);
-        gemL3 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,gemLocked3TextureRegion, vertexBufferObjectManager);
-        gemL4 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,gemLocked1TextureRegion, vertexBufferObjectManager);
-        gemL5 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,gemLocked2TextureRegion, vertexBufferObjectManager);
-        gemL6 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,gemLocked3TextureRegion, vertexBufferObjectManager);
-        gemL7 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,gemLocked1TextureRegion, vertexBufferObjectManager);
-        gemL8 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,gemLocked2TextureRegion, vertexBufferObjectManager);
-        gemL9 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,gemLocked3TextureRegion, vertexBufferObjectManager);
+        gem1 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemBlue1TextureRegion, vertexBufferObjectManager);
+        gem2 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemBlue2TextureRegion, vertexBufferObjectManager);
+        gem3 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemBlue3TextureRegion, vertexBufferObjectManager);
+        gem4 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemPink1TextureRegion, vertexBufferObjectManager);
+        gem5 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemPink2TextureRegion, vertexBufferObjectManager);
+        gem6 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemPink3TextureRegion, vertexBufferObjectManager);
+        gem7 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemYellow1TextureRegion, vertexBufferObjectManager);
+        gem8 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemYellow2TextureRegion, vertexBufferObjectManager);
+        gem9 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemYellow3TextureRegion, vertexBufferObjectManager);
+
+        gemL1 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
+        gemL2 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked2TextureRegion, vertexBufferObjectManager);
+        gemL3 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
+        gemL4 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
+        gemL5 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked2TextureRegion, vertexBufferObjectManager);
+        gemL6 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
+        gemL7 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
+        gemL8 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked2TextureRegion, vertexBufferObjectManager);
+        gemL9 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
         level1 = new Entity();
         level2 = new Entity();
         level3 = new Entity();
 
         //T E M P O R A L Esto y el metodo deben ser implementados en la clase del nivel para registrar su bloqueo
 
-        unlonkGem(1,AppContext.getAppContext(),true);
+
+        unlonkGem(1, AppContext.getAppContext(),true);
         unlonkGem(2,AppContext.getAppContext(),false);
         unlonkGem(3,AppContext.getAppContext(),true);
         unlonkGem(4,AppContext.getAppContext(),true);
@@ -790,11 +663,11 @@ public class MenuScene extends BaseScene{
         settingsMenuScene.setPosition(0, 0);
 
         // =============== Creando los botones ===================
-        IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK, menuSubmenuBackButtonRegion, vertexBufferObjectManager), 0.8f, 1f);
-        IMenuItem musicDecrease = new ScaleMenuItemDecorator(new SpriteMenuItem(MUSIC_DECREASE, settingsMenuDecreaseMusicButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1.0f);
-        IMenuItem musicIncrease = new ScaleMenuItemDecorator(new SpriteMenuItem(MUSIC_INCREASE, settingsMenuIncreaseMusicButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1.0f);
-        IMenuItem soundDecrease = new ScaleMenuItemDecorator(new SpriteMenuItem(SOUND_DECREASE, settingsMenuDecreaseSoundButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1.0f);
-        IMenuItem soundIncrease = new ScaleMenuItemDecorator(new SpriteMenuItem(SOUND_INCREASE, settingsMenuIncreaseSoundButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1.0f);
+        IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK, resourceManager.menuSubmenuBackButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        IMenuItem musicDecrease = new ScaleMenuItemDecorator(new SpriteMenuItem(MUSIC_DECREASE, resourceManager.settingsMenuDecreaseMusicButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1.0f);
+        IMenuItem musicIncrease = new ScaleMenuItemDecorator(new SpriteMenuItem(MUSIC_INCREASE, resourceManager.settingsMenuIncreaseMusicButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1.0f);
+        IMenuItem soundDecrease = new ScaleMenuItemDecorator(new SpriteMenuItem(SOUND_DECREASE, resourceManager.settingsMenuDecreaseSoundButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1.0f);
+        IMenuItem soundIncrease = new ScaleMenuItemDecorator(new SpriteMenuItem(SOUND_INCREASE, resourceManager.settingsMenuIncreaseSoundButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1.0f);
 
 
         // =============== Agregando los botones =================
@@ -815,19 +688,19 @@ public class MenuScene extends BaseScene{
         backButton.setPosition(150, GameManager.CAMERA_HEIGHT - 125);
         musicDecrease.setPosition(300, GameManager.CAMERA_HEIGHT / 2 + 25);
         musicIncrease.setPosition(GameManager.CAMERA_WIDTH - 300, GameManager.CAMERA_HEIGHT / 2 + 25);
-        soundDecrease.setPosition(300, GameManager.CAMERA_HEIGHT / 2 - 250);
-        soundIncrease.setPosition(GameManager.CAMERA_WIDTH - 300, GameManager.CAMERA_HEIGHT / 2 - 250);
+        soundDecrease.setPosition(300, GameManager.CAMERA_HEIGHT / 2 - 200);
+        soundIncrease.setPosition(GameManager.CAMERA_WIDTH - 300, GameManager.CAMERA_HEIGHT / 2 - 200);
 
         // =============== Creando los Sprites de Settings =================
         int barXOffset = 96;
         int barXStart = 458;
 
         musicBarsArrayList = new ArrayList<Sprite>();
-        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 0 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, settingsMenuAudioLevel_20_TextureRegion));
-        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 1 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, settingsMenuAudioLevel_40_TextureRegion));
-        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 2 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, settingsMenuAudioLevel_60_TextureRegion));
-        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 3 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, settingsMenuAudioLevel_80_TextureRegion));
-        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 4 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, settingsMenuAudioLevel_100_TextureRegion));
+        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 0 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, resourceManager.settingsMenuAudioLevel_20_TextureRegion));
+        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 1 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, resourceManager.settingsMenuAudioLevel_40_TextureRegion));
+        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 2 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, resourceManager.settingsMenuAudioLevel_60_TextureRegion));
+        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 3 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, resourceManager.settingsMenuAudioLevel_80_TextureRegion));
+        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 4 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, resourceManager.settingsMenuAudioLevel_100_TextureRegion));
 
         for (Sprite bar : musicBarsArrayList) {
             settingsMenuScene.attachChild(bar);
@@ -835,17 +708,20 @@ public class MenuScene extends BaseScene{
 
 
         soundBarsArrayList = new ArrayList<Sprite>();
-        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 0 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, settingsMenuAudioLevel_20_TextureRegion));
-        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 1 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, settingsMenuAudioLevel_40_TextureRegion));
-        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 2 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, settingsMenuAudioLevel_60_TextureRegion));
-        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 3 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, settingsMenuAudioLevel_80_TextureRegion));
-        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 4 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, settingsMenuAudioLevel_100_TextureRegion));
+        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 0 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, resourceManager.settingsMenuAudioLevel_20_TextureRegion));
+        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 1 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, resourceManager.settingsMenuAudioLevel_40_TextureRegion));
+        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 2 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, resourceManager.settingsMenuAudioLevel_60_TextureRegion));
+        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 3 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, resourceManager.settingsMenuAudioLevel_80_TextureRegion));
+        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 4 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, resourceManager.settingsMenuAudioLevel_100_TextureRegion));
 
         for (Sprite bar : soundBarsArrayList) {
             settingsMenuScene.attachChild(bar);
         }
 
-
+        for(int i = 0; i < 5; i++){
+            musicBarsArrayList.get(i).setVisible(sessionManager.musicVolume >= 0.20f * (i+1));
+            soundBarsArrayList.get(i).setVisible(sessionManager.soundVolume >= 0.20f * (i+1));
+        }
 
         // =============== Creando el listener =============================
         settingsMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
@@ -877,6 +753,7 @@ public class MenuScene extends BaseScene{
                         break;
                 }
 
+
                 resourceManager.musicManager.setMasterVolume(sessionManager.musicVolume);
                 resourceManager.soundManager.setMasterVolume(sessionManager.soundVolume);
 
@@ -887,8 +764,7 @@ public class MenuScene extends BaseScene{
                     soundBarsArrayList.get(i).setVisible(sessionManager.soundVolume >= 0.20f * (i+1));
                 }
 
-                //System.out.println("Music: "+sessionManager.musicVolume+"\nSound: "+sessionManager.soundVolume);
-
+                sessionManager.writeChanges();
                 return true;
             }
         });
@@ -904,12 +780,12 @@ public class MenuScene extends BaseScene{
         aboutMenuScene.setPosition(0, 0);
 
         // =============== Creando los botones ===================
-        IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,menuSubmenuBackButtonRegion,vertexBufferObjectManager),0.8f,1f);
-        IMenuItem buttonAndy = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_ANDY,aboutMenuAndyButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
-        IMenuItem buttonRebe = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_REBE,aboutMenuRebeButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
-        IMenuItem buttonBrian = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_BRIAN,aboutMenuBrianButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
-        IMenuItem buttonDiego = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_DIEGO,aboutMenuDiegoButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
-        IMenuItem buttonDanni = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_DANNI,aboutMenuDanniButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,resourceManager.menuSubmenuBackButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        IMenuItem buttonAndy = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_ANDY, resourceManager.aboutMenuAndyButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        IMenuItem buttonRebe = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_REBE,resourceManager.aboutMenuRebeButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        IMenuItem buttonBrian = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_BRIAN,resourceManager.aboutMenuBrianButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        IMenuItem buttonDiego = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_DIEGO,resourceManager.aboutMenuDiegoButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        IMenuItem buttonDanni = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_DANNI,resourceManager.aboutMenuDanniButtonTexureRegion,vertexBufferObjectManager),0.8f,1f);
 
         // =============== Agregando los botones =================
         aboutMenuScene.addMenuItem(backButton);
@@ -934,14 +810,12 @@ public class MenuScene extends BaseScene{
         buttonBrian.setPosition(905, GameManager.CAMERA_HEIGHT/2);
         buttonDiego.setPosition(1141,GameManager.CAMERA_HEIGHT/2);
 
-        // ===============  Logo y otros items===============
-        aboutMenuLogoSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2-200, aboutMenuLogoTextureRegion,vertexBufferObjectManager);
-        aboutMenuScene.attachChild(aboutMenuLogoSprite);
+
 
             // =============== Crear Sprites y Exlusividad al toque ==
 
 
-        aboutMenuAndyIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, aboutMenuAndyIDTextureRegion,vertexBufferObjectManager){
+        aboutMenuAndyIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, resourceManager.aboutMenuAndyIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
@@ -950,7 +824,7 @@ public class MenuScene extends BaseScene{
             }
         };
 
-        aboutMenuDanniIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, aboutMenuDanniIDTextureRegion,vertexBufferObjectManager){
+        aboutMenuDanniIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, resourceManager.aboutMenuDanniIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
@@ -959,7 +833,7 @@ public class MenuScene extends BaseScene{
             }
         };
 
-        aboutMenuRebeIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, aboutMenuRebeIDTextureRegion,vertexBufferObjectManager){
+        aboutMenuRebeIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, resourceManager.aboutMenuRebeIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
@@ -968,7 +842,7 @@ public class MenuScene extends BaseScene{
             }
         };
 
-        aboutMenuBrianIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, aboutMenuBrianIDTextureRegion,vertexBufferObjectManager){
+        aboutMenuBrianIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, resourceManager.aboutMenuBrianIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
@@ -977,7 +851,7 @@ public class MenuScene extends BaseScene{
             }
         };
 
-        aboutMenuDiegoIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, aboutMenuDiegoIDTextureRegion,vertexBufferObjectManager){
+        aboutMenuDiegoIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, resourceManager.aboutMenuDiegoIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
@@ -1097,8 +971,11 @@ public class MenuScene extends BaseScene{
     // ===========================================================
     @Override
     public void destroyScene() {
+        // -- Llamamos al Adm. de Recursos para liberar las imágnes y la música
         resourceManager.unloadMenuResources();
+        // -- Desadjuntamos esta escena
         this.detachSelf();
+        // -- Liberamos la escena
         this.dispose();
     }
 
