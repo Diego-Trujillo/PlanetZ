@@ -86,19 +86,19 @@ public class SessionManager {
         // ============== Gemas Desbloqueadas =====================
         gemsUnlocked = new boolean[3][3];
         // -------------- Nivel 1 -------------------------------
-        gemsUnlocked[1][1] = sharedPreferences.getBoolean("gem_1_1", false);
-        gemsUnlocked[1][2] = sharedPreferences.getBoolean("gem_1_2",false);
-        gemsUnlocked[1][3] = sharedPreferences.getBoolean("gem_1_3",false);
+        gemsUnlocked[0][0] = sharedPreferences.getBoolean("gem_1_1", false);
+        gemsUnlocked[0][1] = sharedPreferences.getBoolean("gem_1_2",false);
+        gemsUnlocked[0][2] = sharedPreferences.getBoolean("gem_1_3",false);
 
         // -------------- Nivel 2 -------------------------------
-        gemsUnlocked[2][1] = sharedPreferences.getBoolean("gem_2_1",false);
-        gemsUnlocked[2][2] = sharedPreferences.getBoolean("gem_2_2",false);
-        gemsUnlocked[2][3] = sharedPreferences.getBoolean("gem_2_3",false);
+        gemsUnlocked[1][0] = sharedPreferences.getBoolean("gem_2_1",false);
+        gemsUnlocked[1][1] = sharedPreferences.getBoolean("gem_2_2",false);
+        gemsUnlocked[1][2] = sharedPreferences.getBoolean("gem_2_3",false);
 
         // -------------- Nivel 3 -------------------------------
-        gemsUnlocked[3][1] = sharedPreferences.getBoolean("gem_3_1",false);
-        gemsUnlocked[3][2] = sharedPreferences.getBoolean("gem_3_2",false);
-        gemsUnlocked[3][3] = sharedPreferences.getBoolean("gem_3_3",false);
+        gemsUnlocked[2][0] = sharedPreferences.getBoolean("gem_3_1",false);
+        gemsUnlocked[2][1] = sharedPreferences.getBoolean("gem_3_2",false);
+        gemsUnlocked[2][2] = sharedPreferences.getBoolean("gem_3_3",false);
 
         // ============== Nivel actual de Adv. Mode ==============
         currentLevel = sharedPreferences.getInt("currentLevel",0);
@@ -127,19 +127,19 @@ public class SessionManager {
 
         // ============== Gemas Desbloqueadas ===================
         // -------------- Nivel 1 -------------------------------
-        sharedPreferencesEditor.putBoolean("gem_1_1",gemsUnlocked[1][1]);
-        sharedPreferencesEditor.putBoolean("gem_1_2",gemsUnlocked[1][2]);
-        sharedPreferencesEditor.putBoolean("gem_1_3", gemsUnlocked[1][3]);
+        sharedPreferencesEditor.putBoolean("gem_1_1",gemsUnlocked[0][0]);
+        sharedPreferencesEditor.putBoolean("gem_1_2",gemsUnlocked[0][1]);
+        sharedPreferencesEditor.putBoolean("gem_1_3",gemsUnlocked[0][2]);
 
         // -------------- Nivel 2 -------------------------------
-        sharedPreferencesEditor.putBoolean("gem_2_1",gemsUnlocked[2][1]);
-        sharedPreferencesEditor.putBoolean("gem_2_2",gemsUnlocked[2][2]);
-        sharedPreferencesEditor.putBoolean("gem_2_3",gemsUnlocked[2][3]);
+        sharedPreferencesEditor.putBoolean("gem_2_1",gemsUnlocked[1][0]);
+        sharedPreferencesEditor.putBoolean("gem_2_2",gemsUnlocked[1][1]);
+        sharedPreferencesEditor.putBoolean("gem_2_3",gemsUnlocked[1][2]);
 
         // -------------- Nivel 3 -------------------------------
-        sharedPreferencesEditor.putBoolean("gem_3_1",gemsUnlocked[3][1]);
-        sharedPreferencesEditor.putBoolean("gem_3_2",gemsUnlocked[3][2]);
-        sharedPreferencesEditor.putBoolean("gem_3_3",gemsUnlocked[3][3]);
+        sharedPreferencesEditor.putBoolean("gem_3_1",gemsUnlocked[2][0]);
+        sharedPreferencesEditor.putBoolean("gem_3_2",gemsUnlocked[2][1]);
+        sharedPreferencesEditor.putBoolean("gem_3_3",gemsUnlocked[2][2]);
 
         // ============== Escribir los Cambios ===================
         sharedPreferencesEditor.commit();

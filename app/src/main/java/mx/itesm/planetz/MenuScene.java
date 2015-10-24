@@ -887,7 +887,7 @@ public class MenuScene extends BaseScene{
                     soundBarsArrayList.get(i).setVisible(sessionManager.soundVolume >= 0.20f * (i+1));
                 }
 
-                System.out.println("Music: "+sessionManager.musicVolume+"\nSound: "+sessionManager.soundVolume);
+                //System.out.println("Music: "+sessionManager.musicVolume+"\nSound: "+sessionManager.soundVolume);
 
                 return true;
             }
