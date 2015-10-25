@@ -102,8 +102,8 @@ public class GameManager extends BaseGameActivity {
     @Override
     public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws IOException {
         // ============== Obtenemos la configuración de AFX ======
-        getMusicManager().setMasterVolume((sessionManager.musicEnabled) ? sessionManager.musicVolume : 0);
-        getSoundManager().setMasterVolume((sessionManager.soundEnabled)?sessionManager.soundVolume:0);
+        getMusicManager().setMasterVolume(sessionManager.musicVolume);
+        getSoundManager().setMasterVolume(sessionManager.soundVolume);
 
 
         // ============== Cargamos y corremos el Splash ==========

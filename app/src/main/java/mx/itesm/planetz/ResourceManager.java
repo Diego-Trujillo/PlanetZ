@@ -433,7 +433,6 @@ public class ResourceManager {
         catch (IOException e) {e.printStackTrace();}
 
         // ============== Opciones de música =====================
-        menuMusic.setVolume(musicManager.getMasterVolume());
         menuMusic.setLooping(true);
     }
 

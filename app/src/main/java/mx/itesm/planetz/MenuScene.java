@@ -88,7 +88,8 @@ public class MenuScene extends BaseScene{
     private static final int MAIN_SETTINGS = 2;
     private static final int MAIN_ABOUT = 3;
     private static final int MAIN_TOGGLE_AUDIO = 4;
-
+    // =============== Opciones de Botones =======================
+    IMenuItem mainMenuToggleAudioButton;
 
     // =============== OPCIÓN REGRESAR DE SUBMENUS =================
     // =============================================================
@@ -234,6 +235,8 @@ public class MenuScene extends BaseScene{
     public void loadMFX() {
         // -- Llama al administrador de Recursos a cargar la música del nivel
         resourceManager.loadMenuResourcesMFX();
+        // -- Pone el volúmen de la canción según la configuración Guardada
+        resourceManager.menuMusic.setVolume(sessionManager.musicVolume);
     }
 
     // ===========================================================
@@ -290,9 +293,9 @@ public class MenuScene extends BaseScene{
         IMenuItem mainMenuAboutButton = new TiledSpriteMenuItem(MAIN_ABOUT,resourceManager.mainMenuButtonTextureRegion_about,vertexBufferObjectManager);
 
         // -- Botón para habilitar/deshabilitar el audio
-        IMenuItem mainMenuToggleAudioButton = new ToggleSpriteMenuItem(MAIN_TOGGLE_AUDIO,resourceManager.menuToggleAudioButtonTextureRegion,vertexBufferObjectManager);
+        mainMenuToggleAudioButton = new ToggleSpriteMenuItem(MAIN_TOGGLE_AUDIO,resourceManager.menuToggleAudioButtonTextureRegion,vertexBufferObjectManager);
         // -- Cambiamos la imagen de el botoón de hab/deshab audio según la configuración guardada en Session Manager
-        ((ToggleSpriteMenuItem) mainMenuToggleAudioButton).setCurrentTileIndex((sessionManager.musicEnabled && sessionManager.soundEnabled) ? 0 : 1);
+        ((ToggleSpriteMenuItem) mainMenuToggleAudioButton).setCurrentTileIndex((sessionManager.musicVolume > 0.025 || sessionManager.soundVolume > 0.025) ? 0 : 1);
 
         // =============== Agregando los botones =================
         mainMenuScene.addMenuItem(mainMenuPlayButton);
@@ -319,58 +322,61 @@ public class MenuScene extends BaseScene{
         mainMenuAboutButton.setPosition(1100, 100);
         mainMenuToggleAudioButton.setPosition(GameManager.CAMERA_WIDTH - 64, GameManager.CAMERA_HEIGHT - 64);
 
-
-
-
-        // === Establece lo que sea realizará al presionar b. ===
+        // ========= Establecer Acción según botoón presionado ===
         mainMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem,
                                              float pMenuItemLocalX, float pMenuItemLocalY) {
                 switch (pMenuItem.getID()) {
                     case MAIN_PLAY:
+                        // -- Cambiar a al submenú Play
                         setChildScene(playMenuScene);
+                        // -- Poner el Overlay
                         menuOverlaySprite.setVisible(true);
                         break;
                     case MAIN_BACKPACK:
+                        // -- Cambiar al submenú Backpack
                         setChildScene(backpackMenuScene);
+                        // -- Poner el Overlay
                         menuOverlaySprite.setVisible(true);
                         break;
                     case MAIN_SETTINGS:
+                        // -- Cambiar al submenú Settings
                         setChildScene(settingsMenuScene);
+                        // -- Actualizar la visibilidad de las barras de Audio
+                        updateAudioVisibility();
+                        // -- Poner el Overlay
                         menuOverlaySprite.setVisible(true);
                         break;
                     case MAIN_ABOUT:
+                        // -- Cambiar al submenú About
                         setChildScene(aboutMenuScene);
+                        // -- Poner el Overlay
                         menuOverlaySprite.setVisible(true);
                         break;
                     case MAIN_TOGGLE_AUDIO:
                         // == Cuando cualquiera de los dos canales de audio está habilitado ==
-                        if(sessionManager.musicEnabled || sessionManager.soundEnabled){
-                            // -- Cambiar al sprite de la bocina
-                            ((ToggleSpriteMenuItem)mainMenuScene.getMenuItem(MAIN_TOGGLE_AUDIO)).setCurrentTileIndex(1);
-
+                        if(sessionManager.musicVolume > 0f || sessionManager.soundVolume > 0f){
                             // -- Enmudecer los canales de AFX
-                            resourceManager.musicManager.setMasterVolume(0);
-                            resourceManager.soundManager.setMasterVolume(0);
-
+                            sessionManager.musicVolume = 0f;
+                            sessionManager.soundVolume = 0f;
                         }
                         // == Cuando ningún canal de audio está habilitado ====================
                         else{
-                            // -- Cambiar el sprite de la bocina
-                            ((ToggleSpriteMenuItem)mainMenuScene.getMenuItem(MAIN_TOGGLE_AUDIO)).setCurrentTileIndex(0);
-
                             // --Desenmudecer los canales de AFX
-                            resourceManager.musicManager.setMasterVolume(sessionManager.musicVolume);
-                            resourceManager.musicManager.setMasterVolume(sessionManager.soundVolume);
-
+                            sessionManager.musicVolume = 0.6f;
+                            sessionManager.soundVolume = 0.6f;
                         }
-                        // -- Cambiar el volumen de la pista actual
-                        resourceManager.menuMusic.setVolume(resourceManager.musicManager.getMasterVolume());
 
-                        // -- Cambiar la bandera de habilitación de AFX
-                        sessionManager.musicEnabled = !(sessionManager.musicEnabled);
-                        sessionManager.soundEnabled = !(sessionManager.soundEnabled);
+                        // -- Cambiar el ícono de audio según elección del jugador
+                        ((ToggleSpriteMenuItem) mainMenuToggleAudioButton).setCurrentTileIndex((sessionManager.musicVolume > 0.025 || sessionManager.soundVolume > 0.025) ? 0 : 1);
+
+                        // -- Cambiar el volumen en las opciones del motor
+                        resourceManager.musicManager.setMasterVolume(sessionManager.musicVolume);
+                        resourceManager.soundManager.setMasterVolume(sessionManager.soundVolume);
+
+                        // -- Cambiar el volumen de la música según el manager
+                        resourceManager.menuMusic.setVolume(resourceManager.musicManager.getMasterVolume());
 
                         // -- Escribir los cambios al Adm. de Sesión
                         sessionManager.writeChanges();
@@ -392,12 +398,16 @@ public class MenuScene extends BaseScene{
     // ===========================================================
     public void addPlayMenu(){
         // =============== Inicializando la subEscena ============
+        // -- Inicializar la instancia de la escena
         playMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
+        // -- Ubicar el menú
         playMenuScene.setPosition(0, 0);
 
 
         // =============== Creando los botones ===================
+        // -- Botón para regresar al menú principal
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,resourceManager.menuSubmenuBackButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        // -- Botón para abrir las opciones de Adventure
         IMenuItem adventureMode = new ScaleMenuItemDecorator(new SpriteMenuItem(PLAY_ADVENTURE_MODE,resourceManager.loadImage("gfx/planeta_play.png") ,vertexBufferObjectManager),1.2f,1f); /*******/
 
         // =============== Agregando los botones =================
@@ -405,7 +415,9 @@ public class MenuScene extends BaseScene{
         playMenuScene.addMenuItem(adventureMode);
 
         // =============== Configurando las animaciones =========
+        // -- Construimos las animaciones
         playMenuScene.buildAnimations();
+        // -- No habilitamos un fondo
         playMenuScene.setBackgroundEnabled(false);
 
         // =============== Agregando el Texto "PLAY" =============
@@ -443,8 +455,9 @@ public class MenuScene extends BaseScene{
     // ===========================================================
     public void addBackpack() {
         // =============== Inicializando la subEscena ============
+        // -- Crear la instancia de la escena Backpack
         backpackMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
-        //backpackScene = (Scene)backpackMenuScene;
+        // -- Ubicando al submenú
         backpackMenuScene.setPosition(0, 0);
 
         // =============== Creando los botones e imagenes ===================
@@ -546,7 +559,7 @@ public class MenuScene extends BaseScene{
 
         // =============== Agregando el Texto "BACKPACK" =========
         backpackMenuScene.attachChild(new Text(425, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "BACKPACK", vertexBufferObjectManager));
-        backpackMenuScene.attachChild(level1Text= new Text(GameManager.CAMERA_WIDTH/2+400, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "Level 1", vertexBufferObjectManager));
+        backpackMenuScene.attachChild(level1Text = new Text(GameManager.CAMERA_WIDTH / 2 + 400, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "Level 1", vertexBufferObjectManager));
         backpackMenuScene.attachChild(level2Text = new Text(GameManager.CAMERA_WIDTH / 2 + 400, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "Level 2", vertexBufferObjectManager));
         backpackMenuScene.attachChild(level3Text = new Text(GameManager.CAMERA_WIDTH / 2 + 400, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "Level 3", vertexBufferObjectManager));
         level1Text.setVisible(true);
@@ -555,7 +568,8 @@ public class MenuScene extends BaseScene{
 
         // =============== Ubicando los botones =================
         backButton.setPosition(150, GameManager.CAMERA_HEIGHT - 125);
-
+        rightArrow.setPosition(GameManager.CAMERA_WIDTH - 50, GameManager.CAMERA_HEIGHT / 2 - 200);
+        leftArrow.setPosition(100, GameManager.CAMERA_HEIGHT/2 -50);
 
         countPosition= 1;
         //quitar y poner las flechas
@@ -569,28 +583,34 @@ public class MenuScene extends BaseScene{
                 switch (pMenuItem.getID()) {
 
                     case 600:
-                        countPosition+=1;
-                        if(countPosition==1){
-                            leftArrow.setVisible(false);}
-                        if (countPosition==2){
+                        countPosition += 1;
+                        if (countPosition == 1) {
+                            leftArrow.setVisible(false);
+                        }
+                        if (countPosition == 2) {
                             leftArrow.setVisible(true);
-                            rightArrow.setVisible(true);}
-                        if(countPosition==3){
-                            rightArrow.setVisible(false);}
-                        System.out.println("DERECHA " +countPosition);
-                        attachGems(countPosition,0);
+                            rightArrow.setVisible(true);
+                        }
+                        if (countPosition == 3) {
+                            rightArrow.setVisible(false);
+                        }
+                        System.out.println("DERECHA " + countPosition);
+                        attachGems(countPosition, 0);
                         break;
                     case 300:
-                        countPosition-=1;
-                        if(countPosition==1){
-                            leftArrow.setVisible(false);}
-                        if (countPosition==2){
+                        countPosition -= 1;
+                        if (countPosition == 1) {
+                            leftArrow.setVisible(false);
+                        }
+                        if (countPosition == 2) {
                             leftArrow.setVisible(true);
-                            rightArrow.setVisible(true);}
-                        if(countPosition==3){
-                            rightArrow.setVisible(false);}
-                        System.out.println("IZQUIERDA " +countPosition);
-                        attachGems(countPosition,1);
+                            rightArrow.setVisible(true);
+                        }
+                        if (countPosition == 3) {
+                            rightArrow.setVisible(false);
+                        }
+                        System.out.println("IZQUIERDA " + countPosition);
+                        attachGems(countPosition, 1);
                         break;
                     case SUBMENU_BACK:
                         returnToMenu();
@@ -599,8 +619,7 @@ public class MenuScene extends BaseScene{
                 return true;
             }
         });
-        rightArrow.setPosition(GameManager.CAMERA_WIDTH-50, GameManager.CAMERA_HEIGHT/2 -200);
-        leftArrow.setPosition(100, GameManager.CAMERA_HEIGHT/2 -50);
+
     }
 
 
@@ -659,14 +678,21 @@ public class MenuScene extends BaseScene{
     // ===========================================================
     public void addSettings() {
         // =============== Inicializando la subEscena ============
+        // -- Inicializar la instancia de submenú
         settingsMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
+        // -- Ubicar la escena
         settingsMenuScene.setPosition(0, 0);
 
         // =============== Creando los botones ===================
+        // -- Botón para regresar al menú principal
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK, resourceManager.menuSubmenuBackButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        // -- Botón para decrementar el volúmen de la música
         IMenuItem musicDecrease = new ScaleMenuItemDecorator(new SpriteMenuItem(MUSIC_DECREASE, resourceManager.settingsMenuDecreaseMusicButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1.0f);
+        // -- Botón para incrementar el volúmen de la música
         IMenuItem musicIncrease = new ScaleMenuItemDecorator(new SpriteMenuItem(MUSIC_INCREASE, resourceManager.settingsMenuIncreaseMusicButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1.0f);
+        // -- Botón para decrementar el volúmen del sonido
         IMenuItem soundDecrease = new ScaleMenuItemDecorator(new SpriteMenuItem(SOUND_DECREASE, resourceManager.settingsMenuDecreaseSoundButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1.0f);
+        // -- Botón para incrementar el volúmen del sonido
         IMenuItem soundIncrease = new ScaleMenuItemDecorator(new SpriteMenuItem(SOUND_INCREASE, resourceManager.settingsMenuIncreaseSoundButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1.0f);
 
 
@@ -678,7 +704,9 @@ public class MenuScene extends BaseScene{
         settingsMenuScene.addMenuItem(soundIncrease);
 
         // =============== Configurando las animaciones =========
+        // -- Construir las animaciones
         settingsMenuScene.buildAnimations();
+        // -- Desahbilitar el fondo
         settingsMenuScene.setBackgroundEnabled(false);
 
         // =============== Agregando el Texto "BACKPACK" =========
@@ -692,78 +720,91 @@ public class MenuScene extends BaseScene{
         soundIncrease.setPosition(GameManager.CAMERA_WIDTH - 300, GameManager.CAMERA_HEIGHT / 2 - 200);
 
         // =============== Creando los Sprites de Settings =================
-        int barXOffset = 96;
+        // -- Definir un punto de inicio en X
         int barXStart = 458;
+        // -- Definir un offset en X
+        int barXOffset = 96;
 
+        // -- Crear un arreglo contenedor de las barras para la música
         musicBarsArrayList = new ArrayList<Sprite>();
-        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 0 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, resourceManager.settingsMenuAudioLevel_20_TextureRegion));
-        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 1 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, resourceManager.settingsMenuAudioLevel_40_TextureRegion));
-        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 2 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, resourceManager.settingsMenuAudioLevel_60_TextureRegion));
-        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 3 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, resourceManager.settingsMenuAudioLevel_80_TextureRegion));
-        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 4 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, resourceManager.settingsMenuAudioLevel_100_TextureRegion));
+       // -- Cargar y agregar los sprites de las barras al contenedor
+        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 0 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, resourceManager.settingsMenuAudioLevel_20_TextureRegion));  // -- Barra nivel 20
+        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 1 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, resourceManager.settingsMenuAudioLevel_40_TextureRegion));  // -- Barra nivel 40
+        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 2 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, resourceManager.settingsMenuAudioLevel_60_TextureRegion));  // -- Barra nivel 60
+        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 3 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, resourceManager.settingsMenuAudioLevel_80_TextureRegion));  // -- Barra nivel 80
+        musicBarsArrayList.add(resourceManager.loadSprite(barXStart + 4 * barXOffset, GameManager.CAMERA_HEIGHT / 2 + 75, resourceManager.settingsMenuAudioLevel_100_TextureRegion)); // -- Barra nivel 100
 
+        // -- Agregar las barras de música a la escena del submenú
         for (Sprite bar : musicBarsArrayList) {
             settingsMenuScene.attachChild(bar);
         }
 
-
+        // Crear un arreglo contenedor de las barras para el sonido
         soundBarsArrayList = new ArrayList<Sprite>();
-        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 0 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, resourceManager.settingsMenuAudioLevel_20_TextureRegion));
-        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 1 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, resourceManager.settingsMenuAudioLevel_40_TextureRegion));
-        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 2 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, resourceManager.settingsMenuAudioLevel_60_TextureRegion));
-        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 3 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, resourceManager.settingsMenuAudioLevel_80_TextureRegion));
-        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 4 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, resourceManager.settingsMenuAudioLevel_100_TextureRegion));
+        // -- Cargar y agregar los sprites de las barras al contenedor. Utilizamos la misma Texture Region para los dos conjuntos de barras
+        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 0 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, resourceManager.settingsMenuAudioLevel_20_TextureRegion));  // -- Barra nivel 20
+        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 1 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, resourceManager.settingsMenuAudioLevel_40_TextureRegion));  // -- Barra nivel 40
+        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 2 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, resourceManager.settingsMenuAudioLevel_60_TextureRegion));  // -- Barra nivel 60
+        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 3 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, resourceManager.settingsMenuAudioLevel_80_TextureRegion));  // -- Barra nivel 80
+        soundBarsArrayList.add(resourceManager.loadSprite(barXStart + 4 * barXOffset, GameManager.CAMERA_HEIGHT / 2 - 150, resourceManager.settingsMenuAudioLevel_100_TextureRegion)); // -- Barra nivel 100
 
+        // -- Agregar las barras de sonido a la escena del submenú
         for (Sprite bar : soundBarsArrayList) {
             settingsMenuScene.attachChild(bar);
         }
 
-        for(int i = 0; i < 5; i++){
-            musicBarsArrayList.get(i).setVisible(sessionManager.musicVolume >= 0.20f * (i+1));
-            soundBarsArrayList.get(i).setVisible(sessionManager.soundVolume >= 0.20f * (i+1));
-        }
+        // -- Llamamos a la función para poner el estado inicial de las barras de sonido según configuración guardada
+        updateAudioVisibility();
 
-        // =============== Creando el listener =============================
+        // ========= Establecer Acción según botoón presionado ===
         settingsMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
                 switch (pMenuItem.getID()) {
                     case MUSIC_DECREASE:
+                        // -- Si el volúmen de la música no es 0 entonces lo decrementamos en 20%
                         if (sessionManager.musicVolume > 0f) {
                             sessionManager.musicVolume -= 0.20f;
                         }
                         break;
                     case MUSIC_INCREASE:
+                        // -- Si el volúmen de la música no es 1 entonces lo incrementamos en 20%
                         if (sessionManager.musicVolume < 1.0f) {
                             sessionManager.musicVolume += 0.20f;
                         }
                         break;
                     case SOUND_INCREASE:
+                        // -- Si el volúmen del sonido no es 1 entonces lo incrementamos en 20%
                         if (sessionManager.soundVolume < 1.0f) {
                             sessionManager.soundVolume += 0.20f;
                         }
                         break;
                     case SOUND_DECREASE:
+                        // -- Si el volúmen del sonido no es 0 entonces lo decrementamos en 20%
                         if (sessionManager.soundVolume > 0f) {
                             sessionManager.soundVolume -= 0.20f;
                         }
                         break;
                     case SUBMENU_BACK:
+                        // -- Regresamos al menú principal
                         returnToMenu();
+                        // -- Cambiamos el estado del botón de habilitar/deshabilitar audio del menú principal basándonos en lo hecho en esta subescena;
+                        // -- ** Si ambos volúmenes son 0, entonces significa que el audio está deshabilitado, de otro modo el audio está deshabilitado
+                        ((ToggleSpriteMenuItem) mainMenuToggleAudioButton).setCurrentTileIndex((sessionManager.musicVolume > 0.025 || sessionManager.soundVolume > 0.025) ? 0 : 1);
                         break;
                 }
 
-
+                // -- Cambiamos los volúmenes maestros de la música y el sonido basado en la acción realizada
                 resourceManager.musicManager.setMasterVolume(sessionManager.musicVolume);
                 resourceManager.soundManager.setMasterVolume(sessionManager.soundVolume);
 
+                // -- Cambiamos el volúmen de la música del menú basado en la acción realizada
                 resourceManager.menuMusic.setVolume(resourceManager.musicManager.getMasterVolume());
 
-                for(int i = 0; i < 5; i++){
-                    musicBarsArrayList.get(i).setVisible(sessionManager.musicVolume >= 0.20f * (i+1));
-                    soundBarsArrayList.get(i).setVisible(sessionManager.soundVolume >= 0.20f * (i+1));
-                }
+                // -- Actualizamos el estado de las barras de audio basado en la acción realizada
+                updateAudioVisibility();
 
+                // -- Llamamos al Adm. de Sesión para que escriba los cambios realizados
                 sessionManager.writeChanges();
                 return true;
             }
@@ -771,20 +812,38 @@ public class MenuScene extends BaseScene{
     }
 
 
+    void updateAudioVisibility(){
+        // -- Para cada nivel de la barra de Audio
+        for(int i = 0; i < 5; i++){
+            /* Sean las barras {1,2,3,4,5}. Pondremos que la barra n es visible si el volumen
+             * de la música o del sonido es mayor o igual a n*0.20 en cada conjunto de barras
+             * de lo contrario, ocultamos la barra. */
+            musicBarsArrayList.get(i).setVisible(sessionManager.musicVolume >= 0.20f * (i+1));
+            soundBarsArrayList.get(i).setVisible(sessionManager.soundVolume >= 0.20f * (i+1));
+        }
+    }
     // ===========================================================
     //                Crear el menú About
     // ===========================================================
     public void addAbout(){
         // =============== Inicializando la subEscena ============
+        // -- Inicializando la instancia de subescena
         aboutMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
+        // -- Ubicando la escena
         aboutMenuScene.setPosition(0, 0);
 
         // =============== Creando los botones ===================
+        // -- Botón para regresar al menú principal
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,resourceManager.menuSubmenuBackButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        // -- Botón para desplegar el ID de ANDY
         IMenuItem buttonAndy = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_ANDY, resourceManager.aboutMenuAndyButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        // -- Botón para desplegar el ID de REBECCA
         IMenuItem buttonRebe = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_REBE,resourceManager.aboutMenuRebeButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        // -- Botón para desplegar el ID de BRIAN
         IMenuItem buttonBrian = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_BRIAN,resourceManager.aboutMenuBrianButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        // -- Botón para desplegar el ID de DIEGO
         IMenuItem buttonDiego = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_DIEGO,resourceManager.aboutMenuDiegoButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        // -- Botón para desplegar el ID de DANIELA
         IMenuItem buttonDanni = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_DANNI,resourceManager.aboutMenuDanniButtonTexureRegion,vertexBufferObjectManager),0.8f,1f);
 
         // =============== Agregando los botones =================
@@ -796,7 +855,9 @@ public class MenuScene extends BaseScene{
         aboutMenuScene.addMenuItem(buttonDiego);
 
         // =============== Configurando las animaciones =========
+        // -- Construimos las animaciones
         aboutMenuScene.buildAnimations();
+        // -- Deshabilitar el fondo
         aboutMenuScene.setBackgroundEnabled(false);
 
         // =============== Agregando el Texto "ABOUT" =============
@@ -812,73 +873,87 @@ public class MenuScene extends BaseScene{
 
 
 
-            // =============== Crear Sprites y Exlusividad al toque ==
+        // =============== Crear Sprites y Exlusividad al toque ==
 
-
+        // -- Creamos el Sprite de ID de ANDY y asignamos una función que define qué hacer cuando se toque el sprite
         aboutMenuAndyIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, resourceManager.aboutMenuAndyIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
+                // Cuando el jugador toque el ID, llamamos la función setAboutID con ÉSTE id.
                 if (pSceneTouchEvent.isActionUp()) {setAboutID(aboutMenuAndyIDSprite, false);}
                 return true;
             }
         };
-
+        // -- Creamos el Sprite de ID de DANIELA y asignamos una función que define qué hacer cuando se toque el sprite
         aboutMenuDanniIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, resourceManager.aboutMenuDanniIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
+                // Cuando el jugador toque el ID, llamamos la función setAboutID con ÉSTE id.
                 if (pSceneTouchEvent.isActionUp()) {setAboutID(aboutMenuDanniIDSprite, false);}
                 return true;
             }
         };
-
+        // -- Creamos el Sprite de ID de REBECCA y asignamos una función que define qué hacer cuando se toque el sprite
         aboutMenuRebeIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, resourceManager.aboutMenuRebeIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
+                // Cuando el jugador toque el ID, llamamos la función setAboutID con ÉSTE id.
                 if (pSceneTouchEvent.isActionUp()) {setAboutID(aboutMenuRebeIDSprite, false);}
                 return true;
             }
         };
-
+        // -- Creamos el Sprite de ID de BRIAN y asignamos una función que define qué hacer cuando se toque el sprite
         aboutMenuBrianIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, resourceManager.aboutMenuBrianIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
+                // Cuando el jugador toque el ID, llamamos la función setAboutID con ÉSTE id.
                 if (pSceneTouchEvent.isActionUp()) {setAboutID(aboutMenuBrianIDSprite, false);}
                 return true;
             }
         };
-
+        // -- Creamos el Sprite de ID de DIEGO y asignamos una función que define qué hacer cuando se toque el sprite
         aboutMenuDiegoIDSprite = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2, resourceManager.aboutMenuDiegoIDTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {
+                // Cuando el jugador toque el ID, llamamos la función setAboutID con ÉSTE id.
                 if (pSceneTouchEvent.isActionUp()) {setAboutID(aboutMenuDiegoIDSprite, false);}
                 return true;
             }
         };
+
+
+        // ========= Establecer Acción según botoón presionado ===
         aboutMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
                 switch (pMenuItem.getID()) {
                     case ABOUT_ANDY:
+                        // -- Llamar a la función para mostrar el ID de ANDY
                         setAboutID(aboutMenuAndyIDSprite, true);
                         break;
                     case ABOUT_DANNI:
+                        // -- Llamar a la función para mostrar el ID de DANIELA
                         setAboutID(aboutMenuDanniIDSprite, true);
                         break;
                     case ABOUT_REBE:
+                        // -- Llamar a la función para mostrar el ID de REBECCA
                         setAboutID(aboutMenuRebeIDSprite, true);
                         break;
                     case ABOUT_BRIAN:
+                        // -- Llamar a la función para mostrar el ID de BRIAN
                         setAboutID(aboutMenuBrianIDSprite, true);
                         break;
                     case ABOUT_DIEGO:
+                        // -- Llamar a la función para mostrar el ID de DIEGO
                         setAboutID(aboutMenuDiegoIDSprite, true);
                         break;
                     case SUBMENU_BACK:
+                        // -- Regresar al menú principal
                         returnToMenu();
                         break;
                     }
@@ -895,7 +970,9 @@ public class MenuScene extends BaseScene{
     // ===========================================================
 
     public void setEnableAboutButtons(boolean enable){
+        // --
         if(enable){
+            // -- Si la función recibe true, hacemos que los botones que despliegan las ID's se puedan tocar
             aboutMenuScene.registerTouchArea(aboutMenuScene.getChildByIndex(SUBMENU_BACK));
             aboutMenuScene.registerTouchArea(aboutMenuScene.getChildByIndex(ABOUT_ANDY));
             aboutMenuScene.registerTouchArea(aboutMenuScene.getChildByIndex(ABOUT_DANNI));
@@ -904,6 +981,7 @@ public class MenuScene extends BaseScene{
             aboutMenuScene.registerTouchArea(aboutMenuScene.getChildByIndex(ABOUT_DIEGO));
         }
         else{
+            // -- Si la función recibe false, hacemos que los botones que despliegan las ID's NO se puedan tocar
             aboutMenuScene.unregisterTouchArea(aboutMenuScene.getChildByIndex(SUBMENU_BACK));
             aboutMenuScene.unregisterTouchArea(aboutMenuScene.getChildByIndex(ABOUT_ANDY));
             aboutMenuScene.unregisterTouchArea(aboutMenuScene.getChildByIndex(ABOUT_DANNI));
