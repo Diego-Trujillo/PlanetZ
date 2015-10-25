@@ -12,8 +12,10 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import org.andengine.engine.handler.collision.CollisionHandler;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.sensor.acceleration.AccelerationData;
 import org.andengine.input.sensor.acceleration.IAccelerationListener;
@@ -38,7 +40,8 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     private ContactListener contactListener;
 
     // ============== Definición de Fijadores de física ==========
-    final FixtureDef WALL_FIXTURE = PhysicsFactory.createFixtureDef(0,0.1f,0.5f);
+    final FixtureDef WALL_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(0,0.1f,0.5f);
+    final FixtureDef SHIP_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(10.f,0.1f,0.5f);
 
     // ============== Cuerpos ====================================
     // -------------- Paredes ------------------------------------
@@ -77,18 +80,29 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
     @Override
     public void createScene() {
-        physicsWorld = new PhysicsWorld(new Vector2(0,-SensorManager.GRAVITY_EARTH),false);
+        physicsWorld = new PhysicsWorld(new Vector2(0,-5f),false);
         this.registerUpdateHandler(physicsWorld);
 
 
         naveSprite = new Sprite(100, GameManager.CAMERA_HEIGHT/2,naveRegion,vertexBufferObjectManager);
-        this.attachChild(naveSprite);
-        gameManager.getEngine().enableAccelerationSensor(gameManager, this);
-        final Rectangle rekt = new Rectangle(0, 0, GameManager.CAMERA_WIDTH,10, vertexBufferObjectManager);
-        rekt.setColor(1f,1f,1f);
-        leftWallBody = PhysicsFactory.createBoxBody(physicsWorld,rekt, BodyDef.BodyType.StaticBody,WALL_FIXTURE);
 
+
+        gameManager.getEngine().enableAccelerationSensor(gameManager, this);
+
+        final Rectangle rekt = new Rectangle(0, 0, GameManager.CAMERA_WIDTH,10, vertexBufferObjectManager);
+        rekt.setColor(1f, 1f, 1f);
+        final Rectangle rektt = new Rectangle(0, GameManager.CAMERA_HEIGHT - 10, GameManager.CAMERA_WIDTH,10, vertexBufferObjectManager);
+        rektt.setColor(1f,1f,1f);
+        leftWallBody = PhysicsFactory.createBoxBody(physicsWorld, rekt, BodyDef.BodyType.StaticBody, WALL_FIXTURE_DEFINITION);
+        rightWallBody = PhysicsFactory.createBoxBody(physicsWorld, rektt, BodyDef.BodyType.StaticBody, WALL_FIXTURE_DEFINITION);
+        shipBody = PhysicsFactory.createCircleBody(physicsWorld, naveSprite, BodyDef.BodyType.DynamicBody, SHIP_FIXTURE_DEFINITION);
+
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(naveSprite,shipBody,true,false));
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(rekt,leftWallBody,false,false));
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(rektt,rightWallBody,false,false));
+        this.attachChild(naveSprite);
         this.attachChild(rekt);
+        this.attachChild(rektt);
     }
 
     @Override
@@ -117,8 +131,11 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         else {
             naveSprite.setY(0);
         }*/
-        naveSprite.setY(naveSprite.getY() + pAccelerationData.getY());
 
+        final Vector2 gravity = Vector2Pool.obtain(0,pAccelerationData.getY()*5);
+        this.physicsWorld.setGravity(gravity);
 
+        Vector2Pool.recycle(gravity);
+       //shipBody.applyForce(new Vector2(0,pAccelerationData.getY()),shipBody.getWorldCenter());
     }
 }
