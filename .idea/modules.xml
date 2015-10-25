@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/PlanetZ.iml" filepath="$PROJECT_DIR$/PlanetZ.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.andengine/org.andengine.iml" filepath="$PROJECT_DIR$/org.andengine/org.andengine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.andengine.extension.physics.box2d/org.andengine.extension.physics.box2d.iml" filepath="$PROJECT_DIR$/org.andengine.extension.physics.box2d/org.andengine.extension.physics.box2d.iml" />
     </modules>
   </component>
 </project>

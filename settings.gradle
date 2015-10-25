@@ -1,1 +1,1 @@
-include ':app', ':org.andengine'
+include ':app', ':org.andengine', ':org.andengine.extension.physics.box2d'
