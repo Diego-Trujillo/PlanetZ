@@ -27,6 +27,7 @@ import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.RotationAtModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -35,7 +36,10 @@ import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.sensor.acceleration.AccelerationData;
 import org.andengine.input.sensor.acceleration.IAccelerationListener;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObject;
 import org.andengine.util.SocketUtils;
 
@@ -96,7 +100,10 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     float spawnVelocity;
     int timesExecuted;
 
+    BitmapTextureAtlas contendorNave;
+    TiledTextureRegion naveAnimadaRegion;
     boolean movementEnabled;
+    AnimatedSprite as;
 
     Random rand;
     // =============================================================================================
@@ -113,9 +120,12 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     @Override
     public void loadGFX() {
         resourceManager.loadAdventureLevelOneResourcesGFX();
-
+        contendorNave = new BitmapTextureAtlas(resourceManager.textureManager,214,235);
         naveRegion= resourceManager.loadImage("gfx/Level1/Meteors/prueba2.png");
-
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Sprites/");
+        naveAnimadaRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(contendorNave, gameManager, "sprite_nave.png",0,0,3,1);
+        as = new AnimatedSprite(125, GameManager.CAMERA_HEIGHT/2,naveAnimadaRegion,vertexBufferObjectManager);
+        contendorNave.load();
     }
 
     @Override
@@ -143,14 +153,18 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
         gameManager.getEngine().enableAccelerationSensor(gameManager, this);
 
-        shipBody = PhysicsFactory.createCircleBody(physicsWorld, naveSprite, BodyDef.BodyType.DynamicBody, SHIP_FIXTURE_DEFINITION);
+        shipBody = PhysicsFactory.createCircleBody(physicsWorld, as, BodyDef.BodyType.DynamicBody, SHIP_FIXTURE_DEFINITION);
 
 
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(naveSprite, shipBody, true, false));
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(as, shipBody, true, false));
 
-        this.attachChild(naveSprite);
+       // this.attachChild(naveSprite);
 
-        naveSprite.registerUpdateHandler(new IUpdateHandler() {
+        attachChild(as);
+        as.animate(500);
+        as.setRotation(-90);
+
+        as.registerUpdateHandler(new IUpdateHandler() {
             @Override
             public void onUpdate(float pSecondsElapsed) {
                 shipBody.applyForce(-physicsWorld.getGravity().x * shipBody.getMass(), 0, shipBody.getWorldCenter().x, shipBody.getWorldCenter().y);
@@ -213,7 +227,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         float downPosition = rand.nextFloat()*(GameManager.CAMERA_HEIGHT - 20) + 10;
         Sprite meteor;
         Body meteorite;
-        meteor = new Sprite(GameManager.CAMERA_WIDTH,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelOneMeteoriteTextureRegions.get(textureRegionChosen), vertexBufferObjectManager);
+        meteor = new Sprite(GameManager.CAMERA_WIDTH,downPosition,resourceManager.adventureLevelOneMeteoriteTextureRegions.get(textureRegionChosen), vertexBufferObjectManager);
 
         meteorite = PhysicsFactory.createCircleBody(physicsWorld, meteor, BodyDef.BodyType.DynamicBody, METEORE_FIXTURE_DEFINITION);
         meteorite.setUserData("meteorite");
@@ -250,6 +264,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     public void onAccelerationChanged(AccelerationData pAccelerationData) {
         if(movementEnabled) {
             shipBody.setLinearVelocity(0, pAccelerationData.getY() * 4);
+            shipBody.setTransform(shipBody.getPosition(),shipBody.getAngle()+1f);
         }
     }
 
