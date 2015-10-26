@@ -199,11 +199,11 @@ public class ResourceManager {
     // ===========================================================
 
     // ============== Contenedor de Atlas's de Región ============
-    ArrayList<BitmapTextureAtlas> adventureLevelOneTextureAtlasContainer;
+    BitmapTextureAtlas adventureLevelOneShipTextureAtlas;
 
-    ArrayList<ITextureRegion> adventureLevelOneMeteoriteTextureRegions;
     // ============== Regiones para los meteoritos ===============
-
+    ArrayList<ITextureRegion> adventureLevelOneMeteoriteTextureRegions;
+    ITiledTextureRegion adventureLevelOneAnimatedShipTextureRegion;
 
 
 
@@ -465,10 +465,18 @@ public class ResourceManager {
     // ============== Cargar Recursos Gráficos ===================
     // ===========================================================
     public void loadAdventureLevelOneResourcesGFX(){
-        // ============== Inicializar el contenedor ==============
-        //adventureLevelOneTextureAtlasContainer = new ArrayList<BitmapTextureAtlas>();
+        // ============== Texture Atlas ==========================
+        // -------------- Nave -----------------------------------
+        adventureLevelOneShipTextureAtlas = new BitmapTextureAtlas(textureManager,214,235,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        // -------------- Meteoritos -----------------------------
         adventureLevelOneMeteoriteTextureRegions = new ArrayList<>();
-        // ============== Meteoritos =============================
+
+        // ============== Regiones =============================
+        // -------------- Nave ---------------------------------
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Sprites/");
+        adventureLevelOneAnimatedShipTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(adventureLevelOneShipTextureAtlas, gameManager, "sprite_nave.png",0,0,3,1);
+
+        // -------------- Meteoritos ---------------------------
         adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/1.png"));
         adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/2.png"));
         adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/3.png"));
@@ -484,6 +492,9 @@ public class ResourceManager {
         adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/13.png"));
         adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/14.png"));
         adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/15.png"));
+
+        // ================ Cargar los Atlas ====================
+        adventureLevelOneShipTextureAtlas.load();
     }
 
     // ============== Liberar Recursos ===========================

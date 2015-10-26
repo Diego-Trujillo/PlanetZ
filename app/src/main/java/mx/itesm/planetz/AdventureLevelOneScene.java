@@ -36,6 +36,7 @@ import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.sensor.acceleration.AccelerationData;
 import org.andengine.input.sensor.acceleration.IAccelerationListener;
+import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -62,39 +63,48 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // ============== El Contenedor del Mundo de Física ==========
     private PhysicsWorld physicsWorld;
     // -------------- Gravedad -----------------------------------
-    private float GRAVITY_X = 0;
+    private float GRAVITY_X = 4f;
     private float GRAVITY_Y = 0;
 
     // -------------- Escucha los contactos ----------------------
     private ContactListener contactListener;
 
-    // ============== Definición de Fijadores de física ==========
-    final FixtureDef WALL_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(0,0f,0f);
-    final FixtureDef SHIP_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(50.f,0.1f,0.5f);
-    final FixtureDef METEORE_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(1f,1.1f,0.4f);
-
-    // ============== Cuerpos ====================================
-    // -------------- Paredes ------------------------------------
-    private Body leftWallBody;
-    private Body rightWallBody;
-    private Body shipBody;
-
     // ===========================================================
     //              Elementos Gráficos
     // ===========================================================
-    ITextureRegion naveRegion;
-    Sprite naveSprite;
-    //Regiones meteoritos
+    // ============== Sprite Nave ================================
+    AnimatedSprite shipSprite;
+
+    // ===========================================================
+    //            Cuerpos  en el motor de física
+    // ===========================================================
+
+    // ============== Definición de Fijadores de física ==========
+    // -- Paredes laterales
+    final FixtureDef WALL_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(0,0f,0f);
+    // -- Nave
+    final FixtureDef SHIP_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(50.f,0.1f,0.5f);
+    //-- Meteoros
+    final FixtureDef METEOR_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(1f,1.1f,0.4f);
+
+    // ============== Paredes ====================================
+    // -- Izquierda
+    private Body leftWallBody;
+    // -- Derecha
+    private Body rightWallBody;
+
+    // ============== Nave =======================================
+    private Body shipBody;
+
+    // ===========================================================
+    //           Elementos de la mecánica del nivel
+    // ===========================================================
 
     int lives;
     float spawnVelocity;
     int timesExecuted;
 
-    BitmapTextureAtlas contendorNave;
-    TiledTextureRegion naveAnimadaRegion;
     boolean movementEnabled;
-    AnimatedSprite as;
-
     Random rand;
     // =============================================================================================
     //                                    C O N S T R U C T O R
@@ -102,33 +112,44 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     public AdventureLevelOneScene(){
         super();
         sceneType = SceneType.ADVENTURE_LEVEL_1;
+        // -- Deshabilitamos el movimiento de la nave hasta que se cargue todo el nivel.
         movementEnabled = false;
 
     }
 
+    // =============================================================================================
+    //                                       M É T O D O S
+    // =============================================================================================
 
+    // ===========================================================
+    //                 Cargar recursos gráficos
+    // ===========================================================
     @Override
     public void loadGFX() {
+        // -- Llamamos al Adm. de Recursos para cargar las imágenes y los fondos
         resourceManager.loadAdventureLevelOneResourcesGFX();
+        // -- Creamos un sprite animado con la textura animada de la nave
+        shipSprite = new AnimatedSprite(125, GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelOneAnimatedShipTextureRegion,vertexBufferObjectManager);
 
-        contendorNave = new BitmapTextureAtlas(resourceManager.textureManager,214,235);
-        naveRegion= resourceManager.loadImage("gfx/Level1/Meteors/prueba2.png");
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Sprites/");
-        naveAnimadaRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(contendorNave, gameManager, "sprite_nave.png",0,0,3,1);
-        as = new AnimatedSprite(125, GameManager.CAMERA_HEIGHT/2,naveAnimadaRegion,vertexBufferObjectManager);
-        contendorNave.load();
     }
-
+    // ===========================================================
+    //                       Cargar música
+    // ===========================================================
     @Override
     public void loadMFX() {
 
     }
-
+    // ===========================================================
+    //                      Cargar sonidos
+    // ===========================================================
     @Override
     public void loadSFX() {
 
     }
 
+    // ===========================================================
+    //                      Crear la escena
+    // ===========================================================
     @Override
     public void createScene() {
         lives = 3;
@@ -140,23 +161,20 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         createWalls();
 
 
-        naveSprite = new Sprite(100, GameManager.CAMERA_HEIGHT/2,naveRegion,vertexBufferObjectManager);
-
 
         gameManager.getEngine().enableAccelerationSensor(gameManager, this);
 
-        shipBody = PhysicsFactory.createCircleBody(physicsWorld, as, BodyDef.BodyType.DynamicBody, SHIP_FIXTURE_DEFINITION);
+        shipBody = PhysicsFactory.createCircleBody(physicsWorld, shipSprite, BodyDef.BodyType.DynamicBody, SHIP_FIXTURE_DEFINITION);
         shipBody.setUserData("ship");
 
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(as, shipBody, true, false));
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(shipSprite, shipBody, true, false));
 
-       // this.attachChild(naveSprite);
 
-        attachChild(as);
-        as.animate(500);
-        as.setRotation(-90);
+        attachChild(shipSprite);
+        shipSprite.animate(500);
+        shipSprite.setRotation(-90);
 
-        as.registerUpdateHandler(new IUpdateHandler() {
+        shipSprite.registerUpdateHandler(new IUpdateHandler() {
             @Override
             public void onUpdate(float pSecondsElapsed) {
                 shipBody.applyForce(-physicsWorld.getGravity().x * shipBody.getMass(), 0, shipBody.getWorldCenter().x, shipBody.getWorldCenter().y);
@@ -227,7 +245,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         Body meteorite;
         meteor = new Sprite(GameManager.CAMERA_WIDTH,downPosition,resourceManager.adventureLevelOneMeteoriteTextureRegions.get(textureRegionChosen), vertexBufferObjectManager);
 
-        meteorite = PhysicsFactory.createCircleBody(physicsWorld, meteor, BodyDef.BodyType.DynamicBody, METEORE_FIXTURE_DEFINITION);
+        meteorite = PhysicsFactory.createCircleBody(physicsWorld, meteor, BodyDef.BodyType.DynamicBody, METEOR_FIXTURE_DEFINITION);
         meteorite.setUserData("meteorite");
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(meteor, meteorite, true, true));
 
