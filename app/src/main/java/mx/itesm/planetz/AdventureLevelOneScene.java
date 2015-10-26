@@ -68,15 +68,10 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // -------------- Escucha los contactos ----------------------
     private ContactListener contactListener;
 
-    //----------------Tags objetos-------------------------
-    final int TAG_SHIP= 1;
-    final int TAG_METEORS = 2;
-    final int TAG_GEMS =3;
-
     // ============== Definición de Fijadores de física ==========
     final FixtureDef WALL_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(0,0f,0f);
     final FixtureDef SHIP_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(50.f,0.1f,0.5f);
-    final FixtureDef METEORE_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(1f,0.9f,0.4f);
+    final FixtureDef METEORE_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(1f,1.1f,0.4f);
 
     // ============== Cuerpos ====================================
     // -------------- Paredes ------------------------------------
@@ -90,13 +85,8 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     ITextureRegion naveRegion;
     Sprite naveSprite;
     //Regiones meteoritos
-    ArrayList<ITextureRegion> meteorsArrayList;
-    ITextureRegion meteoreRegion1;
-    ITextureRegion meteoreRegion2;
-    ITextureRegion meteoreRegion3;
-    //Sprite meteor;
-    //Body meteorite;
 
+    int lives;
     float spawnVelocity;
     int timesExecuted;
 
@@ -120,6 +110,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     @Override
     public void loadGFX() {
         resourceManager.loadAdventureLevelOneResourcesGFX();
+
         contendorNave = new BitmapTextureAtlas(resourceManager.textureManager,214,235);
         naveRegion= resourceManager.loadImage("gfx/Level1/Meteors/prueba2.png");
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Sprites/");
@@ -140,6 +131,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
     @Override
     public void createScene() {
+        lives = 3;
         physicsWorld = new PhysicsWorld(new Vector2(GRAVITY_X,GRAVITY_Y),false);
 
         this.registerUpdateHandler(physicsWorld);
@@ -154,7 +146,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         gameManager.getEngine().enableAccelerationSensor(gameManager, this);
 
         shipBody = PhysicsFactory.createCircleBody(physicsWorld, as, BodyDef.BodyType.DynamicBody, SHIP_FIXTURE_DEFINITION);
-
+        shipBody.setUserData("ship");
 
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(as, shipBody, true, false));
 
@@ -186,16 +178,18 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
             public void onTimePassed(TimerHandler pTimerHandler) {
                 createMeteorite();
                 timesExecuted++;
-                if(timesExecuted > 5){
-                    spawnVelocity = 1.5f;
+                if(timesExecuted == 5){
+                    spawnVelocity = 2f;
                     pTimerHandler.setTimerSeconds(spawnVelocity);
                 }
-                System.out.println("Meteor Created!");
-                System.out.println("-- timesExecuted: "+timesExecuted+"  spawnVelocity:"+spawnVelocity);
+                if(timesExecuted > 7 && timesExecuted%3 == 0){
+                    createMeteorite();
+                }
             }
         });
 
         this.registerUpdateHandler(timerHandler);
+        physicsWorld.setContactListener(createContactListener());
 
     }
 
@@ -211,6 +205,10 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // ============== Crear los cuerpos de física ===============
         leftWallBody = PhysicsFactory.createBoxBody(physicsWorld, leftWallRectangle, BodyDef.BodyType.StaticBody, WALL_FIXTURE_DEFINITION);
         rightWallBody = PhysicsFactory.createBoxBody(physicsWorld, rightWallRectangle, BodyDef.BodyType.StaticBody, WALL_FIXTURE_DEFINITION);
+
+        // ============== Registrar ID de cuerpo ====================
+        leftWallBody.setUserData("wall");
+        rightWallBody.setUserData("wall");
 
         // ============== Conectar cuerpos de física a sprites ======
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(leftWallRectangle, leftWallBody));
@@ -237,12 +235,14 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         meteor.registerEntityModifier(new LoopEntityModifier(new RotationModifier(5.0f, 0, 360)));
 
         this.attachChild(meteor);
-        float randFlot = rand.nextFloat() + 0.10f;
+        float randFlot = rand.nextFloat();
         int magnitudeMultiplier = 500;
         int sign = (rand.nextInt(2) == 0)?1:-1;
-        System.out.println("SPAWNED. Yvel = "+randFlot*magnitudeMultiplier*sign);
+
         meteorite.setLinearVelocity(-9f,0);
-        meteorite.applyForce(randFlot*magnitudeMultiplier*randFlot,randFlot*magnitudeMultiplier*sign*meteorite.getMass(),meteorite.getWorldCenter().x,meteorite.getWorldCenter().y);
+        meteorite.applyForce(randFlot*magnitudeMultiplier*randFlot,
+                randFlot*magnitudeMultiplier*sign*meteorite.getMass(),
+                meteorite.getWorldCenter().x,meteorite.getWorldCenter().y);
     }
 
     @Override
@@ -272,28 +272,12 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         contactListener = new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
-                {
-                    try {
-                        Fixture x1 = null;
-                        Fixture x2 = null;
-                        //Sprite x =null;
-                        x1 = contact.getFixtureA();
-                        x2 = contact.getFixtureB();
-                        Object x1Object = x1.getBody().getUserData();
-                        Object x2Object = x2.getBody().getUserData();
-
-                        Sprite x1Sprite= (Sprite)x1Object;
-                        Sprite x2Sprite= (Sprite)x1Object;
-
-
-                        if (x1Sprite.getTag()==1 && x2Sprite.getTag()==2  ) {
-                            //x1.getBody().setFixedRotation(true);
-                            //sound.play();
-                            //mEngine.vibrate(100);
-                            Log.i("CONTACT", "BETWEEN SHIP AND METEORE!");
-                        }
-                    } catch (Exception e) {
-                        Log.d("ErrorMessage", e.getMessage());
+                final Fixture fixtureA = contact.getFixtureA();
+                final Fixture fixtureB = contact.getFixtureB();
+                if(fixtureA != null && fixtureB != null){
+                    if((fixtureA.getBody().getUserData().equals("ship") && fixtureB.getBody().getUserData().equals("meteorite")) || (fixtureB.getBody().getUserData().equals("ship") && fixtureA.getBody().getUserData().equals("meteorite")) ){
+                        lives--;
+                        System.out.println("Meteor-Ship Collision!! Lives: "+lives);
                     }
                 }
             }
