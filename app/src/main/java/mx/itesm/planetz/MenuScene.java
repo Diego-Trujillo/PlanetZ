@@ -997,14 +997,21 @@ public class MenuScene extends BaseScene{
 
     public void setAboutID(Sprite sprite, boolean enable){
         if(enable){
+            // -- Deshabilitar los botones para acceder a los demás ID's
             setEnableAboutButtons(false);
+            // -- Superponer el ID seleccionadi
             aboutMenuScene.attachChild(sprite);
+            // -- Poner un efecto de Fade-In al ID
             sprite.registerEntityModifier(new FadeInModifier(2.0f));
+            // -- Registrar al ID como área táctil
             aboutMenuScene.registerTouchArea(sprite);
         }
         else{
+            // -- Desregistrar el área táctil del ID
             aboutMenuScene.unregisterTouchArea(sprite);
+            // -- Desajuntar el ID de la escena
             aboutMenuScene.detachChild(sprite);
+            // -- Re-habilitar los botones para seleccionar otro ID
             setEnableAboutButtons(true);
         }
 
@@ -1023,7 +1030,9 @@ public class MenuScene extends BaseScene{
     //            Regresar a la escena de menú
     // ===========================================================
     void returnToMenu(){
+        // -- Remover el Overlay del los submenú
         menuOverlaySprite.setVisible(false);
+        // -- Poner como escena actual al menú principal
         setChildScene(mainMenuScene);
 
     }
@@ -1032,7 +1041,6 @@ public class MenuScene extends BaseScene{
     // ===========================================================
     @Override
     public void onBackKeyPressed() {
-
         if(this.getChildScene() == mainMenuScene){
             // =============== Salir del Juego ===================
             destroyScene();

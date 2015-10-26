@@ -1,6 +1,7 @@
 package mx.itesm.planetz;
 
 import android.hardware.SensorManager;
+import android.text.method.MovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 
@@ -14,7 +15,13 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
+import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.engine.handler.UpdateHandlerList;
 import org.andengine.engine.handler.collision.CollisionHandler;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.engine.options.ScreenOrientation;
+import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.RotationAtModifier;
@@ -30,9 +37,11 @@ import org.andengine.input.sensor.acceleration.AccelerationData;
 import org.andengine.input.sensor.acceleration.IAccelerationListener;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObject;
+import org.andengine.util.SocketUtils;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
 
 /**
  * Created by Diego on 22/10/2015.
@@ -48,6 +57,9 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // ===========================================================
     // ============== El Contenedor del Mundo de Física ==========
     private PhysicsWorld physicsWorld;
+    // -------------- Gravedad -----------------------------------
+    private float GRAVITY_X = 0;
+    private float GRAVITY_Y = 0;
 
     // -------------- Escucha los contactos ----------------------
     private ContactListener contactListener;
@@ -58,9 +70,9 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     final int TAG_GEMS =3;
 
     // ============== Definición de Fijadores de física ==========
-    final FixtureDef WALL_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(0,0.1f,0.5f);
-    final FixtureDef SHIP_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(10.f,0.1f,0.5f);
-    final FixtureDef METEORE_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(15f,0,0.5f);
+    final FixtureDef WALL_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(0,0f,0f);
+    final FixtureDef SHIP_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(50.f,0.1f,0.5f);
+    final FixtureDef METEORE_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(1f,0.9f,0.4f);
 
     // ============== Cuerpos ====================================
     // -------------- Paredes ------------------------------------
@@ -81,24 +93,28 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     //Sprite meteor;
     //Body meteorite;
 
+    float spawnVelocity;
+    int timesExecuted;
 
+    boolean movementEnabled;
+
+    Random rand;
+    // =============================================================================================
+    //                                    C O N S T R U C T O R
+    // =============================================================================================
     public AdventureLevelOneScene(){
         super();
         sceneType = SceneType.ADVENTURE_LEVEL_1;
+        movementEnabled = false;
 
     }
 
 
     @Override
     public void loadGFX() {
-        meteorsArrayList = new ArrayList<ITextureRegion>();
-        naveRegion = resourceManager.loadImage("gfx/galaxia_play.png");
-        meteoreRegion1 = resourceManager.loadImage("gfx/Level1/Meteors/1.png");
-        meteoreRegion2 = resourceManager.loadImage("gfx/Level1/Meteors/2.png");
-        meteoreRegion3 = resourceManager.loadImage("gfx/Level1/Meteors/3.png");
-        meteorsArrayList.add(meteoreRegion1);
-        meteorsArrayList.add(meteoreRegion2);
-        meteorsArrayList.add(meteoreRegion3);
+        resourceManager.loadAdventureLevelOneResourcesGFX();
+
+        naveRegion= resourceManager.loadImage("gfx/Level1/Meteors/prueba2.png");
 
     }
 
@@ -114,49 +130,127 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
     @Override
     public void createScene() {
-        physicsWorld = new PhysicsWorld(new Vector2(0,0),false);
+        physicsWorld = new PhysicsWorld(new Vector2(GRAVITY_X,GRAVITY_Y),false);
 
         this.registerUpdateHandler(physicsWorld);
+        rand = new Random();
+
+        createWalls();
 
 
         naveSprite = new Sprite(100, GameManager.CAMERA_HEIGHT/2,naveRegion,vertexBufferObjectManager);
 
 
-        gameManager.getEngine().enableAccelerationSensor(gameManager,this);
+        gameManager.getEngine().enableAccelerationSensor(gameManager, this);
 
-        final Rectangle rekt = new Rectangle(0,GameManager.CAMERA_HEIGHT/2,10,GameManager.CAMERA_HEIGHT, vertexBufferObjectManager);
-        rekt.setColor(1f, 1f, 1f);
-        final Rectangle rektt = new Rectangle(GameManager.CAMERA_WIDTH-10, GameManager.CAMERA_HEIGHT/2,10,GameManager.CAMERA_HEIGHT, vertexBufferObjectManager);
-        rektt.setColor(1f,1f,1f);
-        leftWallBody = PhysicsFactory.createBoxBody(physicsWorld, rekt, BodyDef.BodyType.StaticBody, WALL_FIXTURE_DEFINITION);
-        rightWallBody = PhysicsFactory.createBoxBody(physicsWorld, rektt, BodyDef.BodyType.StaticBody, WALL_FIXTURE_DEFINITION);
         shipBody = PhysicsFactory.createCircleBody(physicsWorld, naveSprite, BodyDef.BodyType.DynamicBody, SHIP_FIXTURE_DEFINITION);
-        naveSprite.setTag(TAG_SHIP);
 
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(naveSprite,shipBody,true,false));
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(rekt,leftWallBody,false,false));
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(rektt,rightWallBody,false,false));
+
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(naveSprite, shipBody, true, false));
+
         this.attachChild(naveSprite);
-        this.attachChild(rekt);
-        this.attachChild(rektt);
-        for(int i=0; i<6; i++){
-            createMeteorite();
-        }
+
+        naveSprite.registerUpdateHandler(new IUpdateHandler() {
+            @Override
+            public void onUpdate(float pSecondsElapsed) {
+                shipBody.applyForce(-physicsWorld.getGravity().x * shipBody.getMass(), 0, shipBody.getWorldCenter().x, shipBody.getWorldCenter().y);
+            }
+
+            @Override
+            public void reset() {
+
+            }
+        });
+
+        spawnVelocity = 3f;
+        timesExecuted = 0;
+
+        movementEnabled = true;
+
+        final TimerHandler timerHandler = new TimerHandler(4f, true, new ITimerCallback() {
+            @Override
+            public void onTimePassed(TimerHandler pTimerHandler) {
+                createMeteorite();
+                timesExecuted++;
+                if(timesExecuted > 5){
+                    spawnVelocity = 1.5f;
+                    pTimerHandler.setTimerSeconds(spawnVelocity);
+                }
+                System.out.println("Meteor Created!");
+                System.out.println("-- timesExecuted: "+timesExecuted+"  spawnVelocity:"+spawnVelocity);
+            }
+        });
+
+        this.registerUpdateHandler(timerHandler);
+
+    }
+
+    private void createWalls(){
+        // ============== Crear los SpritesRectángulos ===============
+        // -- Pared Izquierda
+        final Rectangle leftWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2,0,GameManager.CAMERA_WIDTH,10, vertexBufferObjectManager);
+        // -- Pared Derecha
+        final Rectangle rightWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT-10,GameManager.CAMERA_WIDTH,10, vertexBufferObjectManager);
+        // -- Colorear ambos rectángulos de blanco
+        leftWallRectangle.setColor(1f, 1f, 1f);
+        rightWallRectangle.setColor(1f, 1f, 1f);
+        // ============== Crear los cuerpos de física ===============
+        leftWallBody = PhysicsFactory.createBoxBody(physicsWorld, leftWallRectangle, BodyDef.BodyType.StaticBody, WALL_FIXTURE_DEFINITION);
+        rightWallBody = PhysicsFactory.createBoxBody(physicsWorld, rightWallRectangle, BodyDef.BodyType.StaticBody, WALL_FIXTURE_DEFINITION);
+
+        // ============== Conectar cuerpos de física a sprites ======
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(leftWallRectangle, leftWallBody));
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(rightWallRectangle, rightWallBody));
+
+        // ============== Adjuntar las paredes al mundo =============
+        this.attachChild(leftWallRectangle);
+        this.attachChild(rightWallRectangle);
     }
 
     private void createMeteorite(){
-        int num1= (int)Math.random() * ( 4 -  1);
-        float num2 = (float)Math.random() *(GameManager.CAMERA_WIDTH -100);
+        int textureRegionChosen = rand.nextInt(resourceManager.adventureLevelOneMeteoriteTextureRegions.size());
+
+        float downPosition = rand.nextFloat()*(GameManager.CAMERA_HEIGHT - 20) + 10;
         Sprite meteor;
         Body meteorite;
-        meteor = new Sprite(num2,GameManager.CAMERA_HEIGHT-200,meteorsArrayList.get(num1), vertexBufferObjectManager);
-        meteor.registerEntityModifier(new MoveYModifier(5.0f,GameManager.CAMERA_HEIGHT,-100));
-        meteor.registerEntityModifier(new RotationModifier(5.0f,0,360));
-        meteor.setTag(TAG_METEORS);
-        meteorite = PhysicsFactory.createCircleBody(physicsWorld, naveSprite, BodyDef.BodyType.KinematicBody, METEORE_FIXTURE_DEFINITION);
-        meteorite.setTransform(num2,-100,90);
-        //physicsWorld.registerPhysicsConnector(new PhysicsConnector(meteor,meteorite,false,false));
+        meteor = new Sprite(GameManager.CAMERA_WIDTH,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelOneMeteoriteTextureRegions.get(textureRegionChosen), vertexBufferObjectManager);
+
+        meteorite = PhysicsFactory.createCircleBody(physicsWorld, meteor, BodyDef.BodyType.DynamicBody, METEORE_FIXTURE_DEFINITION);
+        meteorite.setUserData("meteorite");
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(meteor, meteorite, true, true));
+
+        //meteorite.setTransform(GameManager.CAMERA_WIDTH,GameManager.CAMERA_HEIGHT/2,0);
+        meteor.registerEntityModifier(new LoopEntityModifier(new RotationModifier(5.0f, 0, 360)));
+
         this.attachChild(meteor);
+        float randFlot = rand.nextFloat() + 0.10f;
+        int magnitudeMultiplier = 500;
+        int sign = (rand.nextInt(2) == 0)?1:-1;
+        System.out.println("SPAWNED. Yvel = "+randFlot*magnitudeMultiplier*sign);
+        meteorite.setLinearVelocity(-9f,0);
+        meteorite.applyForce(randFlot*magnitudeMultiplier*randFlot,randFlot*magnitudeMultiplier*sign*meteorite.getMass(),meteorite.getWorldCenter().x,meteorite.getWorldCenter().y);
+    }
+
+    @Override
+    public void onBackKeyPressed() {
+
+    }
+
+    @Override
+    public void destroyScene() {
+
+    }
+
+    @Override
+    public void onAccelerationAccuracyChanged(AccelerationData pAccelerationData) {
+
+    }
+
+    @Override
+    public void onAccelerationChanged(AccelerationData pAccelerationData) {
+        if(movementEnabled) {
+            shipBody.setLinearVelocity(0, pAccelerationData.getY() * 4);
+        }
     }
 
     private ContactListener createContactListener() {
@@ -203,41 +297,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
             public void postSolve(Contact contact, ContactImpulse impulse) {
 
             }};
-    return contactListener;
-    }
-    @Override
-    public void onBackKeyPressed() {
-
+        return contactListener;
     }
 
-    @Override
-    public void destroyScene() {
-
-    }
-
-    @Override
-    public void onAccelerationAccuracyChanged(AccelerationData pAccelerationData) {
-
-    }
-
-    @Override
-    public void onAccelerationChanged(AccelerationData pAccelerationData) {
-       /*if(naveSprite.getY() >= 0 && naveSprite.getY() <= GameManager.CAMERA_HEIGHT){
-            naveSprite.setY(naveSprite.getY() + pAccelerationData.getY()*5);
-
-        }
-        else if(naveSprite.getY() > GameManager.CAMERA_HEIGHT){
-            naveSprite.setY(GameManager.CAMERA_HEIGHT+1);
-        }
-        else {
-            naveSprite.setY(0);
-        }*/
-
-        //final Vector2 gravity = Vector2Pool.obtain(0,pAccelerationData.getY()*5);
-        //this.physicsWorld.setGravity(gravity);
-
-        //Vector2Pool.recycle(gravity);
-        shipBody.setLinearVelocity(pAccelerationData.getX()*4,0);
-
-    }
 }

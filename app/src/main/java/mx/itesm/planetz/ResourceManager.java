@@ -191,6 +191,22 @@ public class ResourceManager {
     // ============== RECURSOS MUSICALES =========================
     // ===========================================================
     public Music menuMusic;
+    // ===========================================================
+    //                ESCENA NIVEL UNO ADVENTURE MODE
+    // ===========================================================
+
+    // ============== RECURSOS GRÁFICOS ==========================
+    // ===========================================================
+
+    // ============== Contenedor de Atlas's de Región ============
+    ArrayList<BitmapTextureAtlas> adventureLevelOneTextureAtlasContainer;
+
+    ArrayList<ITextureRegion> adventureLevelOneMeteoriteTextureRegions;
+    // ============== Regiones para los meteoritos ===============
+
+
+
+
 
     // =============================================================================================
     //                                         M É T O D O S
@@ -439,6 +455,35 @@ public class ResourceManager {
     // ============== Cargar Recursos de Sonido ==================
     // ===========================================================
     public void loadMenuResourcesSFX(){
+    }
+
+
+
+    // =========================================================== *
+    //            ESCENA NIVEL UNO ADVENTURE MODE
+    // ===========================================================
+    // ============== Cargar Recursos Gráficos ===================
+    // ===========================================================
+    public void loadAdventureLevelOneResourcesGFX(){
+        // ============== Inicializar el contenedor ==============
+        //adventureLevelOneTextureAtlasContainer = new ArrayList<BitmapTextureAtlas>();
+        adventureLevelOneMeteoriteTextureRegions = new ArrayList<>();
+        // ============== Meteoritos =============================
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/1.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/2.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/3.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/4.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/5.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/6.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/7.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/8.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/9.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/10.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/11.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/12.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/13.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/14.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/15.png"));
     }
 
     // ============== Liberar Recursos ===========================
