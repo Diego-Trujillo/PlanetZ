@@ -91,6 +91,11 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     private Sprite pauseButton;
     // -- Pantalla de pausa
     private Sprite resumeButton;
+    // -- Botón de Play
+    private Sprite playButton;
+    // -- Botón de Back
+    private Sprite backButton;
+
     // -- El texto que dice las vidas que nos quedan
     Text livesRemainingText;
 
@@ -386,7 +391,9 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         };
 
         // -- Creamos la pantalla de PAUSA y sus acciones
-        resumeButton = new Sprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2, resourceManager.adventureLevel1ResumeButtonTextureRegion,vertexBufferObjectManager){
+        resumeButton = new Sprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2, resourceManager.adventureLevel1ResumeButtonTextureRegion,vertexBufferObjectManager);
+
+        playButton = new Sprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2, resourceManager.adventureLevel1PlayButtonTextureRegion,vertexBufferObjectManager){
             //si se da click se reanuda colocando el time step en 1/30
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
@@ -395,6 +402,17 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                     setPauseGame();
                 }
                 return true;}};
+        backButton  = new Sprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2, resourceManager.adventureLevel1BackButtonTextureRegion,vertexBufferObjectManager){
+            //regresa al menu play en
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
+                //Cuando se toque la pantalla de pausa
+                if (pSceneTouchEvent.isActionUp()) {
+                    //
+                }
+                return true;}
+        };
+
 
         // ============= Adjuntamos todos los elementos al HUD ===
         playerHUD.attachChild(pauseButton);
