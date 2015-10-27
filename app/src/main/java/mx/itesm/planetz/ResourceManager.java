@@ -362,7 +362,7 @@ public class ResourceManager {
         // -- Logotipo juego --
         menuLogoBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuLogoTextureAtlas, gameManager, "LogoSmall.png", 0, 0);
         // -- Planeta --
-        menuPlanetTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "PlanetaGrande.png", 0, 0);
+        menuPlanetTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuPlanetTextureAtlas, gameManager, "PlanetWithShip.png", 0, 0);
         // -- Overlay --
         menuOverlayTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuOverlayTextureAtlas, gameManager, "menuOverlay.png", 0, 0);
 

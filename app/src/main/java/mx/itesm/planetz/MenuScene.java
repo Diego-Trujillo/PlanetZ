@@ -260,7 +260,7 @@ public class MenuScene extends BaseScene{
         // -- Ajustamos su posición a la parte inferior
         planetSprite.setPosition(gameManager.CAMERA_WIDTH / 2, -gameManager.CAMERA_HEIGHT + 200);
         // -- Registramos un Modifier perpetuo que haga que el planeta gire
-        planetSprite.registerEntityModifier(new LoopEntityModifier(new RotationModifier(250, 0, -360)));
+        planetSprite.registerEntityModifier(new LoopEntityModifier(new RotationModifier(200, 0, -360)));
 
         // =============== Adjuntar y esconder el overlay ========
         attachChild(menuOverlaySprite);
@@ -467,25 +467,25 @@ public class MenuScene extends BaseScene{
 
 
         //gemas
-        gem1 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemBlue1TextureRegion, vertexBufferObjectManager);
+        gem1 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemBlue1TextureRegion, vertexBufferObjectManager);
         gem2 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemBlue2TextureRegion, vertexBufferObjectManager);
-        gem3 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemBlue3TextureRegion, vertexBufferObjectManager);
-        gem4 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemPink1TextureRegion, vertexBufferObjectManager);
+        gem3 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemBlue3TextureRegion, vertexBufferObjectManager);
+        gem4 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemPink1TextureRegion, vertexBufferObjectManager);
         gem5 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemPink2TextureRegion, vertexBufferObjectManager);
-        gem6 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemPink3TextureRegion, vertexBufferObjectManager);
-        gem7 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemYellow1TextureRegion, vertexBufferObjectManager);
+        gem6 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemPink3TextureRegion, vertexBufferObjectManager);
+        gem7 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemYellow1TextureRegion, vertexBufferObjectManager);
         gem8 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemYellow2TextureRegion, vertexBufferObjectManager);
-        gem9 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemYellow3TextureRegion, vertexBufferObjectManager);
+        gem9 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemYellow3TextureRegion, vertexBufferObjectManager);
 
-        gemL1 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
+        gemL1 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
         gemL2 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked2TextureRegion, vertexBufferObjectManager);
-        gemL3 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
-        gemL4 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
+        gemL3 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
+        gemL4 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
         gemL5 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked2TextureRegion, vertexBufferObjectManager);
-        gemL6 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
-        gemL7 = new Sprite(GameManager.CAMERA_WIDTH/2 -400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
+        gemL6 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
+        gemL7 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
         gemL8 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked2TextureRegion, vertexBufferObjectManager);
-        gemL9 = new Sprite(GameManager.CAMERA_WIDTH/2 +400,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
+        gemL9 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
         level1 = new Entity();
         level2 = new Entity();
         level3 = new Entity();
@@ -568,7 +568,7 @@ public class MenuScene extends BaseScene{
 
         // =============== Ubicando los botones =================
         backButton.setPosition(150, GameManager.CAMERA_HEIGHT - 125);
-        rightArrow.setPosition(GameManager.CAMERA_WIDTH - 50, GameManager.CAMERA_HEIGHT / 2 - 200);
+        rightArrow.setPosition(GameManager.CAMERA_WIDTH - 100, GameManager.CAMERA_HEIGHT / 2 - 50);
         leftArrow.setPosition(100, GameManager.CAMERA_HEIGHT/2 -50);
 
         countPosition= 1;
