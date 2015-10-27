@@ -55,7 +55,7 @@ public class Meteorite {
     // -------------- Conector Sprite-Cuerpo ---------------------
     private PhysicsConnector physicsConnector;
     // -------------- Identificador ------------------------------
-    private final String identificador = "meteorite";
+
 
 
 

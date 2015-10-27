@@ -29,6 +29,7 @@ import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.RotationAtModifier;
 import org.andengine.entity.modifier.RotationModifier;
+import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.AutoParallaxBackground;
@@ -90,9 +91,9 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // -- Botón de Pausa
     private Sprite pauseButton;
     // -- Pantalla de pausa
-    private Sprite resumeButton;
+    private Sprite pauseScreen;
     // -- Botón de Play
-    private Sprite playButton;
+    private Sprite resumeButton;
     // -- Botón de Back
     private Sprite backButton;
 
@@ -302,9 +303,9 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
         // ============== Crear los SpritesRectángulos ===============
         // -- Pared Izquierda
-        final Rectangle leftWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2,5,GameManager.CAMERA_WIDTH,10, vertexBufferObjectManager);
+        final Rectangle leftWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2,-5,GameManager.CAMERA_WIDTH,10, vertexBufferObjectManager);
         // -- Pared Derecha
-        final Rectangle rightWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT+5,GameManager.CAMERA_WIDTH,10, vertexBufferObjectManager);
+        final Rectangle rightWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT + 5,GameManager.CAMERA_WIDTH,10, vertexBufferObjectManager);
         // -- Colorear ambos rectángulos de blanco
         leftWallRectangle.setColor(1f, 1f, 1f);
         rightWallRectangle.setColor(1f, 1f, 1f);
@@ -390,10 +391,12 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
             }
         };
 
-        // -- Creamos la pantalla de PAUSA y sus acciones
-        resumeButton = new Sprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2, resourceManager.adventureLevel1ResumeButtonTextureRegion,vertexBufferObjectManager);
+        // ========== Botones de pausa y sus acciones ================
+        // -- Creamos la pantalla de PAUSA
+        pauseScreen = new Sprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2, resourceManager.adventureLevel1ResumeButtonTextureRegion,vertexBufferObjectManager);
 
-        playButton = new Sprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2, resourceManager.adventureLevel1PlayButtonTextureRegion,vertexBufferObjectManager){
+
+        resumeButton = new Sprite(GameManager.CAMERA_WIDTH/2 + 75, GameManager.CAMERA_HEIGHT/2 - 75, resourceManager.adventureLevel1PlayButtonTextureRegion,vertexBufferObjectManager){
             //si se da click se reanuda colocando el time step en 1/30
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
@@ -402,7 +405,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                     setPauseGame();
                 }
                 return true;}};
-        backButton  = new Sprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2, resourceManager.adventureLevel1BackButtonTextureRegion,vertexBufferObjectManager){
+        backButton  = new Sprite(GameManager.CAMERA_WIDTH/2 + 75 , GameManager.CAMERA_HEIGHT/2 + 75, resourceManager.adventureLevel1BackButtonTextureRegion,vertexBufferObjectManager){
             //regresa al menu play en
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
@@ -416,9 +419,19 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
         // ============= Adjuntamos todos los elementos al HUD ===
         playerHUD.attachChild(pauseButton);
+        playerHUD.attachChild(pauseScreen);
         playerHUD.attachChild(resumeButton);
+        playerHUD.attachChild(backButton);
+        // ============= Rotamos los elementos de la pantalla Pausa ==
+        pauseScreen.setRotation(-90);
+        resumeButton.setRotation(-90);
+        backButton.setRotation(-90);
+
         // ============= Deshabilitamos la pantalla de pausa =====
+        pauseScreen.setVisible(false);
         resumeButton.setVisible(false);
+        backButton.setVisible(false);
+
         // ============= Registramos las áreas táctiles ==========
         playerHUD.registerTouchArea(pauseButton);
 
@@ -437,8 +450,11 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
             // -- Declaramos que retome todos los Update Handlers
             sceneManager.getCurrentScene().setIgnoreUpdate(false);
             // -- Quita la visibilidad de la pantalla
+            pauseScreen.setVisible(false);
             resumeButton.setVisible(false);
+            backButton.setVisible(false);
             // -- Desregistra la habilidad de tocar esta pantalla
+            playerHUD.unregisterTouchArea(backButton);
             playerHUD.unregisterTouchArea(resumeButton);
             // -- Habilitamos el movimiento de la nave con el accelerómetro
             gameManager.getEngine().enableAccelerationSensor(gameManager, (AdventureLevelOneScene) sceneManager.getCurrentScene());
@@ -451,9 +467,13 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
             // -- Detenemos a la nave
             shipBody.setLinearVelocity(0,0);
             // -- Hacemos a la pantalla de pausa visible
+            pauseScreen.setVisible(true);
             resumeButton.setVisible(true);
+            backButton.setVisible(true);
+
             // -- Registramos el área táctil de la pantalla de pausa
             playerHUD.registerTouchArea(resumeButton);
+            playerHUD.registerTouchArea(backButton);
             // -- Declaramos que ignore todos los Update Handlers de esta escena
             sceneManager.getCurrentScene().setIgnoreUpdate(true);
             // -- Cambiamos la bandera de juego pausado

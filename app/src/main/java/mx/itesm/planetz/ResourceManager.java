@@ -483,7 +483,7 @@ public class ResourceManager {
         // -------------- Meteoritos -----------------------------
         adventureLevelOneMeteoriteTextureRegions = new ArrayList<>();
         //---------------Botones----------------------------------
-        adventureLevel1OneButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,800,450,TextureOptions.BILINEAR);
+        adventureLevel1OneButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,600,300,TextureOptions.BILINEAR);
 
         // ============== Regiones =============================
         //----------------fondo----------------
@@ -493,10 +493,10 @@ public class ResourceManager {
 
         //------------Botones--------------
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Level1/buttons/");
-        adventureLevel1PauseButtonTextureRegion =  BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "button_pause.png", 0, 0);
-        adventureLevel1ResumeButtonTextureRegion= BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "PauseScreen.png", 500, 0);
-        adventureLevel1PlayButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "PlayButtonPauseScreen.png", 600, 0);
-        adventureLevel1BackButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "DoorButtonPauseScreen.png", 700, 0);
+        adventureLevel1PauseButtonTextureRegion =  BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "button_pause.png", 500, 200);
+        adventureLevel1ResumeButtonTextureRegion= BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "PauseScreen.png", 0, 0);
+        adventureLevel1PlayButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "PlayButtonPauseScreen.png", 500, 0);
+        adventureLevel1BackButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "DoorButtonPauseScreen.png", 500, 100);
 
         // -------------- Nave ---------------------------------
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Sprites/");
