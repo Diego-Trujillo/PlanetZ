@@ -236,6 +236,9 @@ public class ResourceManager {
         getInstance().musicManager = gameManager.getEngine().getMusicManager();
         MusicFactory.setAssetBasePath("mfx/");
 
+        // ============== Cargar Fuentes =============
+        getInstance().fontOne = FontFactory.createFromAsset(gameManager.getFontManager(), getInstance().textureManager, 1024, 1024, gameManager.getAssets(), "gfx/fonts/PetitFour.otf", 100, true, Color.WHITE_ABGR_PACKED_INT);
+        getInstance().fontOne.load();
     }
 
     // =========================================================== *
@@ -296,9 +299,8 @@ public class ResourceManager {
     // ===========================================================
     public void loadMenuResourcesGFX() {
 
-        // ============== Cargar Fuentes =============
-        fontOne = FontFactory.createFromAsset(gameManager.getFontManager(),textureManager,1024,1024,gameManager.getAssets(),"gfx/fonts/PetitFour.otf",100,true, Color.WHITE_ABGR_PACKED_INT);
-        fontOne.load();
+
+
 
         // ============== Asignar el directorio base =============
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
@@ -526,8 +528,6 @@ public class ResourceManager {
             atlas.unload();
             atlas = null;
         }
-
-        fontOne.unload();
 
         menuMusic.stop();
         menuMusic.release();
