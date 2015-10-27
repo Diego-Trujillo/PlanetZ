@@ -408,7 +408,7 @@ public class MenuScene extends BaseScene{
         // -- Botón para regresar al menú principal
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,resourceManager.menuSubmenuBackButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
         // -- Botón para abrir las opciones de Adventure
-        IMenuItem adventureMode = new ScaleMenuItemDecorator(new SpriteMenuItem(PLAY_ADVENTURE_MODE,resourceManager.loadImage("gfx/planeta_play.png") ,vertexBufferObjectManager),1.2f,1f); /*******/
+        IMenuItem adventureMode = new ScaleMenuItemDecorator(new SpriteMenuItem(PLAY_ADVENTURE_MODE,resourceManager.loadImage("gfx/icon_play.png") ,vertexBufferObjectManager),1.2f,1f); /*******/
 
         // =============== Agregando los botones =================
         playMenuScene.addMenuItem(backButton);

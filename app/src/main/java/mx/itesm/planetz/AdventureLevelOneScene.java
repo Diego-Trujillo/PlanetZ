@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.Shape;
 
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.UpdateHandlerList;
@@ -21,12 +22,16 @@ import org.andengine.engine.handler.collision.CollisionHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.ScreenOrientation;
+import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.RotationAtModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.background.AutoParallaxBackground;
+import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -36,6 +41,7 @@ import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.sensor.acceleration.AccelerationData;
 import org.andengine.input.sensor.acceleration.IAccelerationListener;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -72,8 +78,12 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // ===========================================================
     //              Elementos Gráficos
     // ===========================================================
-    // ============== Sprite Nave ================================
+    // ============== Sprites================================
     AnimatedSprite shipSprite;
+    //-----botones sprite
+    Sprite pauseButton;
+    Sprite resumeButton;
+
 
     // ===========================================================
     //            Cuerpos  en el motor de física
@@ -121,6 +131,15 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     int scalarMultipier;
     // -- Indica si el signo es positivo o negativo
     int signInt;
+    // -- Indica el step para crear la pausa
+    int timestep= 1/30;
+    // -- Bandera del click
+    boolean click = false;
+
+    // FONDO
+    private AutoParallaxBackground movingParallaxBackground;
+    private ParallaxBackground.ParallaxEntity movingParallaxEntity;
+    private Sprite backgroundSprite;
 
     // =============================================================================================
     //                                    C O N S T R U C T O R
@@ -147,6 +166,17 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // -- Creamos un sprite animado con la textura animada de la nave
         shipSprite = new AnimatedSprite(125, GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelOneAnimatedShipTextureRegion,vertexBufferObjectManager);
 
+
+        // =============== Fondo de estrellas ====================
+        // -- Crea una entidad de fondo móvil
+        movingParallaxBackground = new AutoParallaxBackground(0f,0,0,1);
+        // -- Crea el sprite del fondo
+        backgroundSprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.menuBackgroundTextureRegion);
+        // -- Crea una entidad móvil que definirá movimiento del fondo
+        movingParallaxEntity = new ParallaxBackground.ParallaxEntity(15f,backgroundSprite);
+        // -- Asigna la entidad móvil para que siga y de movimiento al fondo
+        movingParallaxBackground.attachParallaxEntity(movingParallaxEntity);
+
     }
     // ===========================================================
     //                       Cargar música
@@ -170,11 +200,15 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     public void createScene() {
         // ============== Crear el mundo de física ===============
         // -- Inicializarlo
-        physicsWorld = new PhysicsWorld(new Vector2(GRAVITY_X,GRAVITY_Y),false);
+        physicsWorld = new PhysicsWorld(new Vector2(GRAVITY_X,GRAVITY_Y),true);
         // -- Registrar al mundo de física ante la escena ========
         this.registerUpdateHandler(physicsWorld);
 
+        //-- Fondo
+        this.setBackground(movingParallaxBackground);
         // ============== Crear los objetos del juego ============
+
+
         // -- Las paredes del juego
         createWalls();
         // -- La nave
@@ -188,7 +222,43 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         playerLives = 3;
 
 
+        // ============== PAUSA ============================
 
+                resumeButton = new Sprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2, resourceManager.adventureLevel1ResumeButtonTextureRegion,vertexBufferObjectManager){
+                    //si se da click se reanuda colocando el time step en 1/30
+                    @Override
+                    public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
+                        //si se da click se reanuda colocando el time step en 1/30
+                        if (pSceneTouchEvent.isActionUp()) {
+                            //this.registerUpdateHandler(physicsWorld);
+                            click= false;
+                            this.setIgnoreUpdate(false);
+                            resumeButton.setVisible(false);}
+                        return true;}};
+                pauseButton = new Sprite(50,GameManager.CAMERA_HEIGHT-50,resourceManager.adventureLevel1PauseButtonTextureRegion,vertexBufferObjectManager){
+                    @Override
+                    public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
+                        // si se da click se pone el time step para pausa
+                        if (pSceneTouchEvent.isActionUp()&& click==false) {
+                            //physicsWorld.unregisterPhysicsConnector();
+                            //movementEnabled = false;
+                            click= true;
+                            resumeButton.setVisible(true);
+                            System.out.println("CLICK EN PAUSA");
+                            this.setIgnoreUpdate(true);
+
+
+                        }
+                        return true;
+                    }
+                };
+                this.attachChild(pauseButton);
+                this.attachChild(resumeButton);
+                resumeButton.setVisible(false);
+                this.registerTouchArea(pauseButton);
+                this.registerTouchArea(resumeButton);
+
+                //---- se le da el step al mundo que se checa constantemente
 
 
         // ============== CICLO PRINCIPAL =========================
@@ -196,13 +266,16 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         final TimerHandler timerHandler = new TimerHandler(4f, true, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
-                createMeteorite();
-                timesExecuted++;
-                if(timesExecuted == 5){;
-                    pTimerHandler.setTimerSeconds(2f);
-                }
-                if(timesExecuted > 7 && timesExecuted%3 == 0){
+                if(click==false) {
                     createMeteorite();
+                    timesExecuted++;
+                    if (timesExecuted == 5) {
+                        ;
+                        pTimerHandler.setTimerSeconds(2f);
+                    }
+                    if (timesExecuted > 7 && timesExecuted % 3 == 0) {
+                        createMeteorite();
+                    }
                 }
             }
         });
@@ -226,6 +299,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     //            Crea las paredes límites del juego
     // ===========================================================
     private void createWalls(){
+
         // ============== Crear los SpritesRectángulos ===============
         // -- Pared Izquierda
         final Rectangle leftWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2,0,GameManager.CAMERA_WIDTH,10, vertexBufferObjectManager);
