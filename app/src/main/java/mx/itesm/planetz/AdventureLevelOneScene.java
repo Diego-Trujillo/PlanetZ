@@ -100,12 +100,28 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     //           Elementos de la mecánica del nivel
     // ===========================================================
 
-    int lives;
-    float spawnVelocity;
+    // ============== Elementos del control ======================
+    // -- Dice si el movimiento de la nave con el accelerómetro está habilitado
+    boolean movementEnabled;
+    // ============== Elementos de la nave =======================
+    // -- Vidas de la nave
+    int playerLives;
+    // ============== Elementos de la funcion que crea Meteoritos=
+    // -- Veces que ha sido ejecutada la función de timer.
     int timesExecuted;
 
-    boolean movementEnabled;
+    // ============== Miscéláneo ==================================
+    // -- Generador de números aleatorios
     Random rand;
+    // -- Float
+    int meteoriteTextureChosen;
+    // -- Factor de proporción con respecto al Escalar
+    float proportionFactor;
+    // -- Escalar máximo de fuerza
+    int scalarMultipier;
+    // -- Indica si el signo es positivo o negativo
+    int signInt;
+
     // =============================================================================================
     //                                    C O N S T R U C T O R
     // =============================================================================================
@@ -152,53 +168,38 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // ===========================================================
     @Override
     public void createScene() {
-        lives = 3;
+        // ============== Crear el mundo de física ===============
+        // -- Inicializarlo
         physicsWorld = new PhysicsWorld(new Vector2(GRAVITY_X,GRAVITY_Y),false);
-
+        // -- Registrar al mundo de física ante la escena ========
         this.registerUpdateHandler(physicsWorld);
-        rand = new Random();
 
+        // ============== Crear los objetos del juego ============
+        // -- Las paredes del juego
         createWalls();
+        // -- La nave
+        createShip();
 
-
-
-        gameManager.getEngine().enableAccelerationSensor(gameManager, this);
-
-        shipBody = PhysicsFactory.createCircleBody(physicsWorld, shipSprite, BodyDef.BodyType.DynamicBody, SHIP_FIXTURE_DEFINITION);
-        shipBody.setUserData("ship");
-
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(shipSprite, shipBody, true, false));
-
-
-        attachChild(shipSprite);
-        shipSprite.animate(500);
-        shipSprite.setRotation(-90);
-
-        shipSprite.registerUpdateHandler(new IUpdateHandler() {
-            @Override
-            public void onUpdate(float pSecondsElapsed) {
-                shipBody.applyForce(-physicsWorld.getGravity().x * shipBody.getMass(), 0, shipBody.getWorldCenter().x, shipBody.getWorldCenter().y);
-            }
-
-            @Override
-            public void reset() {
-
-            }
-        });
-
-        spawnVelocity = 3f;
+        // ============== Inicializar elementos de mecánica ======
+        // -- Inicializar el generador de números aleatorios
+        rand = new Random();
+        // -- Las veces que se ha ejecutado el ciclo principal
         timesExecuted = 0;
+        playerLives = 3;
 
-        movementEnabled = true;
 
+
+
+
+        // ============== CICLO PRINCIPAL =========================
+        // -- Se va a ejecutar la acción cada x segundos (x inicial es 4f)
         final TimerHandler timerHandler = new TimerHandler(4f, true, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
                 createMeteorite();
                 timesExecuted++;
-                if(timesExecuted == 5){
-                    spawnVelocity = 2f;
-                    pTimerHandler.setTimerSeconds(spawnVelocity);
+                if(timesExecuted == 5){;
+                    pTimerHandler.setTimerSeconds(2f);
                 }
                 if(timesExecuted > 7 && timesExecuted%3 == 0){
                     createMeteorite();
@@ -206,11 +207,24 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
             }
         });
 
+        // ============== Registrar ciclos del juego ==============
+        // -- Registrar el ciclo principal en la escena
         this.registerUpdateHandler(timerHandler);
+        // -- Registrar el manejador de colisiones en el mundo de física
         physicsWorld.setContactListener(createContactListener());
+
+        // -- Ya que se cargó tod o, habilitamos el movimiento e iniciamos el accelerómetro
+        movementEnabled = true;
+        gameManager.getEngine().enableAccelerationSensor(gameManager, this);
+
+
+
 
     }
 
+    // ===========================================================
+    //            Crea las paredes límites del juego
+    // ===========================================================
     private void createWalls(){
         // ============== Crear los SpritesRectángulos ===============
         // -- Pared Izquierda
@@ -237,65 +251,126 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         this.attachChild(rightWallRectangle);
     }
 
-    private void createMeteorite(){
-        int textureRegionChosen = rand.nextInt(resourceManager.adventureLevelOneMeteoriteTextureRegions.size());
+    // ===========================================================
+    //                      Crea la nave
+    // ===========================================================
+    private void createShip(){
 
-        float downPosition = rand.nextFloat()*(GameManager.CAMERA_HEIGHT - 20) + 10;
-        Sprite meteor;
-        Body meteorite;
-        meteor = new Sprite(GameManager.CAMERA_WIDTH,downPosition,resourceManager.adventureLevelOneMeteoriteTextureRegions.get(textureRegionChosen), vertexBufferObjectManager);
+        shipBody = PhysicsFactory.createCircleBody(physicsWorld, shipSprite, BodyDef.BodyType.DynamicBody, SHIP_FIXTURE_DEFINITION);
+        shipBody.setUserData("ship");
 
-        meteorite = PhysicsFactory.createCircleBody(physicsWorld, meteor, BodyDef.BodyType.DynamicBody, METEOR_FIXTURE_DEFINITION);
-        meteorite.setUserData("meteorite");
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(meteor, meteorite, true, true));
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(shipSprite, shipBody, true, false));
 
-        //meteorite.setTransform(GameManager.CAMERA_WIDTH,GameManager.CAMERA_HEIGHT/2,0);
-        meteor.registerEntityModifier(new LoopEntityModifier(new RotationModifier(5.0f, 0, 360)));
 
-        this.attachChild(meteor);
-        float randFlot = rand.nextFloat();
-        int magnitudeMultiplier = 500;
-        int sign = (rand.nextInt(2) == 0)?1:-1;
+        attachChild(shipSprite);
+        shipSprite.animate(500);
+        shipSprite.setRotation(-90);
 
-        meteorite.setLinearVelocity(-9f,0);
-        meteorite.applyForce(randFlot*magnitudeMultiplier*randFlot,
-                randFlot*magnitudeMultiplier*sign*meteorite.getMass(),
-                meteorite.getWorldCenter().x,meteorite.getWorldCenter().y);
+        shipSprite.registerUpdateHandler(new IUpdateHandler() {
+            @Override
+            public void onUpdate(float pSecondsElapsed) {
+                shipBody.applyForce(-physicsWorld.getGravity().x * shipBody.getMass(), 0, shipBody.getWorldCenter().x, shipBody.getWorldCenter().y);
+            }
+
+            @Override
+            public void reset() {
+
+            }
+        });
+
     }
 
+    // ===========================================================
+    //                Crea una instancia de un meteorito, lo adhiere a la escena y lo propulsa
+    // ===========================================================
+    private void createMeteorite() {
+        // ============== Asignar valores numéricos al azar ==========
+        // -- El índice de la textura de región que se va a elegir para este meteorito [0,15]
+        meteoriteTextureChosen = rand.nextInt(resourceManager.adventureLevelOneMeteoriteTextureRegions.size());
+        // -- El factor de proporción (0,1)
+        proportionFactor = rand.nextFloat();
+        // -- Multiplicador de escala
+        scalarMultipier = 500;
+        // -- Determina al azar 50% - 50% si el número es negativo o positivo
+        signInt = (rand.nextInt(2) == 0) ? 1 : -1;
+
+        // ============== Declara el sprite y el cuerpo físico ========
+        Sprite meteorSprite;
+        Body meteorBody;
+
+        // -- Inicializa el Sprite
+        meteorSprite = new Sprite(GameManager.CAMERA_WIDTH, rand.nextInt(GameManager.CAMERA_HEIGHT - 100) + 50, resourceManager.adventureLevelOneMeteoriteTextureRegions.get(meteoriteTextureChosen), vertexBufferObjectManager);
+        // -- Inicializa el Cuerpo Físico
+        meteorBody = PhysicsFactory.createCircleBody(physicsWorld, meteorSprite, BodyDef.BodyType.DynamicBody, METEOR_FIXTURE_DEFINITION);
+        // -- Adhiere el tag "meteorite" al cuerpo físico
+        meteorBody.setUserData("meteorite");
+        // -- Registra el conector entre el Sprite y el Cuertpo
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(meteorSprite, meteorBody, true, true));
+
+        // -- Registramos una rotación eterna del Sprite del meteorito
+        meteorSprite.registerEntityModifier(new LoopEntityModifier(new RotationModifier(5.0f, 0, 360)));
+
+        // -- Adjuntamos el sprite a la escena
+        this.attachChild(meteorSprite);
+
+        // -- Definimos una velocidad linear para que avance rápido sin importar la gravedad
+        meteorBody.setLinearVelocity(-9f,0);
+        // -- Aplicamos una fuerza aleatoria en x para definir una propulsión aleatoria hacia la nave
+        //    y una fuerza aleratoria en Y para definir un ángulo de lanzamiento inicial.
+        //    la fuerza es = masa * proporción (0,1) * factorEscalar
+        meteorBody.applyForce(proportionFactor*scalarMultipier*meteorBody.getMass()/5,proportionFactor*scalarMultipier*meteorBody.getMass() ,meteorBody.getWorldCenter().x,meteorBody.getWorldCenter().y);
+    }
+    // ===========================================================
+    //  Define comportamiento cuando se presione la tecla BACK
+    // ===========================================================
     @Override
     public void onBackKeyPressed() {
 
     }
-
+    // ===========================================================
+    //             Comportamiento para liberar la escena
+    // ===========================================================
     @Override
     public void destroyScene() {
 
     }
-
+    // ===========================================================
+    //         Cuando se cambia la precisión del accelerómetro
+    // ===========================================================
     @Override
     public void onAccelerationAccuracyChanged(AccelerationData pAccelerationData) {
 
     }
-
+    // ===========================================================
+    //  Define comportamiento cuando la inclinación cambia: Accelerómetro
+    // ===========================================================
     @Override
     public void onAccelerationChanged(AccelerationData pAccelerationData) {
         if(movementEnabled) {
+            // -- Mueve a la nave en la direción indicada por el accelerómetro
             shipBody.setLinearVelocity(0, pAccelerationData.getY() * 4);
-            shipBody.setTransform(shipBody.getPosition(),shipBody.getAngle()+1f);
         }
     }
-
+    // ===========================================================
+    //       Define cómo reaccionar ante las colisiones
+    // ===========================================================
     private ContactListener createContactListener() {
+        // -- Creamos un objeto tipo ContactListener
         contactListener = new ContactListener() {
+            // ========= Cuando se detecta la colisión ===========
             @Override
             public void beginContact(Contact contact) {
+                // -- Obtener objeto A
                 final Fixture fixtureA = contact.getFixtureA();
+                // -- Obtener objeto B
                 final Fixture fixtureB = contact.getFixtureB();
+                // -- Si los dos objetos existen
                 if(fixtureA != null && fixtureB != null){
+                    // MANEJA LA COLISIÓN ENTRE NAVE Y METEORITO
                     if((fixtureA.getBody().getUserData().equals("ship") && fixtureB.getBody().getUserData().equals("meteorite")) || (fixtureB.getBody().getUserData().equals("ship") && fixtureA.getBody().getUserData().equals("meteorite")) ){
-                        lives--;
-                        System.out.println("Meteor-Ship Collision!! Lives: "+lives);
+                        // -- Resta el contador de vidas
+                        playerLives--;
+                        System.out.println("Meteor-Ship Collision!! Lives: "+playerLives);
                     }
                 }
             }
