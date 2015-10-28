@@ -212,6 +212,31 @@ public class ResourceManager {
     ArrayList<ITextureRegion> adventureLevelOneMeteoriteTextureRegions;
     ITiledTextureRegion adventureLevelOneAnimatedShipTextureRegion;
 
+    //-----------------Fondo------------------------
+    //-----Atlas-----
+    BitmapTextureAtlas adventureLevel1Background1TextureAtlas;
+    BitmapTextureAtlas adventureLevel1Background2TextureAtlas;
+    //----Texturas----
+    ITextureRegion adventureLevel1BackgroundTextureRegion;
+    ITextureRegion adventureLevel1BackgroundStarsTextureRegion;
+
+
+    // ===========================================================
+    //                  ESCENA YOU LOSE
+    // ===========================================================
+
+    // ============== RECURSOS GRÁFICOS ==========================
+    // ===========================================================
+    //-------Atlas-------
+    BitmapTextureAtlas YouLoseBackgroundTextureAtlas;
+    BitmapTextureAtlas YouLoseButtonsTextureAtlas;
+    //--------Texturas----
+    ITextureRegion YouLoseBackgroundTextureRegion;
+    ITextureRegion YouLoseExitButtonTextureRegion;
+    ITextureRegion YouLoseRetryButtonTextureRegion;
+
+
+
 
 
 
@@ -389,7 +414,7 @@ public class ResourceManager {
         //botones
         menuSubmenuBackButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuSubmenuBackButtonTextureAtlas, gameManager, "backArrow.png", 0, 0);
         backpackMenuLeftArrowTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuButtonTextureAtlas, gameManager, "arrow_left.png", 0, 0);
-        backpackMenuRightArrowTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuButtonTextureAtlas, gameManager, "arrow_right.png", 150, 0);
+        backpackMenuRightArrowTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuButtonTextureAtlas, gameManager, "arrow_right.png", 115, 0);
         //gemas
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Backpack/");
         backpackMenuGemBlue1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backpackMenuGems1TextureAtlas, gameManager, "GemBlue1.png", 0, 0);
@@ -476,24 +501,26 @@ public class ResourceManager {
     public void loadAdventureLevelOneResourcesGFX(){
         // ============== Texture Atlas ==========================
         //---------------fondo----------------------------------
-        menuBackgroundTextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 800, TextureOptions.BILINEAR);
-
+        //menuBackgroundTextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 800, TextureOptions.BILINEAR);
+        adventureLevel1Background1TextureAtlas = new BitmapTextureAtlas(textureManager,4000,600,TextureOptions.BILINEAR);
+        //adventureLevel1Background2TextureAtlas = new BitmapTextureAtlas(textureManager,600,4000);
         // -------------- Nave -----------------------------------
         adventureLevelOneShipTextureAtlas = new BitmapTextureAtlas(textureManager,214,235,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         // -------------- Meteoritos -----------------------------
         adventureLevelOneMeteoriteTextureRegions = new ArrayList<>();
         //---------------Botones----------------------------------
-        adventureLevel1OneButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,600,300,TextureOptions.BILINEAR);
+        adventureLevel1OneButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,650,350,TextureOptions.BILINEAR);
 
         // ============== Regiones =============================
         //----------------fondo----------------
 
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
-        menuBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundTextureAtlas, gameManager, "fondomenu.jpg", 0, 0);
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Level1/");
+        adventureLevel1BackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1Background1TextureAtlas, gameManager, "fondo2.jpg", 0, 0);
+        //adventureLevel1BackgroundStarsTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1Background2TextureAtlas, gameManager, "estrellas.png", 0, 0);
 
         //------------Botones--------------
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Level1/buttons/");
-        adventureLevel1PauseButtonTextureRegion =  BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "button_pause.png", 500, 200);
+        adventureLevel1PauseButtonTextureRegion =  BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "button_pause.png", 500, 128);
         adventureLevel1ResumeButtonTextureRegion= BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "PauseScreen.png", 0, 0);
         adventureLevel1PlayButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "PlayButtonPauseScreen.png", 500, 0);
         adventureLevel1BackButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "DoorButtonPauseScreen.png", 500, 100);
@@ -522,7 +549,29 @@ public class ResourceManager {
         // ================ Cargar los Atlas ====================
         adventureLevelOneShipTextureAtlas.load();
         adventureLevel1OneButtonsTextureAtlas.load();
-        menuBackgroundTextureAtlas.load();
+        adventureLevel1Background1TextureAtlas.load();
+        //adventureLevel1Background2TextureAtlas.load();
+    }
+
+    public void loadYouLoseResourcesGFX(){
+        //--atlas del fondo
+        YouLoseBackgroundTextureAtlas = new BitmapTextureAtlas(textureManager,1280,800,TextureOptions.BILINEAR);
+        //--atlas de los botones
+        YouLoseButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,500,500,TextureOptions.BILINEAR);
+
+
+        // ============== Regiones =============================
+        //--fondo-------
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/YouLose/");
+        YouLoseBackgroundTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouLoseBackgroundTextureAtlas, gameManager, "fondo.jpg", 0, 0);
+        //--Botones-----
+        YouLoseExitButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouLoseButtonsTextureAtlas, gameManager, "DoorButtonPauseScreen.png", 0, 0);
+        YouLoseRetryButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouLoseButtonsTextureAtlas, gameManager, "Retry_Norm.png", 100, 0);
+
+        // ================ Cargar los Atlas ====================
+        YouLoseBackgroundTextureAtlas.load();
+        YouLoseButtonsTextureAtlas.load();
+
     }
 
     // ============== Liberar Recursos ===========================

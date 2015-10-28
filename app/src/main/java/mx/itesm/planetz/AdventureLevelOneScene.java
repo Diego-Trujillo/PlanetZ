@@ -186,9 +186,9 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // -- Crea una entidad de fondo móvil
         movingParallaxBackground = new AutoParallaxBackground(0f,0,0,1);
         // -- Crea el sprite del fondo
-        backgroundSprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.menuBackgroundTextureRegion);
+        backgroundSprite = resourceManager.loadSprite(0,gameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevel1BackgroundTextureRegion);
         // -- Crea una entidad móvil que definirá movimiento del fondo
-        movingParallaxEntity = new ParallaxBackground.ParallaxEntity(-15f,backgroundSprite);
+        movingParallaxEntity = new ParallaxBackground.ParallaxEntity(-70f,backgroundSprite);
         // -- Asigna la entidad móvil para que siga y de movimiento al fondo
         movingParallaxBackground.attachParallaxEntity(movingParallaxEntity);
 
@@ -292,6 +292,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // -- Ya que se cargó tod o, habilitamos el movimiento e iniciamos el accelerómetro
         movementEnabled = true;
         gameManager.getEngine().enableAccelerationSensor(gameManager, this);
+
 
 
     }
@@ -535,6 +536,14 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                         // -- Resta el contador de vidas
                         playerLives--;
                         livesRemainingText.setText("Lives: "+playerLives);
+                        if(playerLives==0){
+                            // -- Creamos la escena del primer nivel
+                            sceneManager.createScene(SceneType.YOU_LOSE);
+                            // -- Corremos la escena del primer nivel
+                            sceneManager.setScene(SceneType.YOU_LOSE);
+                            // -- Liberamos la escena actual
+                            sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_1);
+                        }
 
                         // -- Preguntamos cuál de los dos cuerpos es el meteorito
                         if(fixtureA.getBody().getUserData() instanceof Meteorite){

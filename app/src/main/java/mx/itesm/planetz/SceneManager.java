@@ -27,6 +27,7 @@ public class SceneManager {
     private BaseScene splashScene;
     private BaseScene menuScene;
     private BaseScene levelOneScene;
+    private BaseScene YouLoseScene;
 
     // ===========================================================
     //  Referencia y ID de la escena en la que estamos actualmente
@@ -62,6 +63,10 @@ public class SceneManager {
             case ADVENTURE_LEVEL_1:
                 levelOneScene = new AdventureLevelOneScene();
                 break;
+            case YOU_LOSE:
+                YouLoseScene = new YouLose();
+                break;
+
         }
     }
 
@@ -80,11 +85,15 @@ public class SceneManager {
             case ADVENTURE_LEVEL_1:
                 currentScene = levelOneScene;
                 break;
+            case YOU_LOSE:
+                currentScene = YouLoseScene;
+                break;
             default:
                 currentScene = menuScene;
                 break;
         }
         // ============== Asigna el ID de escena =================
+        System.out.println(currentScene);
         currentSceneType = currentScene.getSceneType();
 
         // ============== Llama al método de la escena a crearse =
@@ -107,6 +116,15 @@ public class SceneManager {
             case MENU:
                 menuScene.destroyScene();
                 menuScene = null;
+                break;
+            case ADVENTURE_LEVEL_1:
+                levelOneScene.destroyScene();
+                levelOneScene = null;
+                break;
+            case YOU_LOSE:
+                YouLoseScene.destroyScene();
+                YouLoseScene = null;
+                break;
         }
     }
 
