@@ -84,10 +84,10 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // ===========================================================
     //              Elementos Gráficos
     // ===========================================================
-    // ============== Sprites================================
-    // -------------- Nave ----------------------------------
+    // ============== Sprites=====================================
+    // -------------- Nave ---------------------------------------
     private AnimatedSprite shipSprite;
-    // -------------- Elementos HUD -------------------------
+    // -------------- Elementos HUD ------------------------------
     // -- Botón de Pausa
     private Sprite pauseButton;
     // -- Pantalla de pausa
@@ -96,10 +96,21 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     private Sprite resumeButton;
     // -- Botón de Back
     private Sprite backButton;
-
+    // -- Contenedor de vidas
+    private ArrayList<Sprite> playerLivesSprites;
+    // ============== Textos ======================================
     // -- El texto que dice las vidas que nos quedan
     Text livesRemainingText;
 
+    // ============== Fondo =======================================
+    // -------------- Fondo Móvil ---------------------------------
+    private AutoParallaxBackground movingParallaxBackground;
+    // -------------- Entidad Móvil -------------------------------
+    private ParallaxBackground.ParallaxEntity movingParallaxEntityBackground;
+    private ParallaxBackground.ParallaxEntity movingParralaxEntityStars;
+    // -------------- Sprite del Fondo ----------------------------
+    private Sprite backgroundSprite;
+    private Sprite starsSprite;
     // ===========================================================
     //            Cuerpos  en el motor de física
     // ===========================================================
@@ -126,7 +137,6 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // ===========================================================
     // ============== HUD ========================================
     private HUD playerHUD;
-
     // ============== Elementos del control ======================
     // -- Dice si el movimiento de la nave con el accelerómetro está habilitado
     boolean movementEnabled;
@@ -151,10 +161,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // -- Bandera que indica si el juego está en pausa
     private boolean isPaused = false;
 
-    // FONDO
-    private AutoParallaxBackground movingParallaxBackground;
-    private ParallaxBackground.ParallaxEntity movingParallaxEntity;
-    private Sprite backgroundSprite;
+
 
     // =============================================================================================
     //                                    C O N S T R U C T O R
@@ -186,11 +193,21 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // -- Crea una entidad de fondo móvil
         movingParallaxBackground = new AutoParallaxBackground(0f,0,0,1);
         // -- Crea el sprite del fondo
-        backgroundSprite = resourceManager.loadSprite(0,gameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevel1BackgroundTextureRegion);
+        backgroundSprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevel1BackgroundTextureRegion);
+        starsSprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevel1BackgroundStarsTextureRegion);
         // -- Crea una entidad móvil que definirá movimiento del fondo
-        movingParallaxEntity = new ParallaxBackground.ParallaxEntity(-70f,backgroundSprite);
+        movingParallaxEntityBackground = new ParallaxBackground.ParallaxEntity(-5f,backgroundSprite);
+        movingParralaxEntityStars = new ParallaxBackground.ParallaxEntity(-20f,starsSprite);
         // -- Asigna la entidad móvil para que siga y de movimiento al fondo
-        movingParallaxBackground.attachParallaxEntity(movingParallaxEntity);
+        movingParallaxBackground.attachParallaxEntity(movingParallaxEntityBackground);
+        movingParallaxBackground.attachParallaxEntity(movingParralaxEntityStars);
+
+        // -- Crea los sprites de los cascos de la vida
+        playerLivesSprites = new ArrayList<>();
+        playerLivesSprites.add(resourceManager.loadSprite(50,GameManager.CAMERA_HEIGHT - 50,resourceManager.adventureLevelOneLivesTexureRegion));
+        playerLivesSprites.add(resourceManager.loadSprite(50 + 75,GameManager.CAMERA_HEIGHT - 50,resourceManager.adventureLevelOneLivesTexureRegion));
+        playerLivesSprites.add(resourceManager.loadSprite(50 + 75 + 75,GameManager.CAMERA_HEIGHT - 50,resourceManager.adventureLevelOneLivesTexureRegion));
+
 
     }
     // ===========================================================
@@ -254,7 +271,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         createHUD();
 
 
-
+        // -- Creamos la lista de elementos a ser borrados
         toBeDeleted = new ArrayList<Meteorite>();
 
 
@@ -375,13 +392,11 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // -- Inicializamos un nuevo HUD
         playerHUD = new HUD();
 
-        // ============ Creamos el texto de vidas ================
-        livesRemainingText = new Text(60,160,resourceManager.fontOne,"Lives: "+playerLives,vertexBufferObjectManager);
-        livesRemainingText.setRotation(-90);
-        playerHUD.attachChild(livesRemainingText);
+
+
         // ============= Creamos los elementos del HUD ===========
         // -- Creamos el botón de PAUSA y sus acciones
-        pauseButton = new Sprite(50,GameManager.CAMERA_HEIGHT-50,resourceManager.adventureLevel1PauseButtonTextureRegion,vertexBufferObjectManager){
+        pauseButton = new Sprite(GameManager.CAMERA_WIDTH - 50,GameManager.CAMERA_HEIGHT-50,resourceManager.adventureLevel1PauseButtonTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 // Cuando se toca el botón de pausa
@@ -394,10 +409,10 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
         // ========== Botones de pausa y sus acciones ================
         // -- Creamos la pantalla de PAUSA
-        pauseScreen = new Sprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2, resourceManager.adventureLevel1ResumeButtonTextureRegion,vertexBufferObjectManager);
+        pauseScreen = new Sprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2, resourceManager.adventureLevel1PauseScreenTextureRegion,vertexBufferObjectManager);
 
 
-        resumeButton = new Sprite(GameManager.CAMERA_WIDTH/2 + 75, GameManager.CAMERA_HEIGHT/2 - 75, resourceManager.adventureLevel1PlayButtonTextureRegion,vertexBufferObjectManager){
+        resumeButton = new Sprite(GameManager.CAMERA_WIDTH/2 - 75, GameManager.CAMERA_HEIGHT/2 - 75, resourceManager.adventureLevel1PlayButtonTextureRegion,vertexBufferObjectManager){
             //si se da click se reanuda colocando el time step en 1/30
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
@@ -406,13 +421,18 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                     setPauseGame();
                 }
                 return true;}};
-        backButton  = new Sprite(GameManager.CAMERA_WIDTH/2 + 75 , GameManager.CAMERA_HEIGHT/2 + 75, resourceManager.adventureLevel1BackButtonTextureRegion,vertexBufferObjectManager){
+        backButton  = new Sprite(GameManager.CAMERA_WIDTH/2 + 75 , GameManager.CAMERA_HEIGHT/2 - 75, resourceManager.adventureLevel1BackButtonTextureRegion,vertexBufferObjectManager){
             //regresa al menu play en
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 //Cuando se toque la pantalla de pausa
                 if (pSceneTouchEvent.isActionUp()) {
-                    //
+                    // -- Creamos la escena del primer nivel
+                    sceneManager.createScene(SceneType.MENU);
+                    // -- Corremos la escena del primer nivel
+                    sceneManager.setScene(SceneType.MENU);
+                    // -- Liberamos la escena actual
+                    sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_1);
                 }
                 return true;}
         };
@@ -423,10 +443,9 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         playerHUD.attachChild(pauseScreen);
         playerHUD.attachChild(resumeButton);
         playerHUD.attachChild(backButton);
-        // ============= Rotamos los elementos de la pantalla Pausa ==
-        pauseScreen.setRotation(-90);
-        resumeButton.setRotation(-90);
-        backButton.setRotation(-90);
+        playerHUD.attachChild(playerLivesSprites.get(0));
+        playerHUD.attachChild(playerLivesSprites.get(1));
+        playerHUD.attachChild(playerLivesSprites.get(2));
 
         // ============= Deshabilitamos la pantalla de pausa =====
         pauseScreen.setVisible(false);
@@ -491,12 +510,27 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     public void onBackKeyPressed() {
 
     }
+
+
+
     // ===========================================================
     //             Comportamiento para liberar la escena
     // ===========================================================
     @Override
     public void destroyScene() {
 
+        // -- Deshabilitamos el accelerómetro
+        gameManager.getEngine().disableAccelerationSensor(gameManager);
+        // -- Liberamos los recursos de esta escena
+        resourceManager.unloadAdventureLevelOneResources();
+
+        // -- Quitamos los elementos del HUD y el HUD mismo
+        playerHUD.detachChildren();
+        // -- Borramos la escena
+        this.detachChildren();
+        this.detachSelf();
+        // -.- Quitamos la escena
+        this.dispose();
     }
     // ===========================================================
     //         Cuando se cambia la precisión del accelerómetro
@@ -512,9 +546,10 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     public void onAccelerationChanged(AccelerationData pAccelerationData) {
         if(movementEnabled) {
             // -- Mueve a la nave en la direción indicada por el accelerómetro
-            shipBody.setLinearVelocity(0, pAccelerationData.getY() * 4);
+            shipBody.setLinearVelocity(0, (pAccelerationData.getY() + 5f)*4);
         }
     }
+
     // ===========================================================
     //       Define cómo reaccionar ante las colisiones
     // ===========================================================
@@ -535,8 +570,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                     if((fixtureA.getBody().getUserData().equals("ship") && fixtureB.getBody().getUserData() instanceof Meteorite) || (fixtureB.getBody().getUserData().equals("ship") && fixtureA.getBody().getUserData() instanceof Meteorite) ){
                         // -- Resta el contador de vidas
                         playerLives--;
-                        livesRemainingText.setText("Lives: "+playerLives);
-                        if(playerLives==0){
+                        if(playerLives == 0){
                             // -- Creamos la escena del primer nivel
                             sceneManager.createScene(SceneType.YOU_LOSE);
                             // -- Corremos la escena del primer nivel

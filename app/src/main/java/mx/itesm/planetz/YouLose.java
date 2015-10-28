@@ -49,7 +49,7 @@ public class YouLose extends BaseScene {
     public void createScene() {
         this.setBackground(background);
 
-        retryButton = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2,resourceManager.YouLoseRetryButtonTextureRegion,vertexBufferObjectManager){
+        retryButton = new Sprite(GameManager.CAMERA_WIDTH/2,150,resourceManager.YouLoseRetryButtonTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 //Volviendo a jugar
@@ -64,7 +64,7 @@ public class YouLose extends BaseScene {
                 return true;}
         };
 
-        exitButton = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2, resourceManager.YouLoseExitButtonTextureRegion,vertexBufferObjectManager){
+        exitButton = new Sprite(GameManager.CAMERA_WIDTH/2 +400,150, resourceManager.YouLoseExitButtonTextureRegion,vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 //Regresando al menu principal
