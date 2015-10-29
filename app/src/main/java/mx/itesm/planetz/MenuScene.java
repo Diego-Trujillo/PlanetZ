@@ -410,6 +410,9 @@ public class MenuScene extends BaseScene{
         // -- Botón para abrir las opciones de Adventure
         IMenuItem adventureMode = new ScaleMenuItemDecorator(new SpriteMenuItem(PLAY_ADVENTURE_MODE,resourceManager.loadImage("gfx/icon_play.png") ,vertexBufferObjectManager),1.2f,1f); /*******/
 
+        Sprite infiniteModeSprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2 + 250,GameManager.CAMERA_HEIGHT/2,resourceManager.loadImage("gfx/menu/infinityModebutton(locked).png"));
+
+
         // =============== Agregando los botones =================
         playMenuScene.addMenuItem(backButton);
         playMenuScene.addMenuItem(adventureMode);
@@ -422,11 +425,12 @@ public class MenuScene extends BaseScene{
 
         // =============== Agregando el Texto "PLAY" =============
         playMenuScene.attachChild(new Text(350, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "PLAY", vertexBufferObjectManager));
+        playMenuScene.attachChild(infiniteModeSprite);
 
 
         // =============== Ubicando los botones =================
         backButton.setPosition(150,GameManager.CAMERA_HEIGHT - 125 );
-        adventureMode.setPosition(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2);
+        adventureMode.setPosition(GameManager.CAMERA_WIDTH/2 - 250, GameManager.CAMERA_HEIGHT/2);
 
         playMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
@@ -438,9 +442,9 @@ public class MenuScene extends BaseScene{
                         break;
                     case PLAY_ADVENTURE_MODE:
                         // -- Creamos la escena del primer nivel
-                        sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
+                        sceneManager.createScene(SceneType.STORY);
                         // -- Corremos la escena del primer nivel
-                        sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
+                        sceneManager.setScene(SceneType.STORY);
                         // -- Liberamos la escena actual
                         sceneManager.destroyScene(SceneType.MENU);
                 }

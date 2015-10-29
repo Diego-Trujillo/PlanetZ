@@ -171,6 +171,8 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     int signInt;
     // -- Bandera que indica si el juego está en pausa
     private boolean isPaused = false;
+    // -- Bandera que indica si el juego acabó
+    private boolean gameWon = false;
 
 
 
@@ -275,6 +277,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         playerLives = 3;
 
 
+
         // ============== Crear los objetos del juego ============
         // -- Las paredes del juego
         createWalls();
@@ -320,7 +323,9 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                     pTimerHandler.setTimerSeconds(3);
                     sceneManager.getCurrentScene().unregisterUpdateHandler(meteorSpawner);
                     gameManager.getEngine().disableAccelerationSensor(gameManager);
+                    shipBody.setType(BodyDef.BodyType.KinematicBody);
                     shipBody.setLinearVelocity(10f, 0);
+                    gameWon = true;
                     gameManager.toastOnUiThread("Gem Unlocked!", Toast.LENGTH_SHORT);
 
                 }
@@ -578,7 +583,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                     // -- Si la colisión ocurre entre la nave y una insancia de meteorito
                     if((fixtureA.getBody().getUserData().equals("ship") && fixtureB.getBody().getUserData() instanceof Meteorite) || (fixtureB.getBody().getUserData().equals("ship") && fixtureA.getBody().getUserData() instanceof Meteorite) ){
                         // -- Resta el contador de vidas
-                        playerLives--;
+                        if(!gameWon)playerLives--;
                         updateLives();
                         if(playerLives == 0){
                             // -- Creamos la escena del primer nivel

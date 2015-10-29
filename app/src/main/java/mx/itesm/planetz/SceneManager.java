@@ -27,6 +27,7 @@ public class SceneManager {
     private BaseScene splashScene;
     private BaseScene menuScene;
     private BaseScene levelOneScene;
+    private BaseScene storyScene;
     private BaseScene YouLoseScene;
     private BaseScene TempScene;
 
@@ -69,6 +70,9 @@ public class SceneManager {
             case YOU_LOSE:
                 YouLoseScene = new YouLose();
                 break;
+            case STORY:
+                storyScene = new StoryScene();
+                break;
             case TEMP:
                 TempScene = new TemporarySceneVictory();
                 break;
@@ -93,6 +97,9 @@ public class SceneManager {
                 break;
             case YOU_LOSE:
                 currentScene = YouLoseScene;
+                break;
+            case STORY:
+                currentScene = storyScene;
                 break;
             case TEMP:
                 currentScene = TempScene;
@@ -125,6 +132,10 @@ public class SceneManager {
             case MENU:
                 menuScene.destroyScene();
                 menuScene = null;
+                break;
+            case STORY:
+                storyScene.destroyScene();
+                storyScene = null;
                 break;
             case ADVENTURE_LEVEL_1:
                 levelOneScene.destroyScene();
