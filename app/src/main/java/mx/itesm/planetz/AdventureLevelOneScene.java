@@ -4,6 +4,7 @@ import android.hardware.SensorManager;
 import android.text.method.MovementMethod;
 import android.util.Log;
 import android.view.Gravity;
+import android.widget.Toast;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -23,6 +24,8 @@ import org.andengine.engine.handler.collision.CollisionHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.ScreenOrientation;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.IEntityParameterCallable;
 import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.MoveXModifier;
@@ -312,15 +315,24 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         final TimerHandler timeLoop = new TimerHandler(1f, true, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
-                timeRemainingText.setText(Integer.toString(timeRemaining));
-                if(timeRemaining >= 0)timeRemaining--;
-                else if(timeRemaining == -1){
+                if(timeRemaining >= 0)timeRemainingText.setText(Integer.toString(timeRemaining));
+                else if(timeRemaining == -2){
                     pTimerHandler.setTimerSeconds(3);
                     sceneManager.getCurrentScene().unregisterUpdateHandler(meteorSpawner);
                     gameManager.getEngine().disableAccelerationSensor(gameManager);
-                    shipBody.setLinearVelocity(10f,0);
-                    timeRemaining--;
+                    shipBody.setLinearVelocity(10f, 0);
+                    gameManager.toastOnUiThread("Gem Unlocked!", Toast.LENGTH_SHORT);
+
                 }
+                else if(timeRemaining == -3){
+                    // -- Creamos la escena del primer nivel
+                    sceneManager.createScene(SceneType.TEMP);
+                    // -- Corremos la escena del primer nivel
+                    sceneManager.setScene(SceneType.TEMP);
+                    // -- Liberamos la escena actual
+                    sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_1);
+                }
+                timeRemaining--;
 
             }
         });
@@ -346,9 +358,9 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
         // ============== Crear los SpritesRectángulos ===============
         // -- Pared Izquierda
-        final Rectangle leftWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2,-5,GameManager.CAMERA_WIDTH,10, vertexBufferObjectManager);
+        final Rectangle leftWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2,-5,GameManager.CAMERA_WIDTH + 400,10, vertexBufferObjectManager);
         // -- Pared Derecha
-        final Rectangle rightWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT + 5,GameManager.CAMERA_WIDTH,10, vertexBufferObjectManager);
+        final Rectangle rightWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT + 5,GameManager.CAMERA_WIDTH + 400,10, vertexBufferObjectManager);
         // -- "Pared de la muerte", definimos un espacio para que los meteoritos que no impactan al jugador se borren del juego
         final Rectangle wallOfDeathRectangle = new Rectangle(-256,GameManager.CAMERA_HEIGHT/2,10,GameManager.CAMERA_HEIGHT*2,vertexBufferObjectManager);
 
@@ -646,6 +658,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
         // -- Quitamos los elementos del HUD y el HUD mismo
         playerHUD.detachChildren();
+        playerHUD.clearTouchAreas();
         // -- Borramos la escena
         this.detachChildren();
         this.detachSelf();

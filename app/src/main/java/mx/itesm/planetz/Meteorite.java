@@ -83,7 +83,7 @@ public class Meteorite {
 
         // ============== Crear el sprite y cuerpo ====================
         // -- Inicializa el Sprite
-        this.sprite = new Sprite(GameManager.CAMERA_WIDTH, rand.nextInt(GameManager.CAMERA_HEIGHT - 100) + 50, scene.resourceManager.adventureLevelOneMeteoriteTextureRegions.get(meteoriteTextureChosen), scene.vertexBufferObjectManager);
+        this.sprite = new Sprite(GameManager.CAMERA_WIDTH + 200, rand.nextInt(GameManager.CAMERA_HEIGHT - 100) + 50, scene.resourceManager.adventureLevelOneMeteoriteTextureRegions.get(meteoriteTextureChosen), scene.vertexBufferObjectManager);
         // -- Inicializa el Cuerpo Físico
         this.body = PhysicsFactory.createCircleBody(physicsWorld, this.sprite, BodyDef.BodyType.DynamicBody, this.scene.METEOR_FIXTURE_DEFINITION);
         // -- Adhiere el tag "meteorite" al cuerpo físico

@@ -28,6 +28,9 @@ public class SceneManager {
     private BaseScene menuScene;
     private BaseScene levelOneScene;
     private BaseScene YouLoseScene;
+    private BaseScene TempScene;
+
+
 
     // ===========================================================
     //  Referencia y ID de la escena en la que estamos actualmente
@@ -66,6 +69,9 @@ public class SceneManager {
             case YOU_LOSE:
                 YouLoseScene = new YouLose();
                 break;
+            case TEMP:
+                TempScene = new TemporarySceneVictory();
+                break;
 
         }
     }
@@ -87,6 +93,9 @@ public class SceneManager {
                 break;
             case YOU_LOSE:
                 currentScene = YouLoseScene;
+                break;
+            case TEMP:
+                currentScene = TempScene;
                 break;
             default:
                 currentScene = menuScene;
@@ -124,6 +133,10 @@ public class SceneManager {
             case YOU_LOSE:
                 YouLoseScene.destroyScene();
                 YouLoseScene = null;
+                break;
+            case TEMP:
+                TempScene.destroyScene();
+                TempScene = null;
                 break;
         }
     }
