@@ -59,7 +59,7 @@ public class StoryScene extends BaseScene {
         }
         storyLevelOneSpriteContainer.get(index).setVisible(true);
 
-        Sprite flechaDerecha = new Sprite(GameManager.CAMERA_WIDTH - 100,GameManager.CAMERA_HEIGHT/2, resourceManager.loadImage("gfx/menu/buttons/arrow_right.png"),vertexBufferObjectManager){
+        Sprite flechaDerecha = new Sprite(GameManager.CAMERA_WIDTH - 100,GameManager.CAMERA_HEIGHT - 150, resourceManager.loadImage("gfx/menu/buttons/arrow_right.png"),vertexBufferObjectManager){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
             {

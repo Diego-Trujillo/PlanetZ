@@ -293,7 +293,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
         // ============== CICLO PRINCIPAL =========================
         // -- Se va a ejecutar la acción cada x segundos (x inicial es 4f)
-        final TimerHandler meteorSpawner = new TimerHandler(4f, true, new ITimerCallback() {
+        final TimerHandler meteorSpawner = new TimerHandler(3f, true, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
                 // -- Si el juego no está en pausa
@@ -303,7 +303,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                     // -- Sumar el número de veces que se ejecutó este ciclo
                     timesExecuted++;
                     if (timesExecuted == 4) {
-                        pTimerHandler.setTimerSeconds(2f);
+                        pTimerHandler.setTimerSeconds(1.5f);
                     }
                     if (timesExecuted > 6 && timesExecuted % 2 == 0) {
                         createMeteorite();
@@ -581,9 +581,9 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                 if(fixtureA != null && fixtureB != null){
                     // MANEJA LA COLISIÓN ENTRE NAVE Y METEORITO
                     // -- Si la colisión ocurre entre la nave y una insancia de meteorito
-                    if((fixtureA.getBody().getUserData().equals("ship") && fixtureB.getBody().getUserData() instanceof Meteorite) || (fixtureB.getBody().getUserData().equals("ship") && fixtureA.getBody().getUserData() instanceof Meteorite) ){
+                    if((fixtureA.getBody().getUserData().equals("ship") && fixtureB.getBody().getUserData() instanceof Meteorite) || (fixtureB.getBody().getUserData().equals("ship") && fixtureA.getBody().getUserData() instanceof Meteorite) && !gameWon){
                         // -- Resta el contador de vidas
-                        if(!gameWon)playerLives--;
+                        playerLives--;
                         updateLives();
                         if(playerLives == 0){
                             // -- Creamos la escena del primer nivel

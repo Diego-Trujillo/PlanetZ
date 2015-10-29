@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.transition.Fade;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.modifier.FadeInModifier;
@@ -353,6 +354,7 @@ public class MenuScene extends BaseScene{
                         setChildScene(aboutMenuScene);
                         // -- Poner el Overlay
                         menuOverlaySprite.setVisible(true);
+                        gameManager.toastOnUiThread("Tap the faces to see more!",Toast.LENGTH_LONG);
                         break;
                     case MAIN_TOGGLE_AUDIO:
                         // == Cuando cualquiera de los dos canales de audio está habilitado ==
@@ -850,6 +852,7 @@ public class MenuScene extends BaseScene{
         // -- Botón para desplegar el ID de DANIELA
         IMenuItem buttonDanni = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_DANNI,resourceManager.aboutMenuDanniButtonTexureRegion,vertexBufferObjectManager),0.8f,1f);
 
+
         // =============== Agregando los botones =================
         aboutMenuScene.addMenuItem(backButton);
         aboutMenuScene.addMenuItem(buttonAndy);
@@ -864,16 +867,19 @@ public class MenuScene extends BaseScene{
         // -- Deshabilitar el fondo
         aboutMenuScene.setBackgroundEnabled(false);
 
-        // =============== Agregando el Texto "ABOUT" =============
+        Sprite itesmLogo = resourceManager.loadSprite(GameManager.CAMERA_WIDTH - 350, 200,resourceManager.loadImage("gfx/menu/About/logotec.png"));
+        // =============== Agregando textos "ABOUT" y "versión" ==
         aboutMenuScene.attachChild(new Text(350, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "ABOUT", vertexBufferObjectManager));
+        aboutMenuScene.attachChild(new Text(350, 200,resourceManager.fontOne,"Version 0.3",vertexBufferObjectManager));
+        aboutMenuScene.attachChild(itesmLogo);
 
         // =============== Ubicando los botones =================
         backButton.setPosition(150, GameManager.CAMERA_HEIGHT - 125);
-        buttonAndy.setPosition(152, GameManager.CAMERA_HEIGHT/2);
-        buttonDanni.setPosition(393, GameManager.CAMERA_HEIGHT/2 );
-        buttonRebe.setPosition(649, GameManager.CAMERA_HEIGHT/2);
-        buttonBrian.setPosition(905, GameManager.CAMERA_HEIGHT/2);
-        buttonDiego.setPosition(1141,GameManager.CAMERA_HEIGHT/2);
+        buttonAndy.setPosition(152, GameManager.CAMERA_HEIGHT/2 + 50);
+        buttonDanni.setPosition(393, GameManager.CAMERA_HEIGHT/2 +50 );
+        buttonRebe.setPosition(649, GameManager.CAMERA_HEIGHT/2 + 50);
+        buttonBrian.setPosition(905, GameManager.CAMERA_HEIGHT/2 + 50);
+        buttonDiego.setPosition(1141,GameManager.CAMERA_HEIGHT/2 + 50);
 
 
 
