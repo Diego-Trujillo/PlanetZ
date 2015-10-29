@@ -100,7 +100,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     private ArrayList<Sprite> playerLivesSprites;
     // ============== Textos ======================================
     // -- El texto que dice las vidas que nos quedan
-    Text livesRemainingText;
+    Text timeRemainingText;
 
     // ============== Fondo =======================================
     // -------------- Fondo Móvil ---------------------------------
@@ -128,6 +128,8 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     private Body leftWallBody;
     // -- Derecha
     private Body rightWallBody;
+    // -- "Pared de la muerte"
+    private Body wallOfDeathBody;
 
     // ============== Nave =======================================
     private Body shipBody;
@@ -143,8 +145,14 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // ============== Elementos de la nave =======================
     // -- Vidas de la nave
     private int playerLives;
-    // ============== Elementos de la funcion que crea Meteoritos=
-    // -- Veces que ha sido ejecutada la función de timer.
+
+
+    // ===========================================================
+    //          Elementos de la funcion que crea Meteoritos=
+    // ===========================================================
+    // -- Veces que ha sido ejecutada la función del loop de tiempo
+    private int timeRemaining;
+    // -- Veces que ha sido ejecutada la función de meteorSpawner
     private int timesExecuted;
 
     // ============== Miscéláneo ==================================
@@ -196,7 +204,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         backgroundSprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevel1BackgroundTextureRegion);
         starsSprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevel1BackgroundStarsTextureRegion);
         // -- Crea una entidad móvil que definirá movimiento del fondo
-        movingParallaxEntityBackground = new ParallaxBackground.ParallaxEntity(-5f,backgroundSprite);
+        movingParallaxEntityBackground = new ParallaxBackground.ParallaxEntity(-10f,backgroundSprite);
         movingParralaxEntityStars = new ParallaxBackground.ParallaxEntity(-20f,starsSprite);
         // -- Asigna la entidad móvil para que siga y de movimiento al fondo
         movingParallaxBackground.attachParallaxEntity(movingParallaxEntityBackground);
@@ -208,7 +216,8 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         playerLivesSprites.add(resourceManager.loadSprite(50 + 75,GameManager.CAMERA_HEIGHT - 50,resourceManager.adventureLevelOneLivesTexureRegion));
         playerLivesSprites.add(resourceManager.loadSprite(50 + 75 + 75,GameManager.CAMERA_HEIGHT - 50,resourceManager.adventureLevelOneLivesTexureRegion));
 
-
+        // -- El texto de tiempo para ganar
+        timeRemainingText = new Text(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT - 50,resourceManager.fontOne,"  ",vertexBufferObjectManager);
     }
     // ===========================================================
     //                       Cargar música
@@ -258,6 +267,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // -- Inicializar el generador de números aleatorios
         rand = new Random();
         // -- Las veces que se ha ejecutado el ciclo principal
+        timeRemaining = 32;
         timesExecuted = 0;
         playerLives = 3;
 
@@ -277,7 +287,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
         // ============== CICLO PRINCIPAL =========================
         // -- Se va a ejecutar la acción cada x segundos (x inicial es 4f)
-        final TimerHandler timerHandler = new TimerHandler(4f, true, new ITimerCallback() {
+        final TimerHandler meteorSpawner = new TimerHandler(4f, true, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
                 // -- Si el juego no está en pausa
@@ -286,11 +296,10 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                     createMeteorite();
                     // -- Sumar el número de veces que se ejecutó este ciclo
                     timesExecuted++;
-                    if (timesExecuted == 5) {
-                        ;
+                    if (timesExecuted == 4) {
                         pTimerHandler.setTimerSeconds(2f);
                     }
-                    if (timesExecuted > 7 && timesExecuted % 3 == 0) {
+                    if (timesExecuted > 6 && timesExecuted % 2 == 0) {
                         createMeteorite();
                     }
 
@@ -300,9 +309,25 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
             }
         });
 
+        final TimerHandler timeLoop = new TimerHandler(1f, true, new ITimerCallback() {
+            @Override
+            public void onTimePassed(TimerHandler pTimerHandler) {
+                timeRemainingText.setText(Integer.toString(timeRemaining));
+                if(timeRemaining >= 0)timeRemaining--;
+                else if(timeRemaining == -1){
+                    pTimerHandler.setTimerSeconds(3);
+                    sceneManager.getCurrentScene().unregisterUpdateHandler(meteorSpawner);
+                    gameManager.getEngine().disableAccelerationSensor(gameManager);
+                    shipBody.setLinearVelocity(10f,0);
+                    timeRemaining--;
+                }
+
+            }
+        });
         // ============== Registrar ciclos del juego ==============
         // -- Registrar el ciclo principal en la escena
-        this.registerUpdateHandler(timerHandler);
+        this.registerUpdateHandler(meteorSpawner);
+        this.registerUpdateHandler(timeLoop);
         // -- Registrar el manejador de colisiones en el mundo de física
         physicsWorld.setContactListener(createContactListener());
 
@@ -324,24 +349,33 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         final Rectangle leftWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2,-5,GameManager.CAMERA_WIDTH,10, vertexBufferObjectManager);
         // -- Pared Derecha
         final Rectangle rightWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT + 5,GameManager.CAMERA_WIDTH,10, vertexBufferObjectManager);
+        // -- "Pared de la muerte", definimos un espacio para que los meteoritos que no impactan al jugador se borren del juego
+        final Rectangle wallOfDeathRectangle = new Rectangle(-256,GameManager.CAMERA_HEIGHT/2,10,GameManager.CAMERA_HEIGHT*2,vertexBufferObjectManager);
+
         // -- Colorear ambos rectángulos de blanco
-        leftWallRectangle.setColor(1f, 1f, 1f);
-        rightWallRectangle.setColor(1f, 1f, 1f);
+        leftWallRectangle.setColor(0f, 0f, 0f);
+        rightWallRectangle.setColor(0f, 0f, 0f);
+        wallOfDeathRectangle.setColor(1f, 1f,1f);
+
         // ============== Crear los cuerpos de física ===============
         leftWallBody = PhysicsFactory.createBoxBody(physicsWorld, leftWallRectangle, BodyDef.BodyType.StaticBody, WALL_FIXTURE_DEFINITION);
         rightWallBody = PhysicsFactory.createBoxBody(physicsWorld, rightWallRectangle, BodyDef.BodyType.StaticBody, WALL_FIXTURE_DEFINITION);
+        wallOfDeathBody = PhysicsFactory.createBoxBody(physicsWorld,wallOfDeathRectangle, BodyDef.BodyType.StaticBody,WALL_FIXTURE_DEFINITION);
 
         // ============== Registrar ID de cuerpo ====================
         leftWallBody.setUserData("wall");
         rightWallBody.setUserData("wall");
+        wallOfDeathBody.setUserData("wod");
 
         // ============== Conectar cuerpos de física a sprites ======
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(leftWallRectangle, leftWallBody));
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(rightWallRectangle, rightWallBody));
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(wallOfDeathRectangle,wallOfDeathBody));
 
         // ============== Adjuntar las paredes al mundo =============
         this.attachChild(leftWallRectangle);
         this.attachChild(rightWallRectangle);
+        this.attachChild(wallOfDeathRectangle);
     }
 
     // ===========================================================
@@ -392,6 +426,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // -- Inicializamos un nuevo HUD
         playerHUD = new HUD();
 
+        playerHUD.attachChild(timeRemainingText);
 
 
         // ============= Creamos los elementos del HUD ===========
@@ -504,6 +539,91 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     }
 
     // ===========================================================
+    //   Actualiza los cascos indicadores de vidas del personaje
+    // ===========================================================
+    private void updateLives(){
+        for(int i = 0; i < playerLivesSprites.size(); i++){
+            playerLivesSprites.get(i).setVisible(playerLives >= i+1);
+        }
+    }
+
+    // ===========================================================
+    //       Define cómo reaccionar ante las colisiones
+    // ===========================================================
+    private ContactListener createContactListener() {
+        // -- Creamos un objeto tipo ContactListener
+        contactListener = new ContactListener() {
+            // ========= Cuando se detecta la colisión ===========
+            @Override
+            public void beginContact(Contact contact) {
+                // -- Obtener objeto A
+                final Fixture fixtureA = contact.getFixtureA();
+                // -- Obtener objeto B
+                final Fixture fixtureB = contact.getFixtureB();
+                // -- Si los dos objetos existen
+                if(fixtureA != null && fixtureB != null){
+                    // MANEJA LA COLISIÓN ENTRE NAVE Y METEORITO
+                    // -- Si la colisión ocurre entre la nave y una insancia de meteorito
+                    if((fixtureA.getBody().getUserData().equals("ship") && fixtureB.getBody().getUserData() instanceof Meteorite) || (fixtureB.getBody().getUserData().equals("ship") && fixtureA.getBody().getUserData() instanceof Meteorite) ){
+                        // -- Resta el contador de vidas
+                        playerLives--;
+                        updateLives();
+                        if(playerLives == 0){
+                            // -- Creamos la escena del primer nivel
+                            sceneManager.createScene(SceneType.YOU_LOSE);
+                            // -- Corremos la escena del primer nivel
+                            sceneManager.setScene(SceneType.YOU_LOSE);
+                            // -- Liberamos la escena actual
+                            sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_1);
+                        }
+
+                        // -- Preguntamos cuál de los dos cuerpos es el meteorito
+                        if(fixtureA.getBody().getUserData() instanceof Meteorite){
+                            // -- Agregamos el meteorito a la lista de elemtos a ser borrados
+                            toBeDeleted.add((Meteorite) fixtureA.getBody().getUserData());
+                        }
+                        else{
+                            // -- Agregamos el meteorito a la lista de elemtos a ser borrados
+                            toBeDeleted.add((Meteorite)fixtureB.getBody().getUserData());
+                        }
+                    }
+
+                    // -========== Registra el contacto entre meteorito y la pared de la muerte ==
+                    if((fixtureA.getBody().getUserData().equals("wod") && fixtureB.getBody().getUserData() instanceof Meteorite) || (fixtureB.getBody().getUserData().equals("wod") && fixtureA.getBody().getUserData() instanceof Meteorite) ){
+                        System.out.println("Wall of death takes another victim >:)!");
+                        // -- Preguntamos cuál de los dos cuerpos es el meteorito
+                        if(fixtureA.getBody().getUserData() instanceof Meteorite){
+                            // -- Agregamos el meteorito a la lista de elemtos a ser borrados
+                            toBeDeleted.add((Meteorite) fixtureA.getBody().getUserData());
+                        }
+                        else{
+                            // -- Agregamos el meteorito a la lista de elemtos a ser borrados
+                            toBeDeleted.add((Meteorite)fixtureB.getBody().getUserData());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void endContact(Contact contact) {
+
+            }
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {
+
+            }
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+
+            }};
+        return contactListener;
+    }
+
+
+
+    // ===========================================================
     //  Define comportamiento cuando se presione la tecla BACK
     // ===========================================================
     @Override
@@ -550,63 +670,5 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         }
     }
 
-    // ===========================================================
-    //       Define cómo reaccionar ante las colisiones
-    // ===========================================================
-    private ContactListener createContactListener() {
-        // -- Creamos un objeto tipo ContactListener
-        contactListener = new ContactListener() {
-            // ========= Cuando se detecta la colisión ===========
-            @Override
-            public void beginContact(Contact contact) {
-                // -- Obtener objeto A
-                final Fixture fixtureA = contact.getFixtureA();
-                // -- Obtener objeto B
-                final Fixture fixtureB = contact.getFixtureB();
-                // -- Si los dos objetos existen
-                if(fixtureA != null && fixtureB != null){
-                    // MANEJA LA COLISIÓN ENTRE NAVE Y METEORITO
-                    // -- Si la colisión ocurre entre la nave y una insancia de meteorito
-                    if((fixtureA.getBody().getUserData().equals("ship") && fixtureB.getBody().getUserData() instanceof Meteorite) || (fixtureB.getBody().getUserData().equals("ship") && fixtureA.getBody().getUserData() instanceof Meteorite) ){
-                        // -- Resta el contador de vidas
-                        playerLives--;
-                        if(playerLives == 0){
-                            // -- Creamos la escena del primer nivel
-                            sceneManager.createScene(SceneType.YOU_LOSE);
-                            // -- Corremos la escena del primer nivel
-                            sceneManager.setScene(SceneType.YOU_LOSE);
-                            // -- Liberamos la escena actual
-                            sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_1);
-                        }
-
-                        // -- Preguntamos cuál de los dos cuerpos es el meteorito
-                        if(fixtureA.getBody().getUserData() instanceof Meteorite){
-                            // -- Agregamos el meteorito a la lista de elemtos a ser borrados
-                            toBeDeleted.add((Meteorite) fixtureA.getBody().getUserData());
-                        }
-                        else{
-                            // -- Agregamos el meteorito a la lista de elemtos a ser borrados
-                            toBeDeleted.add((Meteorite)fixtureB.getBody().getUserData());
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void endContact(Contact contact) {
-
-            }
-
-            @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {
-
-            }
-
-            @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {
-
-            }};
-        return contactListener;
-    }
 
 }
