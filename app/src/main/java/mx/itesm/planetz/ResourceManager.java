@@ -5,6 +5,8 @@ import android.util.Log;
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
 import org.andengine.audio.music.MusicManager;
+import org.andengine.audio.sound.Sound;
+import org.andengine.audio.sound.SoundFactory;
 import org.andengine.audio.sound.SoundManager;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
@@ -76,9 +78,10 @@ public class ResourceManager {
     public Music splashMusic;
 
 
-    // ===============================================================
+
+    // =========================================================================
     //                        ESCENA MENU
-    // ===============================================================
+    // =========================================================================
 
     // ============== RECURSOS GRÁFICOS ==========================
     // ===========================================================
@@ -191,9 +194,16 @@ public class ResourceManager {
     // ============== RECURSOS MUSICALES =========================
     // ===========================================================
     public Music menuMusic;
-    // ================================================================
+
+    // ============== RECURSOS DE SONIDO =========================
+    // ===========================================================
+    public Sound menuButtonOneSound;
+    public Sound menuButtonTwoSound;
+    public Sound menuButtonThreeSound;
+
+    // ===========================================================================
     //                ESCENA NIVEL UNO ADVENTURE MODE
-    // ================================================================
+    // ===========================================================================
 
     // ============== RECURSOS GRÁFICOS ==========================
     // ===========================================================
@@ -265,6 +275,7 @@ public class ResourceManager {
         getInstance().soundManager = gameManager.getEngine().getSoundManager();
         getInstance().musicManager = gameManager.getEngine().getMusicManager();
         MusicFactory.setAssetBasePath("mfx/");
+        SoundFactory.setAssetBasePath("sfx/");
 
         // ============== Cargar Fuentes =============
         getInstance().fontOne = FontFactory.createFromAsset(gameManager.getFontManager(), getInstance().textureManager, 1024, 1024, gameManager.getAssets(), "gfx/fonts/PetitFour.otf", 100, true, Color.WHITE_ABGR_PACKED_INT);
@@ -488,6 +499,11 @@ public class ResourceManager {
     // ============== Cargar Recursos de Sonido ==================
     // ===========================================================
     public void loadMenuResourcesSFX(){
+        try{
+            menuButtonOneSound = SoundFactory.createSoundFromAsset(soundManager,gameManager,"menu/buttonPress.ogg");
+            menuButtonTwoSound = SoundFactory.createSoundFromAsset(soundManager,gameManager,"menu/buttonPress2.ogg");
+        }
+        catch(IOException e) {e.printStackTrace();}
     }
 
 

@@ -244,7 +244,11 @@ public class MenuScene extends BaseScene{
     //                      Cargar Sonidos
     // ===========================================================
     @Override
-    public void loadSFX() {}
+    public void loadSFX() {
+        resourceManager.loadMenuResourcesSFX();
+        resourceManager.menuButtonOneSound.setVolume(sessionManager.soundVolume);
+        resourceManager.menuButtonOneSound.setVolume(sessionManager.soundVolume);
+    }
 
     // ===========================================================
     //                      Crear Escena
@@ -328,6 +332,7 @@ public class MenuScene extends BaseScene{
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem,
                                              float pMenuItemLocalX, float pMenuItemLocalY) {
+                if(pMenuItem.getID() != MAIN_TOGGLE_AUDIO){resourceManager.menuButtonTwoSound.play();}
                 switch (pMenuItem.getID()) {
                     case MAIN_PLAY:
                         // -- Cambiar a al submenú Play
