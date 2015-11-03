@@ -182,6 +182,8 @@ public class MenuScene extends BaseScene{
     public MenuScene(){
         super();
         sceneType = SceneType.MENU;
+        sessionManager.currentLevel= 2;
+
     }
 
     // =============================================================================================

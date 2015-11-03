@@ -182,6 +182,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     public AdventureLevelOneScene(){
         super();
         sceneType = SceneType.ADVENTURE_LEVEL_1;
+        sessionManager.currentLevel= 1;
         // -- Deshabilitamos el movimiento de la nave hasta que se cargue todo el nivel.
         movementEnabled = false;
 

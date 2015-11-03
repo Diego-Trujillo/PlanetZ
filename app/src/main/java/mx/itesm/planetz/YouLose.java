@@ -54,15 +54,28 @@ public class YouLose extends BaseScene {
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 //Volviendo a jugar
                 if (pSceneTouchEvent.isActionUp()) {
-                    // -- Creamos la escena del primer nivel
-                    sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
-                    // -- Corremos la escena del primer nivel
-                    sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
-                    // -- Liberamos la escena actual
-                    sceneManager.destroyScene(SceneType.YOU_LOSE);
+                    switch (sessionManager.currentLevel){
+                        case 1:
+                            // -- Creamos la escena del primer nivel
+                            sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
+                            // -- Corremos la escena del primer nivel
+                            sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
+                            // -- Liberamos la escena actual
+                            sceneManager.destroyScene(SceneType.YOU_LOSE);
+                            break;
+                        case 2:
+                            sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
+                            sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
+                            sceneManager.destroyScene(SceneType.YOU_LOSE);
+                            break;
+                        case 3:
+                            sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
+                            sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
+                            sceneManager.destroyScene(SceneType.YOU_LOSE);
+                            break;
                 }
-                return true;}
-        };
+
+        }return true;}};
 
         exitButton = new Sprite(GameManager.CAMERA_WIDTH/2 +400,150, resourceManager.YouLoseExitButtonTextureRegion,vertexBufferObjectManager){
             @Override
