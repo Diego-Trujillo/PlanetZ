@@ -86,13 +86,13 @@ public class SessionManager {
         // ============== Gemas Desbloqueadas =====================
         gemsUnlocked = new boolean[4][4];
         // -------------- Nivel 1 -------------------------------
-        gemsUnlocked[1][1] = sharedPreferences.getBoolean("gem_1_1", false);
+        gemsUnlocked[1][1] = sharedPreferences.getBoolean("gem_1_1", true);
         gemsUnlocked[1][2] = sharedPreferences.getBoolean("gem_1_2",false);
-        gemsUnlocked[1][3] = sharedPreferences.getBoolean("gem_1_3",false);
+        gemsUnlocked[1][3] = sharedPreferences.getBoolean("gem_1_3",true);
 
         // -------------- Nivel 2 -------------------------------
         gemsUnlocked[2][1] = sharedPreferences.getBoolean("gem_2_1",false);
-        gemsUnlocked[2][2] = sharedPreferences.getBoolean("gem_2_2",false);
+        gemsUnlocked[2][2] = sharedPreferences.getBoolean("gem_2_2",true);
         gemsUnlocked[2][3] = sharedPreferences.getBoolean("gem_2_3",false);
 
         // -------------- Nivel 3 -------------------------------

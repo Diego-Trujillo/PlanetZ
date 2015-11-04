@@ -182,7 +182,6 @@ public class MenuScene extends BaseScene{
     public MenuScene(){
         super();
         sceneType = SceneType.MENU;
-        sessionManager.currentLevel= 2;
 
     }
 
@@ -472,11 +471,12 @@ public class MenuScene extends BaseScene{
         backpackMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
         // -- Ubicando al submenú
         backpackMenuScene.setPosition(0, 0);
-
+        final int LEFT_ARROW= 300;
+        final int RIGHT_ARROW= 600;
         // =============== Creando los botones e imagenes ===================
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK, resourceManager.menuSubmenuBackButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        final IMenuItem leftArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(300, resourceManager.backpackMenuLeftArrowTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
-        final IMenuItem rightArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(600, resourceManager.backpackMenuRightArrowTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        final IMenuItem leftArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(LEFT_ARROW, resourceManager.backpackMenuLeftArrowTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        final IMenuItem rightArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(RIGHT_ARROW, resourceManager.backpackMenuRightArrowTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
 
 
         //gemas
@@ -503,56 +503,44 @@ public class MenuScene extends BaseScene{
         level2 = new Entity();
         level3 = new Entity();
 
-        //T E M P O R A L Esto y el metodo deben ser implementados en la clase del nivel para registrar su bloqueo
-
-
-        unlonkGem(1, AppContext.getAppContext(),true);
-        unlonkGem(2,AppContext.getAppContext(),false);
-        unlonkGem(3,AppContext.getAppContext(),true);
-        unlonkGem(4,AppContext.getAppContext(),true);
-        unlonkGem(5,AppContext.getAppContext(),false);
-        unlonkGem(6,AppContext.getAppContext(),false);
-        unlonkGem(7,AppContext.getAppContext(),false);
-        unlonkGem(8,AppContext.getAppContext(),false);
-        unlonkGem(9,AppContext.getAppContext(),false);
 
         //A G R E G A R - agrega las gemas a entidades vacias dependiendo de su bloqueo
 
-        if(loadGems("gem1",AppContext.getAppContext())==true){
+        if(sessionManager.gemsUnlocked[1][1]==true){
                 level1.attachChild(gem1);}
-            if(loadGems("gem1",AppContext.getAppContext())==false){
+            if(sessionManager.gemsUnlocked[1][1]==false){
                 level1.attachChild(gemL1); }
-            if(loadGems("gem2",AppContext.getAppContext())==true){
+            if(sessionManager.gemsUnlocked[1][2]==true){
                 level1.attachChild(gem2);}
-            if(loadGems("gem2",AppContext.getAppContext())==false){
+            if(sessionManager.gemsUnlocked[1][2]==false){
                 level1.attachChild(gemL2);}
-            if(loadGems("gem3",AppContext.getAppContext())==true){
+            if(sessionManager.gemsUnlocked[1][3]==true){
                 level1.attachChild(gem3);}
-            if(loadGems("gem3",AppContext.getAppContext())==false){
+            if(sessionManager.gemsUnlocked[1][3]==false){
                 level1.attachChild(gemL3);}
-            if(loadGems("gem4",AppContext.getAppContext())==true){
+            if(sessionManager.gemsUnlocked[2][1]==true){
                 level2.attachChild(gem4);}
-            if(loadGems("gem4",AppContext.getAppContext())==false){
+            if(sessionManager.gemsUnlocked[2][1]==false){
                 level2.attachChild(gemL4); }
-            if(loadGems("gem5",AppContext.getAppContext())==true){
+            if(sessionManager.gemsUnlocked[2][2]==true){
                 level2.attachChild(gem5);}
-            if(loadGems("gem5",AppContext.getAppContext())==false){
+            if(sessionManager.gemsUnlocked[2][2]==false){
                 level2.attachChild(gemL5);}
-            if(loadGems("gem6",AppContext.getAppContext())==true){
+            if(sessionManager.gemsUnlocked[2][3]==true){
                 level2.attachChild(gem6);}
-            if(loadGems("gem6",AppContext.getAppContext())==false){
+            if(sessionManager.gemsUnlocked[2][3]==false){
                 level2.attachChild(gemL6);}
-            if(loadGems("gem7",AppContext.getAppContext())==true){
+            if(sessionManager.gemsUnlocked[3][1]==true){
                 level3.attachChild(gem7);}
-            if(loadGems("gem7",AppContext.getAppContext())==false){
+            if(sessionManager.gemsUnlocked[3][1]==false){
                 level3.attachChild(gemL7); }
-            if(loadGems("gem8",AppContext.getAppContext())==true){
+            if(sessionManager.gemsUnlocked[3][2]==true){
                 level3.attachChild(gem8);}
-            if(loadGems("gem8",AppContext.getAppContext())==false){
+            if(sessionManager.gemsUnlocked[3][2]==false){
                 level3.attachChild(gemL8);}
-            if(loadGems("gem9",AppContext.getAppContext())==true){
+            if(sessionManager.gemsUnlocked[3][3]==true){
                 level3.attachChild(gem9);}
-            if(loadGems("gem9",AppContext.getAppContext())==false){
+            if(sessionManager.gemsUnlocked[3][3]==false){
                 level3.attachChild(gemL9);}
 
         // =============== Agregando los botones =================
@@ -585,17 +573,17 @@ public class MenuScene extends BaseScene{
         leftArrow.setPosition(100, GameManager.CAMERA_HEIGHT/2 -50);
 
         countPosition= 1;
-        //quitar y poner las flechas
+
         if(countPosition==1)
             leftArrow.setVisible(false);
-
 
         backpackMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
                 switch (pMenuItem.getID()) {
 
-                    case 600:
+                    //------  Quita y pone las flechas dependiendo del nivel para evitar que se sigan presionando ------
+                    case LEFT_ARROW:
                         countPosition += 1;
                         if (countPosition == 1) {
                             leftArrow.setVisible(false);
@@ -610,7 +598,7 @@ public class MenuScene extends BaseScene{
                         System.out.println("DERECHA " + countPosition);
                         attachGems(countPosition, 0);
                         break;
-                    case 300:
+                    case RIGHT_ARROW:
                         countPosition -= 1;
                         if (countPosition == 1) {
                             leftArrow.setVisible(false);
@@ -622,9 +610,9 @@ public class MenuScene extends BaseScene{
                         if (countPosition == 3) {
                             rightArrow.setVisible(false);
                         }
-                        System.out.println("IZQUIERDA " + countPosition);
                         attachGems(countPosition, 1);
                         break;
+                    //Regresa al menu si se presiona la flecha de back
                     case SUBMENU_BACK:
                         returnToMenu();
                         break;
@@ -635,18 +623,22 @@ public class MenuScene extends BaseScene{
 
     }
 
-
+    //-- Se hacen visibles los bloques de gemas dependiendo el nivel
     public void attachGems(int level,int lado){
         if(level==1) {
+            //Modifiers para el texto
             level1Text.registerEntityModifier(new FadeInModifier(1.5f));
             if(lado==0){
+                //modifier para desplazar las gemas de un lado dependiendo de la flecha presionada
                 level1.registerEntityModifier(new MoveXModifier(1.5f,GameManager.CAMERA_WIDTH,0));}
             else{
                 level1.registerEntityModifier(new MoveXModifier(1.5f,-GameManager.CAMERA_WIDTH,0));}
+            //Hacer visible el bloque 1 y ocultar el bloque 2 // al igual que on los textos
             level1Text.setVisible(true);
             level2Text.setVisible(false);
             level1.setVisible(true) ;
             level2.setVisible(false);}
+
         if(level==2){
             level2Text.registerEntityModifier(new FadeInModifier(1.5f));
             if(lado==0){
@@ -671,20 +663,6 @@ public class MenuScene extends BaseScene{
             level3.setVisible(true);
             }
 
-    }
-    //ESTO VA EN LA CLASE DE CADA NIVEL, SE PONE AQUI POR CUESTIONES DE PRUEBA
-    public static void unlonkGem(int i, Context context, boolean unlocked){
-        /*SharedPreferences sharedPreferences = context.getSharedPreferences("UNLOCKED_GEMS", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("gem" + i, unlocked);
-        editor.commit(); */
-    }
-    //ESTO ES PARA ACCEDER AL VALOR QUE YA SE REGISTRO EN EL JUEGO
-    public static boolean loadGems(String gem,Context context){
-        /*SharedPreferences sharedPreferences = context.getSharedPreferences("UNLOCKED_GEMS", Context.MODE_PRIVATE);
-        boolean unlock = sharedPreferences.getBoolean(gem,true);
-        return unlock;*/
-        return true;
     }
     // ===========================================================
     //                Crear el menú Settings
