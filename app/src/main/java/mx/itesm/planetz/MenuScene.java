@@ -121,7 +121,8 @@ public class MenuScene extends BaseScene{
     Text level2Text;
     Text level3Text;
 
-
+    private static final int LEFT_ARROW = 1;
+    private static final int RIGHT_ARROW = 2;
 
     Sprite gem1;Sprite gem2;Sprite gem3;Sprite gem4;Sprite gem5;Sprite gem6;
     Sprite gem7;Sprite gem8;Sprite gem9;Sprite gemL1;Sprite gemL2;Sprite gemL3;
@@ -132,7 +133,7 @@ public class MenuScene extends BaseScene{
     Entity level2;
     Entity level3;
     //niveles contador
-    int countPosition;
+    private int countPosition;
 
 
 
@@ -182,7 +183,6 @@ public class MenuScene extends BaseScene{
     public MenuScene(){
         super();
         sceneType = SceneType.MENU;
-
     }
 
     // =============================================================================================
@@ -236,20 +236,15 @@ public class MenuScene extends BaseScene{
     @Override
     public void loadMFX() {
         // -- Llama al administrador de Recursos a cargar la música del nivel
-        resourceManager.loadMenuResourcesMFX();
-        // -- Pone el volúmen de la canción según la configuración Guardada
-        resourceManager.menuMusic.setVolume(sessionManager.musicVolume);
+        resourceManager.setMusic("Menu.ogg");
+        resourceManager.updateAudioVolume();
     }
 
     // ===========================================================
     //                      Cargar Sonidos
     // ===========================================================
     @Override
-    public void loadSFX() {
-        resourceManager.loadMenuResourcesSFX();
-        resourceManager.menuButtonOneSound.setVolume(sessionManager.soundVolume);
-        resourceManager.menuButtonOneSound.setVolume(sessionManager.soundVolume);
-    }
+    public void loadSFX() { }
 
     // ===========================================================
     //                      Crear Escena
@@ -275,7 +270,7 @@ public class MenuScene extends BaseScene{
         setChildScene(mainMenuScene);
 
         // =============== Reproducir música de fondo ============
-        resourceManager.menuMusic.play();
+        resourceManager.backgroundMusic.play();
     }
 
     // ===========================================================
@@ -333,7 +328,6 @@ public class MenuScene extends BaseScene{
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem,
                                              float pMenuItemLocalX, float pMenuItemLocalY) {
-                if(pMenuItem.getID() != MAIN_TOGGLE_AUDIO){resourceManager.menuButtonTwoSound.play();}
                 switch (pMenuItem.getID()) {
                     case MAIN_PLAY:
                         // -- Cambiar a al submenú Play
@@ -360,7 +354,6 @@ public class MenuScene extends BaseScene{
                         setChildScene(aboutMenuScene);
                         // -- Poner el Overlay
                         menuOverlaySprite.setVisible(true);
-                        gameManager.toastOnUiThread("Tap the faces to see more!",Toast.LENGTH_LONG);
                         break;
                     case MAIN_TOGGLE_AUDIO:
                         // == Cuando cualquiera de los dos canales de audio está habilitado ==
@@ -379,15 +372,10 @@ public class MenuScene extends BaseScene{
                         // -- Cambiar el ícono de audio según elección del jugador
                         ((ToggleSpriteMenuItem) mainMenuToggleAudioButton).setCurrentTileIndex((sessionManager.musicVolume > 0.025 || sessionManager.soundVolume > 0.025) ? 0 : 1);
 
-                        // -- Cambiar el volumen en las opciones del motor
-                        resourceManager.musicManager.setMasterVolume(sessionManager.musicVolume);
-                        resourceManager.soundManager.setMasterVolume(sessionManager.soundVolume);
 
                         // -- Cambiar el volumen de la música según el manager
-                        resourceManager.menuMusic.setVolume(resourceManager.musicManager.getMasterVolume());
+                        resourceManager.updateAudioVolume();
 
-                        // -- Escribir los cambios al Adm. de Sesión
-                        sessionManager.writeChanges();
                         break;
                 }
 
@@ -471,8 +459,7 @@ public class MenuScene extends BaseScene{
         backpackMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
         // -- Ubicando al submenú
         backpackMenuScene.setPosition(0, 0);
-        final int LEFT_ARROW = 300;
-        final int RIGHT_ARROW = 600;
+
         // =============== Creando los botones e imagenes ===================
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK, resourceManager.menuSubmenuBackButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
         final IMenuItem leftArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(LEFT_ARROW, resourceManager.backpackMenuLeftArrowTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
@@ -574,48 +561,39 @@ public class MenuScene extends BaseScene{
 
         countPosition= 1;
 
-        if(countPosition==1)
-            leftArrow.setVisible(false);
+        leftArrow.setVisible(false);
 
         backpackMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
                 switch (pMenuItem.getID()) {
-
                     //------  Quita y pone las flechas dependiendo del nivel para evitar que se sigan presionando ------
                     case LEFT_ARROW:
-                        countPosition += 1;
-                        if (countPosition == 1) {
-                            leftArrow.setVisible(false);
+                        if(countPosition > 1){
+                            countPosition--;
+                            attachGems(countPosition, LEFT_ARROW);
                         }
-                        if (countPosition == 2) {
-                            leftArrow.setVisible(true);
-                            rightArrow.setVisible(true);
-                        }
-                        if (countPosition == 3) {
-                            rightArrow.setVisible(false);
-                        }
-                        System.out.println("DERECHA " + countPosition);
-                        attachGems(countPosition, 0);
                         break;
                     case RIGHT_ARROW:
-                        countPosition -= 1;
-                        if (countPosition == 1) {
-                            leftArrow.setVisible(false);
+                        if(countPosition < 3){
+                            countPosition++;
+                            attachGems(countPosition, RIGHT_ARROW);
                         }
-                        if (countPosition == 2) {
-                            leftArrow.setVisible(true);
-                            rightArrow.setVisible(true);
-                        }
-                        if (countPosition == 3) {
-                            rightArrow.setVisible(false);
-                        }
-                        attachGems(countPosition, 1);
                         break;
                     //Regresa al menu si se presiona la flecha de back
                     case SUBMENU_BACK:
                         returnToMenu();
                         break;
+                }
+                if (countPosition == 1) {
+                    leftArrow.setVisible(false);
+                }
+                else if (countPosition == 2) {
+                    leftArrow.setVisible(true);
+                    rightArrow.setVisible(true);
+                }
+                else if (countPosition == 3) {
+                    rightArrow.setVisible(false);
                 }
                 return true;
             }
@@ -625,10 +603,11 @@ public class MenuScene extends BaseScene{
 
     //-- Se hacen visibles los bloques de gemas dependiendo el nivel
     public void attachGems(int level,int lado){
-        if(level==1) {
+        System.out.println(level +" "+lado);
+        if(level == 1) {
             //Modifiers para el texto
             level1Text.registerEntityModifier(new FadeInModifier(1.5f));
-            if(lado==0){
+            if(lado==RIGHT_ARROW){
                 //modifier para desplazar las gemas de un lado dependiendo de la flecha presionada
                 level1.registerEntityModifier(new MoveXModifier(1.5f,GameManager.CAMERA_WIDTH,0));}
             else{
@@ -641,7 +620,7 @@ public class MenuScene extends BaseScene{
 
         if(level==2){
             level2Text.registerEntityModifier(new FadeInModifier(1.5f));
-            if(lado==0){
+            if(lado==RIGHT_ARROW){
                 level2.registerEntityModifier(new MoveXModifier(1.5f,GameManager.CAMERA_WIDTH,0));}
             else{
                 level2.registerEntityModifier(new MoveXModifier(1.5f,-GameManager.CAMERA_WIDTH,0));}
@@ -653,7 +632,7 @@ public class MenuScene extends BaseScene{
             level2.setVisible(true);}
         if(level==3){
             level3Text.registerEntityModifier(new FadeInModifier(1.5f));
-            if(lado==0){
+            if(lado==RIGHT_ARROW){
                 level3.registerEntityModifier(new MoveXModifier(1.5f,GameManager.CAMERA_WIDTH,0));}
             else{
                 level3.registerEntityModifier(new MoveXModifier(1.5f,-GameManager.CAMERA_WIDTH,0));}
@@ -754,7 +733,7 @@ public class MenuScene extends BaseScene{
                 switch (pMenuItem.getID()) {
                     case MUSIC_DECREASE:
                         // -- Si el volúmen de la música no es 0 entonces lo decrementamos en 20%
-                        if (sessionManager.musicVolume > 0f) {
+                        if (sessionManager.musicVolume > 0.025f) {
                             sessionManager.musicVolume -= 0.20f;
                         }
                         break;
@@ -772,7 +751,7 @@ public class MenuScene extends BaseScene{
                         break;
                     case SOUND_DECREASE:
                         // -- Si el volúmen del sonido no es 0 entonces lo decrementamos en 20%
-                        if (sessionManager.soundVolume > 0f) {
+                        if (sessionManager.soundVolume > 0.025f) {
                             sessionManager.soundVolume -= 0.20f;
                         }
                         break;
@@ -786,17 +765,11 @@ public class MenuScene extends BaseScene{
                 }
 
                 // -- Cambiamos los volúmenes maestros de la música y el sonido basado en la acción realizada
-                resourceManager.musicManager.setMasterVolume(sessionManager.musicVolume);
-                resourceManager.soundManager.setMasterVolume(sessionManager.soundVolume);
-
-                // -- Cambiamos el volúmen de la música del menú basado en la acción realizada
-                resourceManager.menuMusic.setVolume(resourceManager.musicManager.getMasterVolume());
+                resourceManager.updateAudioVolume();
 
                 // -- Actualizamos el estado de las barras de audio basado en la acción realizada
                 updateAudioVisibility();
 
-                // -- Llamamos al Adm. de Sesión para que escriba los cambios realizados
-                sessionManager.writeChanges();
                 return true;
             }
         });

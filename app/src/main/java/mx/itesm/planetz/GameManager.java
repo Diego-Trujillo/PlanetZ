@@ -102,16 +102,13 @@ public class GameManager extends BaseGameActivity {
     @Override
     public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws IOException {
         // ============== Obtenemos la configuración de AFX ======
-        getMusicManager().setMasterVolume(sessionManager.musicVolume);
-        getSoundManager().setMasterVolume(sessionManager.soundVolume);
+        resourceManager.updateAudioVolume();
 
 
         // ============== Cargamos y corremos el Splash ==========
         sceneManager.createScene(SceneType.SPLASH);
         sceneManager.setScene(SceneType.SPLASH);
 
-        // ============== Cargamos el menú =======================
-        sceneManager.createScene(SceneType.MENU);
 
         pOnCreateSceneCallback.onCreateSceneFinished(sceneManager.getCurrentScene());
     }
@@ -122,14 +119,16 @@ public class GameManager extends BaseGameActivity {
     @Override
     public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException {
 
+
         // ============== Corre el menú después de 2 segundos ====
         mEngine.registerUpdateHandler(new TimerHandler(2,
                 new ITimerCallback() {
                     @Override
                     public void onTimePassed(TimerHandler pTimerHandler) {
                         mEngine.unregisterUpdateHandler(pTimerHandler);
-                        sceneManager.setScene(SceneType.MENU);
+                        sceneManager.createScene(SceneType.MENU);
                         sceneManager.destroyScene(SceneType.SPLASH);
+                        sceneManager.setScene(SceneType.MENU);
                     }
                 }));
 
@@ -148,15 +147,32 @@ public class GameManager extends BaseGameActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    // ===========================================================
+    //     Define qué hacer cuando se despausa el juego
+    // ===========================================================
     @Override
-    protected void onStop() {
-        super.onStop();
+    public synchronized void onResumeGame() {
+        super.onResumeGame();
+        if(resourceManager.backgroundMusic != null && !resourceManager.backgroundMusic.isPlaying()){
+            resourceManager.backgroundMusic.play();
+        }
+    }
+    // ===========================================================
+    //       Define qué hacer cuando se pausa el juego
+    // ===========================================================
+    @Override
+    public synchronized void onPauseGame() {
+        if(resourceManager.backgroundMusic != null && resourceManager.backgroundMusic.isPlaying()){
+            resourceManager.backgroundMusic.pause();
+        }
+        super.onPauseGame();
     }
 
     // ===========================================================
     //          Función para salir de la aplicación
     // ===========================================================
     public void quit(){
+        resourceManager.releaseAudio();
         finish();
         System.exit(0);
     }

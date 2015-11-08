@@ -24,7 +24,6 @@ public class SplashScene extends BaseScene{
     // ===========================================================
     //                     Sprites
     // ===========================================================
-
     // ============== Fondo ======================================
     private SpriteBackground backgroundSprite;
 
@@ -63,7 +62,7 @@ public class SplashScene extends BaseScene{
     // ===========================================================
     @Override
     public void loadMFX(){
-        resourceManager.loadSplashResourcesMFX();
+        resourceManager.setMusic("Splash.ogg");
     }
 
     // ===========================================================
@@ -77,14 +76,14 @@ public class SplashScene extends BaseScene{
     // ===========================================================
     @Override
     public void createScene() {
-        // ============== Reproducimos el sonido de Bienvenida ===
-        resourceManager.splashMusic.play();
-
         // ============== Adjuntamos el fondo de la escena =======
         this.setBackground(backgroundSprite);
 
         // ============== Adjuntamos el logotipo a la escena =====
         attachChild(logoSprite);
+
+        // ============== Reproducimos el sonido de Bienvenida ===
+        resourceManager.backgroundMusic.play();
     }
     // ===========================================================
     //                Actualización de pantalla
