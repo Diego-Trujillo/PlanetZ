@@ -471,8 +471,8 @@ public class MenuScene extends BaseScene{
         backpackMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
         // -- Ubicando al submenú
         backpackMenuScene.setPosition(0, 0);
-        final int LEFT_ARROW= 300;
-        final int RIGHT_ARROW= 600;
+        final int LEFT_ARROW = 300;
+        final int RIGHT_ARROW = 600;
         // =============== Creando los botones e imagenes ===================
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK, resourceManager.menuSubmenuBackButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
         final IMenuItem leftArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(LEFT_ARROW, resourceManager.backpackMenuLeftArrowTextureRegion, vertexBufferObjectManager), 0.8f, 1f);

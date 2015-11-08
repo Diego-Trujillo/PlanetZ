@@ -60,8 +60,11 @@ public class Meteorite {
 
 
     // =============================================================================================
-    //                                    C O N S T R U C T O R
+    //                              C O N S T R U C T O R E S
     // =============================================================================================
+    // ===========================================================
+    //           Constructor con valores aleatorios
+    // ===========================================================
     public Meteorite(AdventureLevelOneScene scene,PhysicsWorld physicsWorld){
         // ============== Asignamos elementos dados de argumento ====
         // -- La escena del juego
