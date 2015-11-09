@@ -433,7 +433,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // ===========================================================
     private void createMeteorite() {
         // -- Crea un nuevo objeto meteorito
-        Meteorite meteorite = new Meteorite(this,physicsWorld);
+        Meteorite meteorite = new Meteorite(this);
         // -- Agregamos el objeto a la escena
         meteorite.attachToScene();
     }
@@ -687,6 +687,10 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
             // -- Mueve a la nave en la direción indicada por el accelerómetro
             shipBody.setLinearVelocity(0, (pAccelerationData.getY() + 5f)*4);
         }
+    }
+
+    public PhysicsWorld getPhysicsWorld(){
+        return physicsWorld;
     }
 
 

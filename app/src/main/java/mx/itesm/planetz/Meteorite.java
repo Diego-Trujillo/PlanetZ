@@ -65,12 +65,12 @@ public class Meteorite {
     // ===========================================================
     //           Constructor con valores aleatorios
     // ===========================================================
-    public Meteorite(AdventureLevelOneScene scene,PhysicsWorld physicsWorld){
+    public Meteorite(AdventureLevelOneScene scene){
         // ============== Asignamos elementos dados de argumento ====
         // -- La escena del juego
         this.scene = scene;
         // -- El mundo de física
-        this.physicsWorld = physicsWorld;
+        this.physicsWorld = scene.getPhysicsWorld();
         // -- El generador de números al azar
         this.rand = scene.rand;
 
@@ -95,6 +95,16 @@ public class Meteorite {
         // ============== Conectar sprite y cuerpo =====================
         this.physicsConnector = new PhysicsConnector(this.sprite,this.body,true,true);
         this.physicsWorld.registerPhysicsConnector(this.physicsConnector);
+    }
+
+    public Meteorite(AdventureLevelOneScene scene,  int o){
+        // ============== Asignamos elementos dados de argumento ====
+        // -- La escena del juego
+        this.scene = scene;
+        // -- El mundo de física
+        this.physicsWorld = scene.getPhysicsWorld();
+        // -- El generador de números al azar
+        this.rand = scene.rand;
     }
     // ===========================================================
     //            Agrega el meteorito a la escena
