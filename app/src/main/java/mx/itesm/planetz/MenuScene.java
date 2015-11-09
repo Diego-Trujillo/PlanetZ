@@ -183,7 +183,6 @@ public class MenuScene extends BaseScene{
     // =============================================================================================
     //                                    C O N S T R U C T O R
     // =============================================================================================
-
     public MenuScene(){
         super();
         sceneType = SceneType.MENU;
@@ -202,19 +201,19 @@ public class MenuScene extends BaseScene{
         resourceManager.loadMenuResourcesGFX();
 
         // =============== Fondo de estrellas ====================
-        // -- Crea una entidad de fondo móvil
+        // -- Crea una entidad de fondo móvil con color de fondo --
         movingParallaxBackground = new AutoParallaxBackground((22f/255f),(61f/255f),(76f/255f),1f);
+        // -- Habilita el color de fondo ..
         movingParallaxBackground.setColorEnabled(true);
 
-        // -- Crea el sprite del fondo
-        backgroundSprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.menuBackgroundTextureRegion);
 
+        // -- Cargamos a Sprites las tres capas de estrellas --
         backgroundStars1Sprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.menuBackgroundStars1TextureRegion);
         backgroundStars2Sprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.menuBackgroundStars2TextureRegion);
         backgroundStars3Sprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.menuBackgroundStars3TextureRegion);
 
 
-        // -- Asigna la entidad móvil para que siga y de movimiento al fondo
+        // -- Asignamos los sprites como entidades móviles y les damos distintas velocidades de movimiento --
         movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(5f,backgroundStars1Sprite));
         movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-10f,backgroundStars2Sprite));
         movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(20f,backgroundStars3Sprite));
@@ -244,10 +243,9 @@ public class MenuScene extends BaseScene{
     // ===========================================================
     //                      Cargar Música
     // ===========================================================
-
     @Override
     public void loadMFX() {
-        // -- Llama al administrador de Recursos a cargar la música del nivel
+        // -- Llama al administrador de Recursos a cargar la música del nivel --
         resourceManager.setMusic("Menu.ogg");
     }
 
@@ -256,7 +254,7 @@ public class MenuScene extends BaseScene{
     // ===========================================================
     @Override
     public void loadSFX() {
-
+        // -- LLamamos al Adm. de Recursos para cargar los sonidos --
         resourceManager.setSound("Menu/ButtonPress1.ogg",1);
         resourceManager.setSound("Menu/ButtonPress2.ogg",2);
         resourceManager.setSound("Menu/ButtonPress3.ogg",3);
@@ -514,15 +512,21 @@ public class MenuScene extends BaseScene{
 
 
 
-
+        // ================ Adjuntarmos las gemas sus resp. contenedores =======
+        // -- El contenedor funge como entidad de referencia para que cuando
+        //    cambiemos de "nivel", podamos mover las tres gemas de ese
+        //    nivel con facilidad (una sóla llamada).
+        // ---------------- Gemas Nivel 1 --------------------------------------
         backpackGemContainerLevel1.attachChild(gemSprite[1][1]);
         backpackGemContainerLevel1.attachChild(gemSprite[1][2]);
         backpackGemContainerLevel1.attachChild(gemSprite[1][3]);
 
+        // ---------------- Gemas Nivel 2 ---------------------------------------
         backpackGemContainerLevel2.attachChild(gemSprite[2][1]);
         backpackGemContainerLevel2.attachChild(gemSprite[2][2]);
         backpackGemContainerLevel2.attachChild(gemSprite[2][3]);
 
+        // ----------------- Gemas Nivel 3 ---------------------------------------
         backpackGemContainerLevel3.attachChild(gemSprite[3][1]);
         backpackGemContainerLevel3.attachChild(gemSprite[3][2]);
         backpackGemContainerLevel3.attachChild(gemSprite[3][3]);
@@ -531,11 +535,13 @@ public class MenuScene extends BaseScene{
         backpackMenuScene.addMenuItem(backButton);
         backpackMenuScene.addMenuItem(leftArrow);
         backpackMenuScene.addMenuItem(rightArrow);
+
+        // =============== Agregando los contenedores ============
         backpackMenuScene.attachChild(backpackGemContainerLevel1);
         backpackMenuScene.attachChild(backpackGemContainerLevel2);
         backpackMenuScene.attachChild(backpackGemContainerLevel3);
 
-
+        // -- Sólo mostramos las gemas del primer nivel
         backpackGemContainerLevel1.setVisible(true);
         backpackGemContainerLevel2.setVisible(false);
         backpackGemContainerLevel3.setVisible(false);
@@ -544,11 +550,16 @@ public class MenuScene extends BaseScene{
         backpackMenuScene.buildAnimations();
         backpackMenuScene.setBackgroundEnabled(false);
 
-        // =============== Agregando el Texto "BACKPACK" =========
+        // =============== Agregando el Textos ==================
+        // --------------- Creando los objetos ------------------
+        // -- Texto BACKPACK --
         backpackMenuScene.attachChild(new Text(425, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "BACKPACK", vertexBufferObjectManager));
+        // -- Texto para cada nivel
         backpackMenuScene.attachChild(level1Text = new Text(GameManager.CAMERA_WIDTH / 2 + 400, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "Level 1", vertexBufferObjectManager));
         backpackMenuScene.attachChild(level2Text = new Text(GameManager.CAMERA_WIDTH / 2 + 400, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "Level 2", vertexBufferObjectManager));
         backpackMenuScene.attachChild(level3Text = new Text(GameManager.CAMERA_WIDTH / 2 + 400, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "Level 3", vertexBufferObjectManager));
+
+        // ---------------- Esconder los textos que no sean N1 ---
         level1Text.setVisible(true);
         level2Text.setVisible(false);
         level3Text.setVisible(false);
@@ -558,6 +569,7 @@ public class MenuScene extends BaseScene{
         rightArrow.setPosition(GameManager.CAMERA_WIDTH - 100, GameManager.CAMERA_HEIGHT / 2 - 50);
         leftArrow.setPosition(100, GameManager.CAMERA_HEIGHT/2 -50);
 
+        // ============== Inicializar contador para el Scroll ===
         countPosition= 1;
 
         leftArrow.setVisible(false);
@@ -566,7 +578,10 @@ public class MenuScene extends BaseScene{
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
                 switch (pMenuItem.getID()) {
-                    //------  Quita y pone las flechas dependiendo del nivel para evitar que se sigan presionando ------
+                    //------  Quita y pone las flechas dependiendo
+                    // del nivel para evitar que se sigan presionando.
+                    // decrementamos countPosition según el caso,
+                    // llamamos attachGems y reproducimos un sonido --
                     case LEFT_ARROW:
                         if(countPosition > 1){
                             countPosition--;
@@ -587,6 +602,8 @@ public class MenuScene extends BaseScene{
                         resourceManager.soundOne.play();
                         break;
                 }
+                // -- Registramos la visibilidad de las flechas según el valor de
+                //    countPosition
                 if (countPosition == 1) {
                     leftArrow.setVisible(false);
                 }
@@ -603,47 +620,56 @@ public class MenuScene extends BaseScene{
 
     }
 
-    //-- Se hacen visibles los bloques de gemas dependiendo el nivel
-    public void attachGems(int level,int lado){
+    // ===========================================================
+    // Se hacen visibles los bloques de gemas dependiendo el nivel
+    // ===========================================================
+    public void attachGems(int level,int side){
         if(level == 1) {
-            //Modifiers para el texto
+            //Registra un modifier de FadeIn para el texto del nivel
             level1Text.registerEntityModifier(new FadeInModifier(1.0f));
-            if(lado==RIGHT_ARROW){
-                //modifier para desplazar las gemas de un lado dependiendo de la flecha presionada
-                backpackGemContainerLevel1.registerEntityModifier(new MoveXModifier(0.5f, GameManager.CAMERA_WIDTH, 0));}
-            else{
-                backpackGemContainerLevel1.registerEntityModifier(new MoveXModifier(0.5f,-GameManager.CAMERA_WIDTH,0));}
-            //Hacer visible el bloque 1 y ocultar el bloque 2 // al igual que on los textos
+            // -- Realiza un modifier que mueve las gemas del lado dependiendo de dónde se viene (isquierda o derecha) --
+            if(side == RIGHT_ARROW){backpackGemContainerLevel1.registerEntityModifier(new MoveXModifier(0.5f, GameManager.CAMERA_WIDTH, 0));}
+            else{backpackGemContainerLevel1.registerEntityModifier(new MoveXModifier(0.5f,-GameManager.CAMERA_WIDTH,0));}
+            // -- Mostrar texto de nivel 1 y ocular el del 2 --
             level1Text.setVisible(true);
             level2Text.setVisible(false);
+            // -- Hacer visible el bloque 1 y ocultar el bloque 2  --
             backpackGemContainerLevel1.setVisible(true) ;
             backpackGemContainerLevel2.setVisible(false);}
 
-        if(level==2){
+        else if(level==2){
+            //Registra un modifier de FadeIn para el texto del nivel
             level2Text.registerEntityModifier(new FadeInModifier(1.0f));
-            if(lado==RIGHT_ARROW){
-                backpackGemContainerLevel2.registerEntityModifier(new MoveXModifier(0.5f,GameManager.CAMERA_WIDTH,0));}
-            else{
-                backpackGemContainerLevel2.registerEntityModifier(new MoveXModifier(0.5f,-GameManager.CAMERA_WIDTH,0));}
+            // -- Realiza un modifier que mueve las gemas del lado dependiendo de dónde se viene (isquierda o derecha) --
+            if(side == RIGHT_ARROW){backpackGemContainerLevel2.registerEntityModifier(new MoveXModifier(0.5f,GameManager.CAMERA_WIDTH,0));}
+            else{ backpackGemContainerLevel2.registerEntityModifier(new MoveXModifier(0.5f,-GameManager.CAMERA_WIDTH,0));}
+            // -- Mostrar texto de nivel 2 y ocular los de 2 y 3 --
             level1Text.setVisible(false);
             level2Text.setVisible(true);
             level3Text.setVisible(false);
+            // -- Hacer visible el bloque 2 y ocultar los bloques 2 y 3 --
             backpackGemContainerLevel1.setVisible(false);
             backpackGemContainerLevel3.setVisible(false);
             backpackGemContainerLevel2.setVisible(true);}
-        if(level==3){
+        else if(level==3){
+            //Registra un modifier de FadeIn para el texto del nivel
             level3Text.registerEntityModifier(new FadeInModifier(1.0f));
-            if(lado==RIGHT_ARROW){
-                backpackGemContainerLevel3.registerEntityModifier(new MoveXModifier(0.5f,GameManager.CAMERA_WIDTH,0));}
-            else{
-                backpackGemContainerLevel3.registerEntityModifier(new MoveXModifier(0.5f,-GameManager.CAMERA_WIDTH,0));}
+            // -- Realiza un modifier que mueve las gemas del lado dependiendo de dónde se viene (isquierda o derecha) --
+            if(side == RIGHT_ARROW){backpackGemContainerLevel3.registerEntityModifier(new MoveXModifier(0.5f,GameManager.CAMERA_WIDTH,0));}
+            else{ backpackGemContainerLevel3.registerEntityModifier(new MoveXModifier(0.5f,-GameManager.CAMERA_WIDTH,0));}
+            // -- Mostrar texto de nivel 3 y ocular el del 2 --
             level2Text.setVisible(false);
             level3Text.setVisible(true);
+            // -- Hacer visible el bloque 3 y ocultar el bloque 2  --
             backpackGemContainerLevel2.setVisible(false);
             backpackGemContainerLevel3.setVisible(true);
-            }
+        }
+        else{
+            gameManager.toastOnUiThread("Algo ocurrió...");
+        }
 
     }
+
     // ===========================================================
     //                Crear el menú Settings
     // ===========================================================
@@ -780,7 +806,9 @@ public class MenuScene extends BaseScene{
         });
     }
 
-
+    // ===========================================================
+    //           Actualiza el estado de las barras de audio
+    // ===========================================================
     void updateAudioVisibility(){
         // -- Para cada nivel de la barra de Audio
         for(int i = 0; i < 5; i++){
@@ -791,6 +819,7 @@ public class MenuScene extends BaseScene{
             soundBarsArrayList.get(i).setVisible(sessionManager.soundVolume >= 0.20f * (i+1));
         }
     }
+
     // ===========================================================
     //                Crear el menú About
     // ===========================================================
@@ -943,7 +972,6 @@ public class MenuScene extends BaseScene{
     // ===========================================================
     //          Deshabilita los botones de el Submenú About
     // ===========================================================
-
     public void setEnableAboutButtons(boolean enable){
         // --
         if(enable){
@@ -969,7 +997,6 @@ public class MenuScene extends BaseScene{
     // ===========================================================
     //   Deshabilita que el jugador toque otra área de la pantalla
     // ===========================================================
-
     public void setAboutID(Sprite sprite, boolean enable){
         if(enable){
             // -- Deshabilitar los botones para acceder a los demás ID's
@@ -992,10 +1019,10 @@ public class MenuScene extends BaseScene{
 
 
     }
+
     // ===========================================================
     //                          Condición Update
     // ===========================================================
-
     protected void onManagedUpdate(float pSecondsElapsed) {
         super.onManagedUpdate(pSecondsElapsed);
 
@@ -1011,6 +1038,7 @@ public class MenuScene extends BaseScene{
         setChildScene(mainMenuScene);
 
     }
+
     // ===========================================================
     //            Cuando se presiona la tecla retroceder
     // ===========================================================
@@ -1035,6 +1063,7 @@ public class MenuScene extends BaseScene{
     public void destroyScene() {
         // -- Llamamos al Adm. de Recursos para liberar las imágnes y la música
         resourceManager.unloadMenuResources();
+        resourceManager.releaseAudio();
         // -- Desadjuntamos esta escena
         this.detachSelf();
         // -- Liberamos la escena

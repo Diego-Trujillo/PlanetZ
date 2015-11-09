@@ -109,7 +109,6 @@ public class SceneManager {
                 break;
         }
         // ============== Asigna el ID de escena =================
-        System.out.println(currentScene);
         currentSceneType = currentScene.getSceneType();
 
         // ============== Llama al método de la escena a crearse =
