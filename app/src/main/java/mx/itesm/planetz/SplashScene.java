@@ -84,6 +84,7 @@ public class SplashScene extends BaseScene{
 
         // ============== Reproducimos el sonido de Bienvenida ===
         resourceManager.backgroundMusic.play();
+        resourceManager.updateAudioVolume();
     }
     // ===========================================================
     //                Actualización de pantalla

@@ -6,6 +6,7 @@ import android.transition.Fade;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import org.andengine.audio.sound.SoundFactory;
 import org.andengine.entity.Entity;
 import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.modifier.FadeOutModifier;
@@ -42,6 +43,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.SocketUtils;
+import org.andengine.util.adt.color.Color;
 import org.andengine.util.modifier.ParallelModifier;
 
 import java.util.ArrayList;
@@ -65,8 +67,11 @@ public class MenuScene extends BaseScene{
     // ============== Fondo de las estrellas =====================
     private AutoParallaxBackground movingParallaxBackground;
     private ParallaxBackground.ParallaxEntity movingParallaxEntity;
+    // -------------- Sprites ------------------------------------
     private Sprite backgroundSprite;
-
+    private Sprite backgroundStars1Sprite;
+    private Sprite backgroundStars2Sprite;
+    private Sprite backgroundStars3Sprite;
     // =============== Planeta ===================================
     private Sprite planetSprite;
 
@@ -117,21 +122,20 @@ public class MenuScene extends BaseScene{
     private org.andengine.entity.scene.menu.MenuScene backpackMenuScene;
 
     // =============== Cosas que necesitan sanitizarse ===========
-    Text level1Text;
-    Text level2Text;
-    Text level3Text;
+    private Text level1Text;
+    private Text level2Text;
+    private Text level3Text;
+
+    private Sprite gemSprite[][];
 
     private static final int LEFT_ARROW = 1;
     private static final int RIGHT_ARROW = 2;
 
-    Sprite gem1;Sprite gem2;Sprite gem3;Sprite gem4;Sprite gem5;Sprite gem6;
-    Sprite gem7;Sprite gem8;Sprite gem9;Sprite gemL1;Sprite gemL2;Sprite gemL3;
-    Sprite gemL4;Sprite gemL5;Sprite gemL6;Sprite gemL7;Sprite gemL8;Sprite gemL9;
-
     //entidades
-    Entity level1;
-    Entity level2;
-    Entity level3;
+    private Entity backpackGemContainerLevel1;
+    private Entity backpackGemContainerLevel2;
+    private Entity backpackGemContainerLevel3;
+
     //niveles contador
     private int countPosition;
 
@@ -199,13 +203,21 @@ public class MenuScene extends BaseScene{
 
         // =============== Fondo de estrellas ====================
         // -- Crea una entidad de fondo móvil
-        movingParallaxBackground = new AutoParallaxBackground(0f,0,0,1);
+        movingParallaxBackground = new AutoParallaxBackground((22f/255f),(61f/255f),(76f/255f),1f);
+        movingParallaxBackground.setColorEnabled(true);
+
         // -- Crea el sprite del fondo
         backgroundSprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.menuBackgroundTextureRegion);
-        // -- Crea una entidad móvil que definirá movimiento del fondo
-        movingParallaxEntity = new ParallaxBackground.ParallaxEntity(15f,backgroundSprite);
+
+        backgroundStars1Sprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.menuBackgroundStars1TextureRegion);
+        backgroundStars2Sprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.menuBackgroundStars2TextureRegion);
+        backgroundStars3Sprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.menuBackgroundStars3TextureRegion);
+
+
         // -- Asigna la entidad móvil para que siga y de movimiento al fondo
-        movingParallaxBackground.attachParallaxEntity(movingParallaxEntity);
+        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(3f,backgroundStars1Sprite));
+        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-5f,backgroundStars2Sprite));
+        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(10f,backgroundStars3Sprite));
 
         // =============== Planeta giratorio ====================
         // -- Carga el sprite
@@ -237,14 +249,18 @@ public class MenuScene extends BaseScene{
     public void loadMFX() {
         // -- Llama al administrador de Recursos a cargar la música del nivel
         resourceManager.setMusic("Menu.ogg");
-        resourceManager.updateAudioVolume();
     }
 
     // ===========================================================
     //                      Cargar Sonidos
     // ===========================================================
     @Override
-    public void loadSFX() { }
+    public void loadSFX() {
+
+        resourceManager.setSound("Menu/ButtonPress1.ogg",1);
+        resourceManager.setSound("Menu/ButtonPress2.ogg",2);
+        resourceManager.setSound("Menu/ButtonPress3.ogg",3);
+    }
 
     // ===========================================================
     //                      Crear Escena
@@ -265,12 +281,14 @@ public class MenuScene extends BaseScene{
 
         // =============== Adjuntar y esconder el overlay ========
         attachChild(menuOverlaySprite);
+        menuOverlaySprite.setVisible(false);
 
         // =============== Agregar la sub-escena del menú ========
         setChildScene(mainMenuScene);
 
         // =============== Reproducir música de fondo ============
         resourceManager.backgroundMusic.play();
+        resourceManager.updateAudioVolume();
     }
 
     // ===========================================================
@@ -308,8 +326,7 @@ public class MenuScene extends BaseScene{
         // =============== Configurando las animaciones =========
         // -- Construimos las animaciones del menú
         mainMenuScene.buildAnimations();
-        // -- Ocultamos el overlay de los Submenús
-        menuOverlaySprite.setVisible(false);
+
         // -- No registramos fondo
         mainMenuScene.setBackgroundEnabled(false);
 
@@ -328,6 +345,7 @@ public class MenuScene extends BaseScene{
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem,
                                              float pMenuItemLocalX, float pMenuItemLocalY) {
+                if(pMenuItem.getID() != MAIN_TOGGLE_AUDIO){resourceManager.soundOne.play();}
                 switch (pMenuItem.getID()) {
                     case MAIN_PLAY:
                         // -- Cambiar a al submenú Play
@@ -357,7 +375,7 @@ public class MenuScene extends BaseScene{
                         break;
                     case MAIN_TOGGLE_AUDIO:
                         // == Cuando cualquiera de los dos canales de audio está habilitado ==
-                        if(sessionManager.musicVolume > 0f || sessionManager.soundVolume > 0f){
+                        if(sessionManager.musicVolume > 0.025f || sessionManager.soundVolume > 0.025f){
                             // -- Enmudecer los canales de AFX
                             sessionManager.musicVolume = 0f;
                             sessionManager.soundVolume = 0f;
@@ -435,6 +453,7 @@ public class MenuScene extends BaseScene{
                     case SUBMENU_BACK:
                         // -- Regresamos al menú principal
                         returnToMenu();
+                        resourceManager.soundOne.play();
                         break;
                     case PLAY_ADVENTURE_MODE:
                         // -- Creamos la escena del primer nivel
@@ -461,85 +480,65 @@ public class MenuScene extends BaseScene{
         backpackMenuScene.setPosition(0, 0);
 
         // =============== Creando los botones e imagenes ===================
+        // -- Botón para regresar al menú principal --
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK, resourceManager.menuSubmenuBackButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        // -- Botón para cambiar las gemas mostradas del nivel anterior --
         final IMenuItem leftArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(LEFT_ARROW, resourceManager.backpackMenuLeftArrowTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
+        // -- Botón para cambiar las gemas mostradas del nivel siguiente --
         final IMenuItem rightArrow = new ScaleMenuItemDecorator(new SpriteMenuItem(RIGHT_ARROW, resourceManager.backpackMenuRightArrowTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
 
+        // ============== Creando contenedores de tercias de gemas ===========
+        backpackGemContainerLevel1= new Entity();
+        backpackGemContainerLevel2 = new Entity();
+        backpackGemContainerLevel3 = new Entity();
 
-        //gemas
-        gem1 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemBlue1TextureRegion, vertexBufferObjectManager);
-        gem2 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemBlue2TextureRegion, vertexBufferObjectManager);
-        gem3 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemBlue3TextureRegion, vertexBufferObjectManager);
-        gem4 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemPink1TextureRegion, vertexBufferObjectManager);
-        gem5 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemPink2TextureRegion, vertexBufferObjectManager);
-        gem6 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemPink3TextureRegion, vertexBufferObjectManager);
-        gem7 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemYellow1TextureRegion, vertexBufferObjectManager);
-        gem8 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemYellow2TextureRegion, vertexBufferObjectManager);
-        gem9 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemYellow3TextureRegion, vertexBufferObjectManager);
+        // -------------- Inicializar el contenedor de Sprites --------------
+        gemSprite = new Sprite[4][4];
 
-        gemL1 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
-        gemL2 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked2TextureRegion, vertexBufferObjectManager);
-        gemL3 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
-        gemL4 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
-        gemL5 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked2TextureRegion, vertexBufferObjectManager);
-        gemL6 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
-        gemL7 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
-        gemL8 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked2TextureRegion, vertexBufferObjectManager);
-        gemL9 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
-        level1 = new Entity();
-        level2 = new Entity();
-        level3 = new Entity();
+        // --------------- Gemas Nivel 1 -------------------------------------
+        gemSprite[1][1] = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,(sessionManager.gemsUnlocked[1][1])?resourceManager.backpackMenuGemBlue1TextureRegion:resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
+        gemSprite[1][2] = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,(sessionManager.gemsUnlocked[1][2])?resourceManager.backpackMenuGemBlue2TextureRegion:resourceManager.backpackMenuGemLocked2TextureRegion, vertexBufferObjectManager);
+        gemSprite[1][3] = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,(sessionManager.gemsUnlocked[1][3])?resourceManager.backpackMenuGemBlue3TextureRegion:resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
+
+        // --------------- Gemas Nivel 2 --------------------------------------
+        gemSprite[2][1] = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,(sessionManager.gemsUnlocked[2][1])?resourceManager.backpackMenuGemPink1TextureRegion:resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
+        gemSprite[2][2] = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,(sessionManager.gemsUnlocked[2][2])?resourceManager.backpackMenuGemPink2TextureRegion:resourceManager.backpackMenuGemLocked2TextureRegion, vertexBufferObjectManager);
+        gemSprite[2][3] = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,(sessionManager.gemsUnlocked[2][3])?resourceManager.backpackMenuGemPink3TextureRegion:resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
 
 
-        //A G R E G A R - agrega las gemas a entidades vacias dependiendo de su bloqueo
+        // --------------- Gemas Nivel 3 --------------------------------------
+        gemSprite[3][1] = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,(sessionManager.gemsUnlocked[3][1])?resourceManager.backpackMenuGemYellow1TextureRegion:resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
+        gemSprite[3][2] = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,(sessionManager.gemsUnlocked[3][2])?resourceManager.backpackMenuGemYellow2TextureRegion:resourceManager.backpackMenuGemLocked2TextureRegion, vertexBufferObjectManager);
+        gemSprite[3][3] = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,(sessionManager.gemsUnlocked[3][3])?resourceManager.backpackMenuGemYellow3TextureRegion:resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
 
-        if(sessionManager.gemsUnlocked[1][1]==true){
-                level1.attachChild(gem1);}
-            if(sessionManager.gemsUnlocked[1][1]==false){
-                level1.attachChild(gemL1); }
-            if(sessionManager.gemsUnlocked[1][2]==true){
-                level1.attachChild(gem2);}
-            if(sessionManager.gemsUnlocked[1][2]==false){
-                level1.attachChild(gemL2);}
-            if(sessionManager.gemsUnlocked[1][3]==true){
-                level1.attachChild(gem3);}
-            if(sessionManager.gemsUnlocked[1][3]==false){
-                level1.attachChild(gemL3);}
-            if(sessionManager.gemsUnlocked[2][1]==true){
-                level2.attachChild(gem4);}
-            if(sessionManager.gemsUnlocked[2][1]==false){
-                level2.attachChild(gemL4); }
-            if(sessionManager.gemsUnlocked[2][2]==true){
-                level2.attachChild(gem5);}
-            if(sessionManager.gemsUnlocked[2][2]==false){
-                level2.attachChild(gemL5);}
-            if(sessionManager.gemsUnlocked[2][3]==true){
-                level2.attachChild(gem6);}
-            if(sessionManager.gemsUnlocked[2][3]==false){
-                level2.attachChild(gemL6);}
-            if(sessionManager.gemsUnlocked[3][1]==true){
-                level3.attachChild(gem7);}
-            if(sessionManager.gemsUnlocked[3][1]==false){
-                level3.attachChild(gemL7); }
-            if(sessionManager.gemsUnlocked[3][2]==true){
-                level3.attachChild(gem8);}
-            if(sessionManager.gemsUnlocked[3][2]==false){
-                level3.attachChild(gemL8);}
-            if(sessionManager.gemsUnlocked[3][3]==true){
-                level3.attachChild(gem9);}
-            if(sessionManager.gemsUnlocked[3][3]==false){
-                level3.attachChild(gemL9);}
+
+
+
+
+        backpackGemContainerLevel1.attachChild(gemSprite[1][1]);
+        backpackGemContainerLevel1.attachChild(gemSprite[1][2]);
+        backpackGemContainerLevel1.attachChild(gemSprite[1][3]);
+
+        backpackGemContainerLevel2.attachChild(gemSprite[2][1]);
+        backpackGemContainerLevel2.attachChild(gemSprite[2][2]);
+        backpackGemContainerLevel2.attachChild(gemSprite[2][3]);
+
+        backpackGemContainerLevel3.attachChild(gemSprite[3][1]);
+        backpackGemContainerLevel3.attachChild(gemSprite[3][2]);
+        backpackGemContainerLevel3.attachChild(gemSprite[3][3]);
 
         // =============== Agregando los botones =================
         backpackMenuScene.addMenuItem(backButton);
         backpackMenuScene.addMenuItem(leftArrow);
         backpackMenuScene.addMenuItem(rightArrow);
-        backpackMenuScene.attachChild(level1);
-        backpackMenuScene.attachChild(level2);
-        backpackMenuScene.attachChild(level3);
-        level1.setVisible(true);
-        level2.setVisible(false);
-        level3.setVisible(false);
+        backpackMenuScene.attachChild(backpackGemContainerLevel1);
+        backpackMenuScene.attachChild(backpackGemContainerLevel2);
+        backpackMenuScene.attachChild(backpackGemContainerLevel3);
+
+
+        backpackGemContainerLevel1.setVisible(true);
+        backpackGemContainerLevel2.setVisible(false);
+        backpackGemContainerLevel3.setVisible(false);
 
         // =============== Configurando las animaciones =========
         backpackMenuScene.buildAnimations();
@@ -572,17 +571,20 @@ public class MenuScene extends BaseScene{
                         if(countPosition > 1){
                             countPosition--;
                             attachGems(countPosition, LEFT_ARROW);
+                            resourceManager.soundThree.play();
                         }
                         break;
                     case RIGHT_ARROW:
                         if(countPosition < 3){
                             countPosition++;
                             attachGems(countPosition, RIGHT_ARROW);
+                            resourceManager.soundThree.play();
                         }
                         break;
                     //Regresa al menu si se presiona la flecha de back
                     case SUBMENU_BACK:
                         returnToMenu();
+                        resourceManager.soundOne.play();
                         break;
                 }
                 if (countPosition == 1) {
@@ -603,43 +605,42 @@ public class MenuScene extends BaseScene{
 
     //-- Se hacen visibles los bloques de gemas dependiendo el nivel
     public void attachGems(int level,int lado){
-        System.out.println(level +" "+lado);
         if(level == 1) {
             //Modifiers para el texto
-            level1Text.registerEntityModifier(new FadeInModifier(1.5f));
+            level1Text.registerEntityModifier(new FadeInModifier(1.0f));
             if(lado==RIGHT_ARROW){
                 //modifier para desplazar las gemas de un lado dependiendo de la flecha presionada
-                level1.registerEntityModifier(new MoveXModifier(1.5f,GameManager.CAMERA_WIDTH,0));}
+                backpackGemContainerLevel1.registerEntityModifier(new MoveXModifier(0.5f, GameManager.CAMERA_WIDTH, 0));}
             else{
-                level1.registerEntityModifier(new MoveXModifier(1.5f,-GameManager.CAMERA_WIDTH,0));}
+                backpackGemContainerLevel1.registerEntityModifier(new MoveXModifier(0.5f,-GameManager.CAMERA_WIDTH,0));}
             //Hacer visible el bloque 1 y ocultar el bloque 2 // al igual que on los textos
             level1Text.setVisible(true);
             level2Text.setVisible(false);
-            level1.setVisible(true) ;
-            level2.setVisible(false);}
+            backpackGemContainerLevel1.setVisible(true) ;
+            backpackGemContainerLevel2.setVisible(false);}
 
         if(level==2){
-            level2Text.registerEntityModifier(new FadeInModifier(1.5f));
+            level2Text.registerEntityModifier(new FadeInModifier(1.0f));
             if(lado==RIGHT_ARROW){
-                level2.registerEntityModifier(new MoveXModifier(1.5f,GameManager.CAMERA_WIDTH,0));}
+                backpackGemContainerLevel2.registerEntityModifier(new MoveXModifier(0.5f,GameManager.CAMERA_WIDTH,0));}
             else{
-                level2.registerEntityModifier(new MoveXModifier(1.5f,-GameManager.CAMERA_WIDTH,0));}
+                backpackGemContainerLevel2.registerEntityModifier(new MoveXModifier(0.5f,-GameManager.CAMERA_WIDTH,0));}
             level1Text.setVisible(false);
             level2Text.setVisible(true);
             level3Text.setVisible(false);
-            level1.setVisible(false);
-            level3.setVisible(false);
-            level2.setVisible(true);}
+            backpackGemContainerLevel1.setVisible(false);
+            backpackGemContainerLevel3.setVisible(false);
+            backpackGemContainerLevel2.setVisible(true);}
         if(level==3){
-            level3Text.registerEntityModifier(new FadeInModifier(1.5f));
+            level3Text.registerEntityModifier(new FadeInModifier(1.0f));
             if(lado==RIGHT_ARROW){
-                level3.registerEntityModifier(new MoveXModifier(1.5f,GameManager.CAMERA_WIDTH,0));}
+                backpackGemContainerLevel3.registerEntityModifier(new MoveXModifier(0.5f,GameManager.CAMERA_WIDTH,0));}
             else{
-                level3.registerEntityModifier(new MoveXModifier(1.5f,-GameManager.CAMERA_WIDTH,0));}
+                backpackGemContainerLevel3.registerEntityModifier(new MoveXModifier(0.5f,-GameManager.CAMERA_WIDTH,0));}
             level2Text.setVisible(false);
             level3Text.setVisible(true);
-            level2.setVisible(false);
-            level3.setVisible(true);
+            backpackGemContainerLevel2.setVisible(false);
+            backpackGemContainerLevel3.setVisible(true);
             }
 
     }
@@ -758,6 +759,7 @@ public class MenuScene extends BaseScene{
                     case SUBMENU_BACK:
                         // -- Regresamos al menú principal
                         returnToMenu();
+                        resourceManager.soundOne.play();
                         // -- Cambiamos el estado del botón de habilitar/deshabilitar audio del menú principal basándonos en lo hecho en esta subescena;
                         // -- ** Si ambos volúmenes son 0, entonces significa que el audio está deshabilitado, de otro modo el audio está deshabilitado
                         ((ToggleSpriteMenuItem) mainMenuToggleAudioButton).setCurrentTileIndex((sessionManager.musicVolume > 0.025 || sessionManager.soundVolume > 0.025) ? 0 : 1);
@@ -770,6 +772,9 @@ public class MenuScene extends BaseScene{
                 // -- Actualizamos el estado de las barras de audio basado en la acción realizada
                 updateAudioVisibility();
 
+                if(pMenuItem.getID() == SOUND_DECREASE || pMenuItem.getID() == SOUND_INCREASE){
+                    resourceManager.soundTwo.play();
+                }
                 return true;
             }
         });
@@ -899,6 +904,7 @@ public class MenuScene extends BaseScene{
         aboutMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
+                if(pMenuItem.getID() != SUBMENU_BACK){resourceManager.soundThree.play();}
                 switch (pMenuItem.getID()) {
                     case ABOUT_ANDY:
                         // -- Llamar a la función para mostrar el ID de ANDY
@@ -923,6 +929,7 @@ public class MenuScene extends BaseScene{
                     case SUBMENU_BACK:
                         // -- Regresar al menú principal
                         returnToMenu();
+                        resourceManager.soundOne.play();
                         break;
                     }
 
@@ -970,7 +977,7 @@ public class MenuScene extends BaseScene{
             // -- Superponer el ID seleccionadi
             aboutMenuScene.attachChild(sprite);
             // -- Poner un efecto de Fade-In al ID
-            sprite.registerEntityModifier(new FadeInModifier(2.0f));
+            sprite.registerEntityModifier(new FadeInModifier(0.25f));
             // -- Registrar al ID como área táctil
             aboutMenuScene.registerTouchArea(sprite);
         }
@@ -1017,6 +1024,7 @@ public class MenuScene extends BaseScene{
         else{
             // =============== Habilitar el menú ==================
             returnToMenu();
+            resourceManager.soundOne.play();
         }
     }
 

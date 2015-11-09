@@ -90,8 +90,21 @@ public class ResourceManager {
     private ArrayList<BitmapTextureAtlas> menuBitmapTextureAtlasContainer;
 
     // ============== Fondo ======================================
+    // -------------- Fondo Sólido -------------------------------
     private BitmapTextureAtlas menuBackgroundTextureAtlas;
     public ITextureRegion menuBackgroundTextureRegion;
+
+    // -------------- Fondo Estrellas 1 --------------------------
+    private BitmapTextureAtlas menuBackgroundStars1TextureAtlas;
+    public ITextureRegion menuBackgroundStars1TextureRegion;
+
+    // -------------- Fondo Estrellas 2 --------------------------
+    private BitmapTextureAtlas menuBackgroundStars2TextureAtlas;
+    public ITextureRegion menuBackgroundStars2TextureRegion;
+
+    // -------------- Fondo Estrellas 3 --------------------------
+    private BitmapTextureAtlas menuBackgroundStars3TextureAtlas;
+    public ITextureRegion menuBackgroundStars3TextureRegion;
 
     // ============== Logotipo Juego =============================
     private BitmapTextureAtlas menuLogoTextureAtlas;
@@ -133,9 +146,6 @@ public class ResourceManager {
     public ITextureRegion backpackMenuRightArrowTextureRegion;
 
 
-    // -------------- Mochila cosas ------------------------------
-    private BitmapTextureAtlas  backpackMenuMochilaTextureAtlas;
-    public ITextureRegion  backpackMenuMochilaTextureRegion;
     // -------------- Gemas --------------------------------------
     private BitmapTextureAtlas backpackMenuGems1TextureAtlas;
     private BitmapTextureAtlas backpackMenuGems2TextureAtlas;
@@ -192,15 +202,6 @@ public class ResourceManager {
     public ITextureRegion aboutMenuBrianIDTextureRegion;
     public ITextureRegion aboutMenuDiegoIDTextureRegion;
 
-    // ============== RECURSOS MUSICALES =========================
-    // ===========================================================
-    public Music menuMusic;
-
-    // ============== RECURSOS DE SONIDO =========================
-    // ===========================================================
-    public Sound menuButtonOneSound;
-    public Sound menuButtonTwoSound;
-    public Sound menuButtonThreeSound;
 
     // ===========================================================================
     //                ESCENA NIVEL UNO ADVENTURE MODE
@@ -344,8 +345,21 @@ public class ResourceManager {
         // -- Inicializar Contenedor --
         menuBitmapTextureAtlasContainer = new ArrayList<BitmapTextureAtlas>();
         // -- Fondo --
-        menuBackgroundTextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 800, TextureOptions.BILINEAR);
+        menuBackgroundTextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 720, TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(menuBackgroundTextureAtlas);
+
+        // -- Estrellas Fondo 2 --
+        menuBackgroundStars1TextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 720, TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(menuBackgroundStars1TextureAtlas);
+
+        // -- Estrellas Fondo 3 --
+        menuBackgroundStars2TextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 720, TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(menuBackgroundStars2TextureAtlas);
+
+        // -- Estrellas Fondo 4 --
+        menuBackgroundStars3TextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 720, TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(menuBackgroundStars3TextureAtlas);
+
         // -- Logotipo juego --
         menuLogoTextureAtlas = new BitmapTextureAtlas(textureManager, 675, 475, TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(menuLogoTextureAtlas);
@@ -399,8 +413,13 @@ public class ResourceManager {
 
 
         // ============== Cargando las imágenes ==================
-        // -- Fondo --
-        menuBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundTextureAtlas, gameManager, "Background.jpg", 0, 0);
+        // -------------- Fondo ----------------------------------
+        menuBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundTextureAtlas, gameManager, "BackgroundLayer1.jpg", 0, 0);
+        menuBackgroundStars1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundStars1TextureAtlas, gameManager, "BackgroundLayer2.png", 0, 0);
+        menuBackgroundStars2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundStars2TextureAtlas, gameManager, "BackgroundLayer3.png", 0, 0);
+        menuBackgroundStars3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundStars3TextureAtlas, gameManager, "BackgroundLayer4.png", 0, 0);
+
+
         // -- Logotipo juego --
         menuLogoBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuLogoTextureAtlas, gameManager, "Logo.png", 0, 0);
         // -- Planeta --
@@ -641,6 +660,31 @@ public class ResourceManager {
         }
     }
 
+    public void setSound(String filename, int soundNumber){
+        releaseSound(soundNumber);
+        switch(soundNumber){
+            case 1:
+                try{soundOne = SoundFactory.createSoundFromAsset(soundManager,gameManager,filename);}
+                catch(IOException e){e.printStackTrace();return;}
+                break;
+            case 2:
+                try{soundTwo = SoundFactory.createSoundFromAsset(soundManager,gameManager,filename);}
+                catch(IOException e){e.printStackTrace();return;}
+                break;
+            case 3:
+                try{soundThree = SoundFactory.createSoundFromAsset(soundManager,gameManager,filename);}
+                catch(IOException e){e.printStackTrace();return;}
+                break;
+            case 4:
+                try{soundFour = SoundFactory.createSoundFromAsset(soundManager,gameManager,filename);}
+                catch(IOException e){e.printStackTrace();return;}
+                break;
+            case 5:
+                try{soundFive = SoundFactory.createSoundFromAsset(soundManager,gameManager,filename);}
+                catch(IOException e){e.printStackTrace();return;}
+                break;
+        }
+    }
     // ===========================================================
     //              Cambiar el volumen de las cosas
     // ===========================================================
@@ -663,10 +707,10 @@ public class ResourceManager {
     // ===========================================================
     public void releaseAudio(){
         releaseMusic();
-        releaseSound();
+        releaseAllSound();
     }
     // ===========================================================
-    //                      Detener la música
+    //                     Liberar la música
     // ===========================================================
     public void releaseMusic(){
         if(backgroundMusic != null){
@@ -676,9 +720,9 @@ public class ResourceManager {
         }
     }
     // ===========================================================
-    //                      Detener los sonidos
+    //                   Liberar TODOS los sonidos
     // ===========================================================
-    public void releaseSound(){
+    public void releaseAllSound(){
         if(soundOne != null){
             soundOne.release();
             soundOne = null;
@@ -698,6 +742,43 @@ public class ResourceManager {
         if(soundFive != null){
             soundFive.release();
             soundFive = null;
+        }
+    }
+    // ===========================================================
+    //                  Liberar un sonido en particular
+    // ===========================================================
+    public void releaseSound(int soundNumber){
+        switch (soundNumber){
+            case 1:
+                if(soundOne != null){
+                    soundOne.release();
+                    soundOne = null;
+                }
+                break;
+            case 2:
+                if(soundTwo != null){
+                    soundTwo.release();
+                    soundTwo = null;
+                }
+                break;
+            case 3:
+                if(soundThree != null){
+                    soundThree.release();
+                    soundThree = null;
+                }
+                break;
+            case 4:
+                if(soundFour != null){
+                    soundFour.release();
+                    soundFour = null;
+                }
+                break;
+            case 5:
+                if(soundFive != null){
+                    soundFive.release();
+                    soundFive = null;
+                }
+                break;
         }
     }
 
