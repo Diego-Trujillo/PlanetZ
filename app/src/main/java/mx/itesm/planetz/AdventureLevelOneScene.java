@@ -205,13 +205,13 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
         // =============== Fondo de estrellas ====================
         // -- Crea una entidad de fondo móvil
-        movingParallaxBackground = new AutoParallaxBackground(0f,0,0,1);
+        movingParallaxBackground = new AutoParallaxBackground(0f,0,0,10);
         // -- Crea el sprite del fondo
         backgroundSprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevel1BackgroundTextureRegion);
         starsSprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevel1BackgroundStarsTextureRegion);
         // -- Crea una entidad móvil que definirá movimiento del fondo
-        movingParallaxEntityBackground = new ParallaxBackground.ParallaxEntity(-10f,backgroundSprite);
-        movingParralaxEntityStars = new ParallaxBackground.ParallaxEntity(-20f,starsSprite);
+        movingParallaxEntityBackground = new ParallaxBackground.ParallaxEntity(-1f,backgroundSprite);
+        movingParralaxEntityStars = new ParallaxBackground.ParallaxEntity(-100f,starsSprite);
         // -- Asigna la entidad móvil para que siga y de movimiento al fondo
         movingParallaxBackground.attachParallaxEntity(movingParallaxEntityBackground);
         movingParallaxBackground.attachParallaxEntity(movingParralaxEntityStars);
