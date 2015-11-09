@@ -215,9 +215,9 @@ public class MenuScene extends BaseScene{
 
 
         // -- Asigna la entidad móvil para que siga y de movimiento al fondo
-        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(3f,backgroundStars1Sprite));
-        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-5f,backgroundStars2Sprite));
-        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(10f,backgroundStars3Sprite));
+        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(5f,backgroundStars1Sprite));
+        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-10f,backgroundStars2Sprite));
+        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(20f,backgroundStars3Sprite));
 
         // =============== Planeta giratorio ====================
         // -- Carga el sprite
