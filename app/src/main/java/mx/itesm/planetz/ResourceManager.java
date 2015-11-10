@@ -250,7 +250,38 @@ public class ResourceManager {
     ITextureRegion YouLoseExitButtonTextureRegion;
     ITextureRegion YouLoseRetryButtonTextureRegion;
 
+    // =================================================================
+    //                  ESCENA YOU WIN
+    // =================================================================
 
+    // ============== RECURSOS GRÁFICOS ==========================
+    // ===========================================================
+    //-------Atlas-------
+    BitmapTextureAtlas YouWinBackgroundTextureAtlas;
+    BitmapTextureAtlas YouWinButtonsTextureAtlas;
+    //--------Texturas----
+    ITextureRegion YouWinBackgroundTextureRegion;
+    ITextureRegion YouWinExitButtonTextureRegion;
+    ITextureRegion YouWinRetryButtonTextureRegion;
+    ITextureRegion YouWinContinueButtonTextureRegion;
+
+    // -------------- Gemas --------------------------------------
+    private BitmapTextureAtlas YouWinGems1TextureAtlas;
+    private BitmapTextureAtlas YouWinGems2TextureAtlas;
+    private BitmapTextureAtlas YouWinGems3TextureAtlas;
+    private BitmapTextureAtlas YouWinGems4TextureAtlas;
+    public ITextureRegion YouWinGemBlue1TextureRegion;
+    public ITextureRegion YouWinGemBlue2TextureRegion;
+    public ITextureRegion YouWinGemBlue3TextureRegion;
+    public ITextureRegion YouWinGemPink1TextureRegion;
+    public ITextureRegion YouWinGemPink2TextureRegion;
+    public ITextureRegion YouWinGemPink3TextureRegion;
+    public ITextureRegion YouWinGemYellow1TextureRegion;
+    public ITextureRegion YouWinGemYellow2TextureRegion;
+    public ITextureRegion YouWinGemYellow3TextureRegion;
+    public ITextureRegion YouWinGemLocked1TextureRegion;
+    public ITextureRegion YouWinGemLocked2TextureRegion;
+    public ITextureRegion YouWinGemLocked3TextureRegion;
     // ============================================================================
     //                                RECURSOS DE AUDIO
     // ============================================================================
@@ -604,6 +635,52 @@ public class ResourceManager {
 
     }
 
+    public void loadYouWinResourcesGFX(){
+        //--atlas del fondo
+        YouWinBackgroundTextureAtlas = new BitmapTextureAtlas(textureManager,1280,720,TextureOptions.BILINEAR);
+        //--atlas de los botones
+        YouWinButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,650,200,TextureOptions.BILINEAR);
+        YouWinGems1TextureAtlas = new BitmapTextureAtlas(textureManager,900,400,TextureOptions.BILINEAR);
+        YouWinGems2TextureAtlas = new BitmapTextureAtlas(textureManager,900,400,TextureOptions.BILINEAR);
+        YouWinGems3TextureAtlas = new BitmapTextureAtlas(textureManager,900,400,TextureOptions.BILINEAR);
+        YouWinGems4TextureAtlas = new BitmapTextureAtlas(textureManager,900,400,TextureOptions.BILINEAR);
+
+
+        // ============== Regiones =============================
+        //--fondo-------
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/YouLose/");
+        YouWinBackgroundTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinBackgroundTextureAtlas, gameManager, "fondoWin.jpg", 0, 0);
+        //--Botones-----
+        YouWinExitButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "DoorButtonPauseScreen.png", 0, 0);
+        YouWinRetryButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "Retry_Norm.png", 200, 0);
+
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/buttons/");
+        YouWinContinueButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "arrow_right.png", 315, 0);
+        // --Gemas------
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/Menu/Backpack/");
+        YouWinGemBlue1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems1TextureAtlas, gameManager, "GemBlue1.png", 0, 0);
+        YouWinGemBlue2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems1TextureAtlas, gameManager, "GemBlue2.png", 300, 0);
+        YouWinGemBlue3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems1TextureAtlas, gameManager, "GemBlue3.png", 600, 0);
+        YouWinGemPink1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems2TextureAtlas, gameManager, "GemPink1.png",0, 0);
+        YouWinGemPink2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems2TextureAtlas, gameManager, "GemPink2.png", 300, 0);
+        YouWinGemPink3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems2TextureAtlas, gameManager, "GemPink3.png", 600, 0);
+        YouWinGemYellow1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems3TextureAtlas, gameManager, "GemYellow1.png", 0, 0);
+        YouWinGemYellow2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems3TextureAtlas, gameManager, "GemYellow2.png", 300, 0);
+        YouWinGemYellow3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems3TextureAtlas, gameManager, "GemYellow3.png", 600, 0);
+        YouWinGemLocked1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems4TextureAtlas, gameManager, "GemLocked1.png", 0, 0);
+        YouWinGemLocked2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems4TextureAtlas, gameManager, "GemLocked2.png", 300, 0);
+        YouWinGemLocked3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems4TextureAtlas, gameManager, "GemLocked3.png", 600, 0);
+
+        // ================ Cargar los Atlas ====================
+        YouWinBackgroundTextureAtlas.load();
+        YouWinButtonsTextureAtlas.load();
+        YouWinGems1TextureAtlas.load();
+        YouWinGems2TextureAtlas.load();
+        YouWinGems3TextureAtlas.load();
+        YouWinGems4TextureAtlas.load();
+
+
+    }
 
 
 
