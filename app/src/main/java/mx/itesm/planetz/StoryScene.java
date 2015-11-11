@@ -19,6 +19,8 @@ public class StoryScene extends BaseScene {
     private ArrayList<ITextureRegion> storyLevelOneTextureContainer;
     private ArrayList<Sprite> storyLevelOneSpriteContainer;
 
+    private Sprite skip;
+
     int index;
     private HUD hudThing;
 
@@ -81,9 +83,22 @@ public class StoryScene extends BaseScene {
                 return true;
             }
         };
-
+        skip = new Sprite(GameManager.CAMERA_WIDTH-100,20, resourceManager.loadImage("gfx/menu/buttons/skip.png"),vertexBufferObjectManager){
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)
+            {
+                        sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
+                        // -- Corremos la escena del primer nivel
+                        sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
+                        // -- Liberamos la escena actual
+                        sceneManager.destroyScene(SceneType.STORY);
+                return true;
+            }
+        };
         this.attachChild(flechaDerecha);
+        this.attachChild(skip);
         this.registerTouchArea(flechaDerecha);
+        this.registerTouchArea(skip);
 
        // this.attachChild(hudThing);
     }
