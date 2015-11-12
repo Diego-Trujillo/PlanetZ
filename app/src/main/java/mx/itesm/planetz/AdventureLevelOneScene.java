@@ -328,6 +328,10 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                     shipBody.setLinearVelocity(10f, 0);
                     gameWon = true;
                     gameManager.toastOnUiThread("Gem Unlocked!", Toast.LENGTH_SHORT);
+                    sessionManager.gemsUnlocked[1][1]= true;
+                    sessionManager.gemsUnlocked[1][2]= true;
+                    sessionManager.gemsUnlocked[1][3]= true;
+                    sessionManager.writeChanges();
 
                 }
                 else if(timeRemaining == -3){
@@ -582,7 +586,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                 if(fixtureA != null && fixtureB != null){
                     // MANEJA LA COLISIÓN ENTRE NAVE Y METEORITO
                     // -- Si la colisión ocurre entre la nave y una insancia de meteorito
-                    if((fixtureA.getBody().getUserData().equals("ship") && fixtureB.getBody().getUserData() instanceof Meteorite) || (fixtureB.getBody().getUserData().equals("ship") && fixtureA.getBody().getUserData() instanceof Meteorite) && !gameWon){
+                    if(((fixtureA.getBody().getUserData().equals("ship") && fixtureB.getBody().getUserData() instanceof Meteorite) || (fixtureB.getBody().getUserData().equals("ship") && fixtureA.getBody().getUserData() instanceof Meteorite)) && gameWon == false){
                         // -- Resta el contador de vidas
                         playerLives--;
                         updateLives();
