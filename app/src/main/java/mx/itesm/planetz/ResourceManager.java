@@ -376,15 +376,15 @@ public class ResourceManager {
         // -- Inicializar Contenedor --
         menuBitmapTextureAtlasContainer = new ArrayList<BitmapTextureAtlas>();
         // -- Estrellas Fondo 2 --
-        menuBackgroundStars1TextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 720, TextureOptions.BILINEAR);
+        menuBackgroundStars1TextureAtlas = new BitmapTextureAtlas(textureManager, 1366, 768, TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(menuBackgroundStars1TextureAtlas);
 
         // -- Estrellas Fondo 3 --
-        menuBackgroundStars2TextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 720, TextureOptions.BILINEAR);
+        menuBackgroundStars2TextureAtlas = new BitmapTextureAtlas(textureManager, 1366, 768, TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(menuBackgroundStars2TextureAtlas);
 
         // -- Estrellas Fondo 4 --
-        menuBackgroundStars3TextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 720, TextureOptions.BILINEAR);
+        menuBackgroundStars3TextureAtlas = new BitmapTextureAtlas(textureManager, 1366, 768, TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(menuBackgroundStars3TextureAtlas);
 
         // -- Logotipo juego --
@@ -441,10 +441,10 @@ public class ResourceManager {
 
         // ============== Cargando las imágenes ==================
         // -------------- Fondo ----------------------------------
-        menuBackgroundStars1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundStars1TextureAtlas, gameManager, "BackgroundStars1.png", 0, 0);
-        menuBackgroundStars2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundStars2TextureAtlas, gameManager, "BackgroundStars2.png", 0, 0);
-        menuBackgroundStars3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundStars3TextureAtlas, gameManager, "BackgroundStars3.png", 0, 0);
 
+        menuBackgroundStars1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundStars1TextureAtlas, gameManager, "layerstars1.png", 0, 0);
+        menuBackgroundStars2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundStars2TextureAtlas, gameManager, "layerstars2.png", 0, 0);
+        menuBackgroundStars3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundStars3TextureAtlas, gameManager, "layerstars3.png", 0, 0);
 
         // -- Logotipo juego --
         menuLogoBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuLogoTextureAtlas, gameManager, "Logo.png", 0, 0);
