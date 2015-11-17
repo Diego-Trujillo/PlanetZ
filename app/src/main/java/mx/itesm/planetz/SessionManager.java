@@ -101,7 +101,7 @@ public class SessionManager {
         gemsUnlocked[3][3] = sharedPreferences.getBoolean("gem_3_3",false);
 
         // ============== Nivel actual de Adv. Mode ==============
-        currentLevel = sharedPreferences.getInt("currentLevel",0);
+        currentLevel = sharedPreferences.getInt("currentLevel",1);
     }
 
     // ===========================================================

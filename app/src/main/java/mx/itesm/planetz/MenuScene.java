@@ -420,14 +420,15 @@ public class MenuScene extends BaseScene{
         // -- Botón para regresar al menú principal
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,resourceManager.menuSubmenuBackButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
         // -- Botón para abrir las opciones de Adventure
-        IMenuItem adventureMode = new ScaleMenuItemDecorator(new SpriteMenuItem(PLAY_ADVENTURE_MODE,resourceManager.loadImage("gfx/icon_play.png") ,vertexBufferObjectManager),1.2f,1f); /*******/
-
-        Sprite infiniteModeSprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2 + 250,GameManager.CAMERA_HEIGHT/2,resourceManager.loadImage("gfx/menu/infinityModebutton(locked).png"));
+        IMenuItem adventureMode = new ScaleMenuItemDecorator(new SpriteMenuItem(PLAY_ADVENTURE_MODE,resourceManager.loadImage("Graphics/Menu/Play/AdventureModeButton.png") ,vertexBufferObjectManager),1.2f,1f); /*******/
+        // -- Botón para abrir las opciones de Adventure
+        IMenuItem infinityMode = new ScaleMenuItemDecorator(new SpriteMenuItem(PLAY_INFINITE_MODE,resourceManager.loadImage("Graphics/Menu/Play/InfinityModeButtonLocked.png"),vertexBufferObjectManager),0.8f,1f);
 
 
         // =============== Agregando los botones =================
         playMenuScene.addMenuItem(backButton);
         playMenuScene.addMenuItem(adventureMode);
+        playMenuScene.addMenuItem(infinityMode);
 
         // =============== Configurando las animaciones =========
         // -- Construimos las animaciones
@@ -437,12 +438,11 @@ public class MenuScene extends BaseScene{
 
         // =============== Agregando el Texto "PLAY" =============
         playMenuScene.attachChild(new Text(350, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "PLAY", vertexBufferObjectManager));
-        playMenuScene.attachChild(infiniteModeSprite);
-
 
         // =============== Ubicando los botones =================
-        backButton.setPosition(150,GameManager.CAMERA_HEIGHT - 125 );
+        backButton.setPosition(150, GameManager.CAMERA_HEIGHT - 125);
         adventureMode.setPosition(GameManager.CAMERA_WIDTH/2 - 250, GameManager.CAMERA_HEIGHT/2);
+        infinityMode.setPosition(GameManager.CAMERA_WIDTH/2 + 250,GameManager.CAMERA_HEIGHT/2);
 
         playMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
@@ -454,12 +454,22 @@ public class MenuScene extends BaseScene{
                         resourceManager.soundOne.play();
                         break;
                     case PLAY_ADVENTURE_MODE:
+                        // -- Liberamos la escena actual
+                        sceneManager.destroyScene(SceneType.MENU);
                         // -- Creamos la escena del primer nivel
                         sceneManager.createScene(SceneType.STORY);
                         // -- Corremos la escena del primer nivel
                         sceneManager.setScene(SceneType.STORY);
+                        break;
+                    case PLAY_INFINITE_MODE:
                         // -- Liberamos la escena actual
                         sceneManager.destroyScene(SceneType.MENU);
+                        // -- Creamos la escena del primer nivel
+                        sceneManager.createScene(SceneType.ADVENTURE_LEVEL_2);
+                        // -- Corremos la escena del primer nivel
+                        sceneManager.setScene(SceneType.ADVENTURE_LEVEL_2);
+                        break;
+
                 }
                 return true;
             }

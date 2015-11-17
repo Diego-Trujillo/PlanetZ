@@ -375,10 +375,6 @@ public class ResourceManager {
         // ============== Asignarndo espacio en memoria ==========
         // -- Inicializar Contenedor --
         menuBitmapTextureAtlasContainer = new ArrayList<BitmapTextureAtlas>();
-        // -- Fondo --
-        menuBackgroundTextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 720, TextureOptions.BILINEAR);
-        menuBitmapTextureAtlasContainer.add(menuBackgroundTextureAtlas);
-
         // -- Estrellas Fondo 2 --
         menuBackgroundStars1TextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 720, TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(menuBackgroundStars1TextureAtlas);
@@ -445,10 +441,9 @@ public class ResourceManager {
 
         // ============== Cargando las imágenes ==================
         // -------------- Fondo ----------------------------------
-        menuBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundTextureAtlas, gameManager, "BackgroundLayer1.jpg", 0, 0);
-        menuBackgroundStars1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundStars1TextureAtlas, gameManager, "BackgroundLayer2.png", 0, 0);
-        menuBackgroundStars2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundStars2TextureAtlas, gameManager, "BackgroundLayer3.png", 0, 0);
-        menuBackgroundStars3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundStars3TextureAtlas, gameManager, "BackgroundLayer4.png", 0, 0);
+        menuBackgroundStars1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundStars1TextureAtlas, gameManager, "BackgroundStars1.png", 0, 0);
+        menuBackgroundStars2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundStars2TextureAtlas, gameManager, "BackgroundStars2.png", 0, 0);
+        menuBackgroundStars3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundStars3TextureAtlas, gameManager, "BackgroundStars3.png", 0, 0);
 
 
         // -- Logotipo juego --
