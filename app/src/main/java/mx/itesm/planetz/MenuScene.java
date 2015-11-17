@@ -255,9 +255,9 @@ public class MenuScene extends BaseScene{
     @Override
     public void loadSFX() {
         // -- LLamamos al Adm. de Recursos para cargar los sonidos --
-        resourceManager.setSound("Menu/ButtonPress1.ogg",1);
-        resourceManager.setSound("Menu/ButtonPress2.ogg",2);
-        resourceManager.setSound("Menu/ButtonPress3.ogg",3);
+        resourceManager.setSound("Menu/Button1.ogg",1);
+        resourceManager.setSound("Menu/Button2.ogg",2);
+        resourceManager.setSound("Menu/Button3.ogg",3);
     }
 
     // ===========================================================
