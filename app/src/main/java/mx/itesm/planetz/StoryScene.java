@@ -45,8 +45,6 @@ public class StoryScene extends BaseScene {
     // ===========================================================
     //                 Elementos de UI
     // ===========================================================
-    // ============== HUD ========================================
-    private HUD containerHUD;
     // ============== Menú para los botones ======================
     private org.andengine.entity.scene.menu.MenuScene containerMenu;
 
@@ -105,7 +103,7 @@ public class StoryScene extends BaseScene {
             default:
                 // -- Su ocurre un error --
                 gameManager.toastOnUiThread("This isn't supposed to happen, quitting.");
-                //gameManager.quit();
+                gameManager.quit();
                 break;
 
         }
