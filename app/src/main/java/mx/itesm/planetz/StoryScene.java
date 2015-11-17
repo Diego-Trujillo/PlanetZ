@@ -202,15 +202,7 @@ public class StoryScene extends BaseScene {
                             // -- Reproducir sonido de cambiado --
                             resourceManager.soundOne.play();
                         }
-                        else{
-                            // -- Liberamos la escena actual
-                            sceneManager.destroyScene(SceneType.STORY);
-                            // -- Creamos la escena del primer nivel --
-                            sceneManager.createScene(SceneType.MENU);
-                            // -- Corremos la escena del primer nivel
-                            sceneManager.setScene(SceneType.MENU);
 
-                        }
                         break;
                     case NEXT_SLIDE:
                         // -- Si todavía hay un slide adelante --
@@ -255,12 +247,13 @@ public class StoryScene extends BaseScene {
     // ===========================================================
     @Override
     public void onBackKeyPressed() {
+        // -- Liberamos la escena actual
+        sceneManager.destroyScene(SceneType.STORY);
         // -- Creamos la escena del primer nivel --
         sceneManager.createScene(SceneType.MENU);
         // -- Corremos la escena del primer nivel
         sceneManager.setScene(SceneType.MENU);
-        // -- Liberamos la escena actual
-        sceneManager.destroyScene(SceneType.STORY);
+
     }
 
     // ===========================================================
