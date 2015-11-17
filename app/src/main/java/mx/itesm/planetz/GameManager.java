@@ -126,8 +126,8 @@ public class GameManager extends BaseGameActivity {
                     @Override
                     public void onTimePassed(TimerHandler pTimerHandler) {
                         mEngine.unregisterUpdateHandler(pTimerHandler);
-                        sceneManager.createScene(SceneType.MENU);
                         sceneManager.destroyScene(SceneType.SPLASH);
+                        sceneManager.createScene(SceneType.MENU);
                         sceneManager.setScene(SceneType.MENU);
                     }
                 }));
