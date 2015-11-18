@@ -216,8 +216,9 @@ public class ResourceManager {
     // ============== Contenedor de Atlas's de Región ============
     public BitmapTextureAtlas adventureLevel1OneButtonsTextureAtlas;
     public BitmapTextureAtlas adventureLevelOneShipTextureAtlas;
-    public BitmapTextureAtlas adventureLevel1Background1TextureAtlas;
-    public BitmapTextureAtlas adventureLevel1Background2TextureAtlas;
+    public BitmapTextureAtlas adventureLevelOneBackgroundStars1TextureAtlas;
+    public BitmapTextureAtlas adventureLevelOneBackgroundStars2TextureAtlas;
+    public BitmapTextureAtlas adventureLevelOneBackgroundStars3TextureAtlas;
 
     // =============== Regiones de Texturas ======================
     // --------------- Botones -----------------------------------
@@ -226,14 +227,18 @@ public class ResourceManager {
     public ITextureRegion adventureLevel1PlayButtonTextureRegion;
     public ITextureRegion adventureLevel1BackButtonTextureRegion;
 
+    //-----------------Particula----------------------------------
+    public ITextureRegion adventureLevel1ParticleTextureRegion;
     // --------------- Meteoritos --------------------------------
     public ArrayList<ITextureRegion> adventureLevelOneMeteoriteTextureRegions;
     public ITiledTextureRegion adventureLevelOneAnimatedShipTextureRegion;
     // --------------- Vidas -------------------------------------
     public ITextureRegion adventureLevelOneLivesTexureRegion;
     // --------------- Fondo ------------------------------------
-    public ITextureRegion adventureLevel1BackgroundTextureRegion;
-    public ITextureRegion adventureLevel1BackgroundStarsTextureRegion;
+    public BitmapTextureAtlas adventureLevelOneParticleTextureAtlas;
+    public ITextureRegion adventureLevelOneBackgroundStars1TextureRegion;
+    public ITextureRegion adventureLevelOneBackgroundStars2TextureRegion;
+    public ITextureRegion adventureLevelOneBackgroundStars3TextureRegion;
 
 
     // =================================================================
@@ -545,13 +550,16 @@ public class ResourceManager {
         // ============== Texture Atlas ==========================
         adventureLevel1BitmapTextureAtlasContainer = new ArrayList<>();
         //---------------fondo----------------------------------
-        //menuBackgroundTextureAtlas = new BitmapTextureAtlas(textureManager, 1280, 800, TextureOptions.BILINEAR);
-        adventureLevel1Background1TextureAtlas = new BitmapTextureAtlas(textureManager,2048,1440,TextureOptions.BILINEAR);
-        adventureLevel1BitmapTextureAtlasContainer.add(adventureLevel1Background1TextureAtlas);
-        //adventureLevel1Background2TextureAtlas = new BitmapTextureAtlas(textureManager,600,4000);
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Level1/");
+        adventureLevelOneBackgroundStars1TextureAtlas = new BitmapTextureAtlas(textureManager, 1366, 768, TextureOptions.BILINEAR);
+        adventureLevelOneBackgroundStars2TextureAtlas = new BitmapTextureAtlas(textureManager, 1366, 768, TextureOptions.BILINEAR);
+        adventureLevelOneBackgroundStars3TextureAtlas = new BitmapTextureAtlas(textureManager, 1366, 768, TextureOptions.BILINEAR);
         // -------------- Nave -----------------------------------
         adventureLevelOneShipTextureAtlas = new BitmapTextureAtlas(textureManager,214,235,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         adventureLevel1BitmapTextureAtlasContainer.add(adventureLevelOneShipTextureAtlas);
+        //----------------Particulas-------------------------------
+        adventureLevelOneParticleTextureAtlas = new BitmapTextureAtlas(textureManager, 15, 16, TextureOptions.BILINEAR);
+        adventureLevel1BitmapTextureAtlasContainer.add(adventureLevelOneParticleTextureAtlas);
         // -------------- Meteoritos -----------------------------
         adventureLevelOneMeteoriteTextureRegions = new ArrayList<>();
         //---------------Botones----------------------------------
@@ -562,8 +570,9 @@ public class ResourceManager {
         //----------------fondo----------------
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Level1/");
-        adventureLevel1BackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1Background1TextureAtlas, gameManager, "fondoChico.png", 0, 0);
-        adventureLevel1BackgroundStarsTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1Background1TextureAtlas, gameManager, "estrellasChicas.png", 0, 720);
+        adventureLevel1BitmapTextureAtlasContainer.add(adventureLevelOneBackgroundStars1TextureAtlas);
+        adventureLevel1BitmapTextureAtlasContainer.add(adventureLevelOneBackgroundStars2TextureAtlas);
+        adventureLevel1BitmapTextureAtlasContainer.add(adventureLevelOneBackgroundStars3TextureAtlas);
 
         //------------Botones--------------
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Level1/buttons/");
@@ -576,8 +585,18 @@ public class ResourceManager {
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Sprites/");
         adventureLevelOneAnimatedShipTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(adventureLevelOneShipTextureAtlas, gameManager, "sprite_nave.png",0,0,3,1);
 
+        //----------------Particula-----------------------------
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Level1/");
+        adventureLevel1ParticleTextureRegion =  BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelOneParticleTextureAtlas, gameManager, "smokeParticle.png", 0, 0);
+
         // -------------- Vidas --------------------------------
         adventureLevelOneLivesTexureRegion = loadImage("gfx/Level1/Lifes/casco_vida.png");
+
+        //----------------Fondos--------------------------------
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Level1/");
+        adventureLevelOneBackgroundStars1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelOneBackgroundStars1TextureAtlas, gameManager, "layerstars1.png", 0, 0);
+        adventureLevelOneBackgroundStars2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelOneBackgroundStars2TextureAtlas, gameManager, "layerstars2.png", 0, 0);
+        adventureLevelOneBackgroundStars3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelOneBackgroundStars3TextureAtlas, gameManager, "layerstars3.png", 0, 0);
 
         // -------------- Meteoritos ---------------------------
         adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/1.png"));

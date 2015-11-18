@@ -1,6 +1,7 @@
 package mx.itesm.planetz;
 
 import android.hardware.SensorManager;
+import android.opengl.GLES20;
 import android.text.method.MovementMethod;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,6 +26,7 @@ import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.IEntityFactory;
 import org.andengine.entity.IEntityParameterCallable;
 import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.LoopEntityModifier;
@@ -33,6 +35,17 @@ import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.RotationAtModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
+import org.andengine.entity.particle.ParticleSystem;
+import org.andengine.entity.particle.SpriteParticleSystem;
+import org.andengine.entity.particle.emitter.CircleParticleEmitter;
+import org.andengine.entity.particle.initializer.BlendFunctionParticleInitializer;
+import org.andengine.entity.particle.initializer.ColorParticleInitializer;
+import org.andengine.entity.particle.initializer.ExpireParticleInitializer;
+import org.andengine.entity.particle.initializer.RotationParticleInitializer;
+import org.andengine.entity.particle.initializer.ScaleParticleInitializer;
+import org.andengine.entity.particle.initializer.VelocityParticleInitializer;
+import org.andengine.entity.particle.modifier.AlphaParticleModifier;
+import org.andengine.entity.particle.modifier.ScaleParticleModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.AutoParallaxBackground;
@@ -53,6 +66,7 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObject;
 import org.andengine.util.SocketUtils;
@@ -69,6 +83,13 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // =============================================================================================
     //                     D E C L A R A C I Ó N  D E  V A R I A B L E S
     // =============================================================================================
+
+    // ===========================================================
+    //           Elementos de las particulas
+    // ===========================================================
+
+    private ParticleSystem<Sprite> smokeParticleSystem;
+    private CircleParticleEmitter smokeEmmiter;
 
     // ===========================================================
     //           Elementos del Motor de Física
@@ -113,7 +134,12 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     private ParallaxBackground.ParallaxEntity movingParralaxEntityStars;
     // -------------- Sprite del Fondo ----------------------------
     private Sprite backgroundSprite;
-    private Sprite starsSprite;
+    private Sprite backgroundStars1Sprite;
+    private Sprite backgroundStars2Sprite;
+    private Sprite backgroundStars3Sprite;
+    //-------------Particula--------------------------
+    private ITextureRegion particle;
+
     // ===========================================================
     //            Cuerpos  en el motor de física
     // ===========================================================
@@ -176,6 +202,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
 
 
+
     // =============================================================================================
     //                                    C O N S T R U C T O R
     // =============================================================================================
@@ -204,17 +231,32 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
 
         // =============== Fondo de estrellas ====================
+        backgroundStars1Sprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelOneBackgroundStars1TextureRegion);
+        backgroundStars2Sprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelOneBackgroundStars2TextureRegion);
+        backgroundStars3Sprite = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelOneBackgroundStars3TextureRegion);
+
+        //----------------Particula------------------------------
+        particle = resourceManager.adventureLevel1ParticleTextureRegion;
+
+        movingParallaxBackground = new AutoParallaxBackground((22f/255f),(61f/255f),(76f/255f),10f);
+        // -- Habilita el color de fondo ..
+        movingParallaxBackground.setColorEnabled(true);
+        // -- Asignamos los sprites como entidades móviles y les damos distintas velocidades de movimiento --
+        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-20f,backgroundStars1Sprite));
+        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-80f,backgroundStars2Sprite));
+        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-175f,backgroundStars3Sprite));
+
         // -- Crea una entidad de fondo móvil
-        movingParallaxBackground = new AutoParallaxBackground(0f,0,0,10);
+        //movingParallaxBackground = new AutoParallaxBackground(0f,0,0,10);
         // -- Crea el sprite del fondo
-        backgroundSprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevel1BackgroundTextureRegion);
-        starsSprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevel1BackgroundStarsTextureRegion);
+        //backgroundSprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevel1BackgroundTextureRegion);
+        //starsSprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevel1BackgroundStarsTextureRegion);
         // -- Crea una entidad móvil que definirá movimiento del fondo
-        movingParallaxEntityBackground = new ParallaxBackground.ParallaxEntity(-1f,backgroundSprite);
-        movingParralaxEntityStars = new ParallaxBackground.ParallaxEntity(-100f,starsSprite);
+        //movingParallaxEntityBackground = new ParallaxBackground.ParallaxEntity(-1f,backgroundSprite);
+        //movingParralaxEntityStars = new ParallaxBackground.ParallaxEntity(-100f,starsSprite);
         // -- Asigna la entidad móvil para que siga y de movimiento al fondo
-        movingParallaxBackground.attachParallaxEntity(movingParallaxEntityBackground);
-        movingParallaxBackground.attachParallaxEntity(movingParralaxEntityStars);
+        //movingParallaxBackground.attachParallaxEntity(movingParallaxEntityBackground);
+        //movingParallaxBackground.attachParallaxEntity(movingParralaxEntityStars);
 
         // -- Crea los sprites de los cascos de la vida
         playerLivesSprites = new ArrayList<>();
@@ -245,6 +287,20 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // ===========================================================
     @Override
     public void createScene() {
+
+        //this.smokeEmmiter = (CircleParticleEmitter) this.smokeParticleSystem.getParticleEmitter();
+        //smokeEmmiter = new CircleParticleEmitter(GameManager.CAMERA_WIDTH * 0.5f, GameManager.CAMERA_HEIGHT * 0.5f + 20, 40);
+        //smokeParticleSystem = new ParticleSystem(smokeEmmiter,100, 100, 500, this.mParticleTextureRegion);
+        //smokeParticleSystem = getSmokeParticleSystem();
+        //this.attachChild(smokeParticleSystem);
+
+
+        //this.smokeParticleSystem.setParticlesSpawnEnabled(true);
+        //this.smokeEmmiter.setCenterX(GameManager.CAMERA_WIDTH / 2); //PARA QUE INICIE EN EL METEORO
+        //this.attachChild(getSmokeParticleSystem());
+
+
+        //setBackground(movingParallaxBackground);
         // ============== Crear el mundo de física ===============
         // -- Inicializarlo
         physicsWorld = new PhysicsWorld(new Vector2(GRAVITY_X,GRAVITY_Y),true){
@@ -326,8 +382,9 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                     gameManager.getEngine().disableAccelerationSensor(gameManager);
                     shipBody.setType(BodyDef.BodyType.KinematicBody);
                     shipBody.setLinearVelocity(10f, 0);
+                    smokeEmmiter.setCenterX(shipSprite.getX()-20);
                     gameWon = true;
-                    gameManager.toastOnUiThread("Gem Unlocked!", Toast.LENGTH_SHORT);
+                    gameManager.toastOnUiThread("Gems Unlocked!", Toast.LENGTH_SHORT);
                     sessionManager.gemsUnlocked[1][1]= true;
                     sessionManager.gemsUnlocked[1][2]= true;
                     sessionManager.gemsUnlocked[1][3]= true;
@@ -413,6 +470,10 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
         // -- Adjuntar la nave a la escena
         attachChild(shipSprite);
+        shipSprite.attachChild(getSmokeParticleSystem());
+        //-- Igualar la posicion de la particula
+        //smokeEmmiter.setCenterX(shipSprite.getX()-20);
+
         // -- Animar el sprite
         shipSprite.animate(500);
         // -- Girar el sprite 90°
@@ -559,6 +620,50 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
 
     }
+    //Sistema de particulas
+
+    public ParticleSystem<Sprite> getSmokeParticleSystem() {
+
+        IEntityFactory<Sprite> ief = new IEntityFactory<Sprite>() {
+            @Override
+            public Sprite create(float pX, float pY)
+            {
+                //Sprite s = resourceManager.loadSprite(pX,pY,particle);
+                return new Sprite (pX,pY,particle,vertexBufferObjectManager);
+                //return s;
+            }
+        };
+
+        smokeEmmiter = new CircleParticleEmitter(30,100,0.0f,5.5f);
+        //resourceManager.adventureLevel1ParticleTextureRegion.getWidth()
+        smokeParticleSystem = new ParticleSystem<Sprite>(ief,smokeEmmiter,60,90,180);
+        smokeParticleSystem.addParticleInitializer(new BlendFunctionParticleInitializer<Sprite>(
+                GLES20.GL_SRC_ALPHA,GLES20.GL_ONE));
+        float tiempoVida = 0.5f;   // Segundos de vida de cada partícula
+        smokeParticleSystem.addParticleInitializer(new ColorParticleInitializer<Sprite>(5.0f,0.3f,0.2f));
+        smokeParticleSystem.addParticleInitializer(new ExpireParticleInitializer<Sprite>(tiempoVida));
+        smokeParticleSystem.addParticleInitializer(new VelocityParticleInitializer<Sprite>(250.0f,-250.0f,260.0f,160.0f));
+        smokeParticleSystem.addParticleInitializer(new ScaleParticleInitializer<Sprite>(0.5f,2.5f));
+        smokeParticleSystem.addParticleInitializer(new RotationParticleInitializer<Sprite>(-100, 100));
+        smokeParticleSystem.addParticleModifier(new AlphaParticleModifier<Sprite>(0.0f,1.1f,0.45f,0.0f));
+        //controla la escala en un lapso de tiempo
+        smokeParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(0.0f,0.05f,0.5f,2.0f));
+        smokeParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(0.05f,1.0f,4.0f,0.5f));
+
+        return smokeParticleSystem;
+    }
+
+    public void createParticleSystem(){
+        smokeEmmiter = new CircleParticleEmitter(shipSprite.getX()-10, shipSprite.getY() + 20, 40);
+        smokeParticleSystem = new SpriteParticleSystem(smokeEmmiter,30,60,180,particle,vertexBufferObjectManager);
+        smokeParticleSystem.addParticleInitializer(new ExpireParticleInitializer<Sprite>(2.0f));
+        smokeParticleSystem.addParticleInitializer(new ScaleParticleInitializer<Sprite>(1.0f,3.5f));
+        smokeParticleSystem.addParticleInitializer(new RotationParticleInitializer<Sprite>(-100, 100));
+        smokeParticleSystem.addParticleModifier(new AlphaParticleModifier<Sprite>(0.0f,1.5f,0.45f,0.0f));
+        //controla la escala en un lapso de tiempo
+        smokeParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(0.0f,0.05f,0.5f,3.0f));
+        smokeParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(0.05f,1.0f,3.0f,0.5f));
+    }
 
     // ===========================================================
     //   Actualiza los cascos indicadores de vidas del personaje
@@ -689,7 +794,10 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     public void onAccelerationChanged(AccelerationData pAccelerationData) {
         if(movementEnabled) {
             // -- Mueve a la nave en la direción indicada por el accelerómetro
-            shipBody.setLinearVelocity(0, (pAccelerationData.getY() + 5f)*4);
+            shipBody.setLinearVelocity(0, (pAccelerationData.getY() + 5f) * 7);
+            //smokeEmmiter.setCenterY((pAccelerationData.getY() + 5f)*7);
+            //smokeEmmiter.setCenterX(500);
+            //smokeParticleSystem.setPosition(shipSprite.getX()-10,(pAccelerationData.getY() + 5f)*7);
         }
     }
 
