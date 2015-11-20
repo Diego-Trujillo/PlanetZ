@@ -1,7 +1,11 @@
 package mx.itesm.planetz;
 
+import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
 import android.hardware.SensorManager;
 import android.opengl.GLES20;
+import android.os.Vibrator;
 import android.text.method.MovementMethod;
 import android.util.Log;
 import android.view.Gravity;
@@ -53,6 +57,7 @@ import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -90,7 +95,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
     private ParticleSystem<Sprite> smokeParticleSystem;
     private CircleParticleEmitter smokeEmmiter;
-
+    private Vibrator mVibrator;
     // ===========================================================
     //           Elementos del Motor de Física
     // ===========================================================
@@ -110,7 +115,8 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // ===========================================================
     // ============== Sprites=====================================
     // -------------- Nave ---------------------------------------
-    private AnimatedSprite shipSprite;
+    //private AnimatedSprite shipSprite;
+    private TiledSprite shipSprite;
     // -------------- Elementos HUD ------------------------------
     // -- Botón de Pausa
     private Sprite pauseButton;
@@ -227,7 +233,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // -- Llamamos al Adm. de Recursos para cargar las imágenes y los fondos
         resourceManager.loadAdventureLevelOneResourcesGFX();
         // -- Creamos un sprite animado con la textura animada de la nave
-        shipSprite = new AnimatedSprite(125, GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelOneAnimatedShipTextureRegion,vertexBufferObjectManager);
+        shipSprite = new AnimatedSprite(130, GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelOneAnimatedShipTextureRegion,vertexBufferObjectManager);
 
 
         // =============== Fondo de estrellas ====================
@@ -245,18 +251,6 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-20f,backgroundStars1Sprite));
         movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-80f,backgroundStars2Sprite));
         movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-175f,backgroundStars3Sprite));
-
-        // -- Crea una entidad de fondo móvil
-        //movingParallaxBackground = new AutoParallaxBackground(0f,0,0,10);
-        // -- Crea el sprite del fondo
-        //backgroundSprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevel1BackgroundTextureRegion);
-        //starsSprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevel1BackgroundStarsTextureRegion);
-        // -- Crea una entidad móvil que definirá movimiento del fondo
-        //movingParallaxEntityBackground = new ParallaxBackground.ParallaxEntity(-1f,backgroundSprite);
-        //movingParralaxEntityStars = new ParallaxBackground.ParallaxEntity(-100f,starsSprite);
-        // -- Asigna la entidad móvil para que siga y de movimiento al fondo
-        //movingParallaxBackground.attachParallaxEntity(movingParallaxEntityBackground);
-        //movingParallaxBackground.attachParallaxEntity(movingParralaxEntityStars);
 
         // -- Crea los sprites de los cascos de la vida
         playerLivesSprites = new ArrayList<>();
@@ -287,20 +281,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // ===========================================================
     @Override
     public void createScene() {
-
-        //this.smokeEmmiter = (CircleParticleEmitter) this.smokeParticleSystem.getParticleEmitter();
-        //smokeEmmiter = new CircleParticleEmitter(GameManager.CAMERA_WIDTH * 0.5f, GameManager.CAMERA_HEIGHT * 0.5f + 20, 40);
-        //smokeParticleSystem = new ParticleSystem(smokeEmmiter,100, 100, 500, this.mParticleTextureRegion);
-        //smokeParticleSystem = getSmokeParticleSystem();
-        //this.attachChild(smokeParticleSystem);
-
-
-        //this.smokeParticleSystem.setParticlesSpawnEnabled(true);
-        //this.smokeEmmiter.setCenterX(GameManager.CAMERA_WIDTH / 2); //PARA QUE INICIE EN EL METEORO
-        //this.attachChild(getSmokeParticleSystem());
-
-
-        //setBackground(movingParallaxBackground);
+        mVibrator = (Vibrator) gameManager.getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
         // ============== Crear el mundo de física ===============
         // -- Inicializarlo
         physicsWorld = new PhysicsWorld(new Vector2(GRAVITY_X,GRAVITY_Y),true){
@@ -356,14 +337,19 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                 // -- Si el juego no está en pausa
                 if(isPaused == false) {
                     // -- Crear un meteorito
-                    createMeteorite();
+                    createMeteorite(1);
                     // -- Sumar el número de veces que se ejecutó este ciclo
                     timesExecuted++;
                     if (timesExecuted == 4) {
                         pTimerHandler.setTimerSeconds(1.5f);
                     }
-                    if (timesExecuted > 6 && timesExecuted % 2 == 0) {
-                        createMeteorite();
+                    if (timesExecuted > 2 && timesExecuted % 2 == 0) {
+                        createMeteorite(1);
+                        createMeteorite(1);
+                    }
+                    if (timesExecuted > 4 && timesExecuted % 2 == 1) {
+                        createMeteorite(2);
+                        createMeteorite(2);
                     }
 
                     // -- Incrementar el número de veces que se ejecutó este ciclo
@@ -470,12 +456,13 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
         // -- Adjuntar la nave a la escena
         attachChild(shipSprite);
+        shipSprite.setCurrentTileIndex(0);
         shipSprite.attachChild(getSmokeParticleSystem());
         //-- Igualar la posicion de la particula
         //smokeEmmiter.setCenterX(shipSprite.getX()-20);
 
         // -- Animar el sprite
-        shipSprite.animate(500);
+        //shipSprite.animate(500);
         // -- Girar el sprite 90°
         shipSprite.setRotation(-90);
 
@@ -496,11 +483,22 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // ===========================================================
     //  Crea una instancia de un meteorito, lo adhiere a la escena y lo propulsa
     // ===========================================================
-    private void createMeteorite() {
-        // -- Crea un nuevo objeto meteorito
-        Meteorite meteorite = new Meteorite(this);
+    private void createMeteorite(int num) {
+        // -- Crea un nuevo objeto meteorito con angulo aleatorio o sin angulo
+        Meteorite meteorite;
+        switch(num){
+            case 1:
+                meteorite = new Meteorite(this);
+                meteorite.attachToScene(num);
+                break;
+            case 2:
+                meteorite = new Meteorite(this);
+                meteorite.attachToScene(num);
+                break;
+        }
+
         // -- Agregamos el objeto a la escena
-        meteorite.attachToScene();
+
     }
     // ===========================================================
     //                  Crea el HUD del nivel
@@ -653,17 +651,6 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         return smokeParticleSystem;
     }
 
-    public void createParticleSystem(){
-        smokeEmmiter = new CircleParticleEmitter(shipSprite.getX()-10, shipSprite.getY() + 20, 40);
-        smokeParticleSystem = new SpriteParticleSystem(smokeEmmiter,30,60,180,particle,vertexBufferObjectManager);
-        smokeParticleSystem.addParticleInitializer(new ExpireParticleInitializer<Sprite>(2.0f));
-        smokeParticleSystem.addParticleInitializer(new ScaleParticleInitializer<Sprite>(1.0f,3.5f));
-        smokeParticleSystem.addParticleInitializer(new RotationParticleInitializer<Sprite>(-100, 100));
-        smokeParticleSystem.addParticleModifier(new AlphaParticleModifier<Sprite>(0.0f,1.5f,0.45f,0.0f));
-        //controla la escala en un lapso de tiempo
-        smokeParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(0.0f,0.05f,0.5f,3.0f));
-        smokeParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(0.05f,1.0f,3.0f,0.5f));
-    }
 
     // ===========================================================
     //   Actualiza los cascos indicadores de vidas del personaje
@@ -671,6 +658,19 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     private void updateLives(){
         for(int i = 0; i < playerLivesSprites.size(); i++){
             playerLivesSprites.get(i).setVisible(playerLives >= i+1);
+        }
+    }
+    // ===========================================================
+    //   Actualiza el indice del sprite para mostrar el daño
+    // ===========================================================
+    private void updateSprite(){
+        switch(playerLives){
+            case 2:
+                shipSprite.setCurrentTileIndex(1);
+                break;
+            case 1:
+                shipSprite.setCurrentTileIndex(2);
+                break;
         }
     }
 
@@ -694,7 +694,9 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                     if(((fixtureA.getBody().getUserData().equals("ship") && fixtureB.getBody().getUserData() instanceof Meteorite) || (fixtureB.getBody().getUserData().equals("ship") && fixtureA.getBody().getUserData() instanceof Meteorite)) && gameWon == false){
                         // -- Resta el contador de vidas
                         playerLives--;
+                        mVibrator.vibrate(300);
                         updateLives();
+                        updateSprite();
                         if(playerLives == 0){
                             // -- Creamos la escena del primer nivel
                             sceneManager.createScene(SceneType.YOU_LOSE);

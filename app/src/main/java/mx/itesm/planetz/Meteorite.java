@@ -109,7 +109,10 @@ public class Meteorite {
     // ===========================================================
     //            Agrega el meteorito a la escena
     // ===========================================================
-    public void attachToScene(){
+    public void attachToScene(int num){
+        this.rand = scene.rand;
+        int r= rand.nextInt(2);
+        System.out.println(r);
         // -- Adjuntamos el sprite a la escena
         this.scene.attachChild(sprite);
 
@@ -122,7 +125,19 @@ public class Meteorite {
         // -- Aplicamos una fuerza aleatoria en x para definir una propulsión aleatoria hacia la nave
         //    y una fuerza aleratoria en Y para definir un ángulo de lanzamiento inicial.
         //    la fuerza es = masa * proporción (0,1) * factorEscalar
-        this.body.applyForce(proportionFactor * scalarMultipier * body.getMass() / 5, signInt * proportionFactor * scalarMultipier * body.getMass(), body.getWorldCenter().x, body.getWorldCenter().y);
+        switch(num){
+            case 1:
+                this.body.applyForce(proportionFactor * scalarMultipier * body.getMass() / 5, signInt * proportionFactor * scalarMultipier * body.getMass(), body.getWorldCenter().x, body.getWorldCenter().y);
+                break;
+            case 2:
+                if(r==0)
+                    sprite.setPosition(GameManager.CAMERA_WIDTH + 200,GameManager.CAMERA_HEIGHT-200);
+                    this.body.applyForce(proportionFactor * scalarMultipier * body.getMass() / 5, 0, body.getWorldCenter().x, body.getWorldCenter().y);
+                if(r==1)
+                    sprite.setPosition(GameManager.CAMERA_WIDTH + 200,200);
+                    this.body.applyForce(proportionFactor * scalarMultipier * body.getMass() / 5, 0, body.getWorldCenter().x, body.getWorldCenter().y);
+                break;
+        }
     }
     // ===========================================================
     //        Destruimos el meteorito

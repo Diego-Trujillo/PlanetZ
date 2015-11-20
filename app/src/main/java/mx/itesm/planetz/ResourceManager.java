@@ -583,7 +583,7 @@ public class ResourceManager {
 
         // -------------- Nave ---------------------------------
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Sprites/");
-        adventureLevelOneAnimatedShipTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(adventureLevelOneShipTextureAtlas, gameManager, "sprite_nave.png",0,0,3,1);
+        adventureLevelOneAnimatedShipTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(adventureLevelOneShipTextureAtlas, gameManager, "adfs.png",0,0,3,1);
 
         //----------------Particula-----------------------------
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Level1/");
@@ -653,37 +653,37 @@ public class ResourceManager {
         //--atlas del fondo
         YouWinBackgroundTextureAtlas = new BitmapTextureAtlas(textureManager,1280,720,TextureOptions.BILINEAR);
         //--atlas de los botones
-        YouWinButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,650,200,TextureOptions.BILINEAR);
-        YouWinGems1TextureAtlas = new BitmapTextureAtlas(textureManager,900,400,TextureOptions.BILINEAR);
-        YouWinGems2TextureAtlas = new BitmapTextureAtlas(textureManager,900,400,TextureOptions.BILINEAR);
-        YouWinGems3TextureAtlas = new BitmapTextureAtlas(textureManager,900,400,TextureOptions.BILINEAR);
-        YouWinGems4TextureAtlas = new BitmapTextureAtlas(textureManager,900,400,TextureOptions.BILINEAR);
+        YouWinButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,750,200,TextureOptions.BILINEAR);
+        YouWinGems1TextureAtlas = new BitmapTextureAtlas(textureManager,600,300,TextureOptions.BILINEAR);
+        YouWinGems2TextureAtlas = new BitmapTextureAtlas(textureManager,600,300,TextureOptions.BILINEAR);
+        YouWinGems3TextureAtlas = new BitmapTextureAtlas(textureManager,600,300,TextureOptions.BILINEAR);
+        YouWinGems4TextureAtlas = new BitmapTextureAtlas(textureManager,600,300,TextureOptions.BILINEAR);
 
 
         // ============== Regiones =============================
         //--fondo-------
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/YouLose/");
-        YouWinBackgroundTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinBackgroundTextureAtlas, gameManager, "fondoWin.jpg", 0, 0);
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/WinScene/");
+        YouWinBackgroundTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinBackgroundTextureAtlas, gameManager, "ScreenWin.jpg", 0, 0);
         //--Botones-----
         YouWinExitButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "DoorButtonPauseScreen.png", 0, 0);
         YouWinRetryButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "Retry_Norm.png", 200, 0);
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/buttons/");
-        YouWinContinueButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "arrow_right.png", 315, 0);
+        YouWinContinueButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "arrow_right.png", 415, 0);
         // --Gemas------
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/Menu/Backpack/");
-        YouWinGemBlue1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems1TextureAtlas, gameManager, "GemBlue1.png", 0, 0);
-        YouWinGemBlue2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems1TextureAtlas, gameManager, "GemBlue2.png", 300, 0);
-        YouWinGemBlue3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems1TextureAtlas, gameManager, "GemBlue3.png", 600, 0);
-        YouWinGemPink1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems2TextureAtlas, gameManager, "GemPink1.png",0, 0);
-        YouWinGemPink2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems2TextureAtlas, gameManager, "GemPink2.png", 300, 0);
-        YouWinGemPink3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems2TextureAtlas, gameManager, "GemPink3.png", 600, 0);
-        YouWinGemYellow1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems3TextureAtlas, gameManager, "GemYellow1.png", 0, 0);
-        YouWinGemYellow2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems3TextureAtlas, gameManager, "GemYellow2.png", 300, 0);
-        YouWinGemYellow3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems3TextureAtlas, gameManager, "GemYellow3.png", 600, 0);
-        YouWinGemLocked1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems4TextureAtlas, gameManager, "GemLocked1.png", 0, 0);
-        YouWinGemLocked2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems4TextureAtlas, gameManager, "GemLocked2.png", 300, 0);
-        YouWinGemLocked3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems4TextureAtlas, gameManager, "GemLocked3.png", 600, 0);
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/WinScene/");
+        YouWinGemBlue1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems1TextureAtlas, gameManager, "ScreenWinGemBlue1.png", 0, 0);
+        YouWinGemBlue2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems1TextureAtlas, gameManager, "ScreenWinGemBlue2.png", 200, 0);
+        YouWinGemBlue3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems1TextureAtlas, gameManager, "ScreenWinGemBlue3.png", 400, 0);
+        YouWinGemPink1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems2TextureAtlas, gameManager, "ScreenWinGemPink1.png",0, 0);
+        YouWinGemPink2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems2TextureAtlas, gameManager, "ScreenWinGemPink2.png", 200, 0);
+        YouWinGemPink3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems2TextureAtlas, gameManager, "ScreenWinGemPink3.png", 400, 0);
+        YouWinGemYellow1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems3TextureAtlas, gameManager, "ScreenWinGemYellow1.png", 0, 0);
+        YouWinGemYellow2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems3TextureAtlas, gameManager, "ScreenWinGemYellow2.png", 200, 0);
+        YouWinGemYellow3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems3TextureAtlas, gameManager, "ScreenWinGemYellow3.png", 400, 0);
+        YouWinGemLocked1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems4TextureAtlas, gameManager, "ScreenWinGemLocked1.png", 0, 0);
+        YouWinGemLocked2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems4TextureAtlas, gameManager, "ScreenWinGemLocked2.png", 200, 0);
+        YouWinGemLocked3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems4TextureAtlas, gameManager, "ScreenWinGemLocked3.png", 400, 0);
 
         // ================ Cargar los Atlas ====================
         YouWinBackgroundTextureAtlas.load();

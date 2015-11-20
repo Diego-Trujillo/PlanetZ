@@ -88,9 +88,9 @@ public class TemporarySceneVictory extends BaseScene {
         scene.addMenuItem(retryButton);
         scene.addMenuItem(exitButton);
         scene.addMenuItem(continueButton);
-        retryButton.setPosition(GameManager.CAMERA_WIDTH/2,150);
-        exitButton.setPosition(GameManager.CAMERA_WIDTH/2 +200,150);
-        continueButton.setPosition(GameManager.CAMERA_WIDTH/2+500,150);
+        retryButton.setPosition(GameManager.CAMERA_WIDTH/2+200,100);
+        exitButton.setPosition(GameManager.CAMERA_WIDTH/2 +400,100);
+        continueButton.setPosition(GameManager.CAMERA_WIDTH/2+580,100);
 
         scene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
@@ -142,92 +142,13 @@ public class TemporarySceneVictory extends BaseScene {
             }
         });
     }
-        /*
-
-        retryButton = new Sprite(GameManager.CAMERA_WIDTH/2,150,resourceManager.YouWinRetryButtonTextureRegion,vertexBufferObjectManager){
-            @Override
-            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
-                //Volviendo a jugar
-                if (pSceneTouchEvent.isActionUp()) {
-                    switch (sessionManager.currentLevel){
-                        case 1:
-                            // -- Creamos la escena del primer nivel
-                            sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
-                            // -- Corremos la escena del primer nivel
-                            sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
-                            // -- Liberamos la escena actual
-                            sceneManager.destroyScene(SceneType.TEMP);
-                            break;
-                        case 2:
-                            sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
-                            sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
-                            sceneManager.destroyScene(SceneType.TEMP);
-                            break;
-                        case 3:
-                            sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
-                            sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
-                            sceneManager.destroyScene(SceneType.TEMP);
-                            break;
-                    }
-
-                }return true;}};
-
-        exitButton = new Sprite(GameManager.CAMERA_WIDTH/2 +200,150, resourceManager.YouWinExitButtonTextureRegion,vertexBufferObjectManager){
-            @Override
-            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
-                //Regresando al menu principal
-                if (pSceneTouchEvent.isActionUp()) {
-                    // -- Creamos la escena del primer nivel
-                    sceneManager.createScene(SceneType.MENU);
-                    // -- Corremos la escena del primer nivel
-                    sceneManager.setScene(SceneType.MENU);
-                    // -- Liberamos la escena actual
-                    sceneManager.destroyScene(SceneType.TEMP);
-                }
-                return true;}
-        };
-        continueButton = new Sprite(GameManager.CAMERA_WIDTH/2+1000,150, resourceManager.YouWinContinueButtonTextureRegion,vertexBufferObjectManager){
-            @Override
-            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
-                //Regresando al menu principal
-                if (pSceneTouchEvent.isActionUp()) {
-                    // -- Creamos la escena del primer nivel
-                    //sceneManager.createScene(SceneType.MENU);
-                    // -- Corremos la escena del primer nivel
-                    //sceneManager.setScene(SceneType.MENU);
-                    // -- Liberamos la escena actual
-                    //sceneManager.destroyScene(SceneType.YOU_LOSE);
-                }
-
-                return true;}
-        };
-
-        this.attachChild(retryButton);
-        this.attachChild(exitButton);
-        this.registerTouchArea(retryButton);
-        this.registerTouchArea(exitButton);
-
-            */
-
-            //this.attachChild(text1);
-            //this.attachChild(text2);
-
-
-
 
     public void attachGems(){
         //-- Creación de las gemas
 
-        gemL1 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemLocked1TextureRegion, vertexBufferObjectManager);
+        gemL1 = new Sprite(GameManager.CAMERA_WIDTH/2 -200,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemLocked1TextureRegion, vertexBufferObjectManager);
         gemL2 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemLocked2TextureRegion, vertexBufferObjectManager);
-        gemL3 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemLocked3TextureRegion, vertexBufferObjectManager);
-        /*gemL4 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
-        gemL5 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked2TextureRegion, vertexBufferObjectManager);
-        gemL6 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
-        gemL7 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked1TextureRegion, vertexBufferObjectManager);
-        gemL8 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked2TextureRegion, vertexBufferObjectManager);
-        gemL9 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.backpackMenuGemLocked3TextureRegion, vertexBufferObjectManager);
-*/
+        gemL3 = new Sprite(GameManager.CAMERA_WIDTH/2 +230,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemLocked3TextureRegion, vertexBufferObjectManager);
         level1 = new Entity();
         level2 = new Entity();
         level3 = new Entity();
@@ -235,9 +156,9 @@ public class TemporarySceneVictory extends BaseScene {
         switch (sessionManager.currentLevel){
             case 1:
                 // creación de las gemas del nivel 1
-                gem1 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemBlue1TextureRegion, vertexBufferObjectManager);
+                gem1 = new Sprite(GameManager.CAMERA_WIDTH/2 -200,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemBlue1TextureRegion, vertexBufferObjectManager);
                 gem2 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemBlue2TextureRegion, vertexBufferObjectManager);
-                gem3 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemBlue3TextureRegion, vertexBufferObjectManager);
+                gem3 = new Sprite(GameManager.CAMERA_WIDTH/2 +230,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemBlue3TextureRegion, vertexBufferObjectManager);
                 //agregar las gemas a la entidad
                 if(sessionManager.gemsUnlocked[1][1]==true){
                     level1.attachChild(gem1);}
@@ -260,9 +181,9 @@ public class TemporarySceneVictory extends BaseScene {
                 break;
             case 2:
                 // creación de las gemas del nivel 2
-                gem4 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemPink1TextureRegion, vertexBufferObjectManager);
+                gem4 = new Sprite(GameManager.CAMERA_WIDTH/2 -200,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemPink1TextureRegion, vertexBufferObjectManager);
                 gem5 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemPink2TextureRegion, vertexBufferObjectManager);
-                gem6 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemPink3TextureRegion, vertexBufferObjectManager);
+                gem6 = new Sprite(GameManager.CAMERA_WIDTH/2 +230,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemPink3TextureRegion, vertexBufferObjectManager);
                 //agregar las gemas a la entidad
                 if(sessionManager.gemsUnlocked[2][1]==true){
                     level2.attachChild(gem4);}
@@ -281,9 +202,9 @@ public class TemporarySceneVictory extends BaseScene {
                 scene.attachChild(level2);
                 break;
             case 3:
-                gem7 = new Sprite(GameManager.CAMERA_WIDTH/2 -300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemYellow1TextureRegion, vertexBufferObjectManager);
+                gem7 = new Sprite(GameManager.CAMERA_WIDTH/2 -200,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemYellow1TextureRegion, vertexBufferObjectManager);
                 gem8 = new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemYellow2TextureRegion, vertexBufferObjectManager);
-                gem9 = new Sprite(GameManager.CAMERA_WIDTH/2 +300,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemYellow3TextureRegion, vertexBufferObjectManager);
+                gem9 = new Sprite(GameManager.CAMERA_WIDTH/2 +230,GameManager.CAMERA_HEIGHT/2 -50,resourceManager.YouWinGemYellow3TextureRegion, vertexBufferObjectManager);
                 if(sessionManager.gemsUnlocked[3][1]==true){
                     level3.attachChild(gem7);}
                 if(sessionManager.gemsUnlocked[3][1]==false){

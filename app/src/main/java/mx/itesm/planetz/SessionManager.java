@@ -13,7 +13,6 @@ public class SessionManager {
     // =============================================================================================
     //                          D E C L A R A C I Ó N  D E  V A R I A B L E S
     // =============================================================================================
-
     // ============== Referencia de Instancia Única =============
     private static SessionManager INSTANCE = new SessionManager();
 
