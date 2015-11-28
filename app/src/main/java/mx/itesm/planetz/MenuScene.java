@@ -287,6 +287,7 @@ public class MenuScene extends BaseScene{
         // =============== Reproducir música de fondo ============
         resourceManager.backgroundMusic.play();
         resourceManager.updateAudioVolume();
+
     }
 
     // ===========================================================

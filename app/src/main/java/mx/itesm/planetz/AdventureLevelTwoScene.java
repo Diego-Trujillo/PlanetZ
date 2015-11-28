@@ -49,8 +49,7 @@ public class AdventureLevelTwoScene extends BaseScene{
     final FixtureDef WALL_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(0,0f,0f);
     // -- Nave
     final FixtureDef SHIP_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(1000.f,0.1f,0.5f);
-    //-- Meteoros
-    final FixtureDef METEOR_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(1f,0.9f,0.4f);
+
 
     // ============== Paredes ====================================
     // -- Izquierda
@@ -66,6 +65,7 @@ public class AdventureLevelTwoScene extends BaseScene{
     private Rectangle astronautRectangle;
     private Body astronautBody;
 
+    private Astronaut player;
     private PlayerHUD sceneHUD;
     @Override
     public void loadGFX() {
@@ -155,66 +155,8 @@ public class AdventureLevelTwoScene extends BaseScene{
 
 
     private void createAstronaut(){
-        astronautRectangle = new Rectangle(128,128,128,128,vertexBufferObjectManager);
-
-        astronautRectangle.setColor(1f,1f,1f);
-
-        astronautBody = PhysicsFactory.createBoxBody(physicsWorld, astronautRectangle, BodyDef.BodyType.DynamicBody, SHIP_FIXTURE_DEFINITION);
-
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(astronautRectangle, astronautBody));
-
-        this.attachChild(astronautRectangle);
-
-
-        Sprite sp = new Sprite(150,100, resourceManager.loadImage("Graphics/Menu/BackArrow.png"),vertexBufferObjectManager){
-            @Override
-            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
-                if (pSceneTouchEvent.isActionDown()) {
-                    System.out.println("is touched");
-                    astronautBody.setLinearVelocity(astronautBody.getLinearVelocity().x,15);
-
-                }
-                return true;
-            }
-
-        };
-
-
-        Sprite sp2 = new Sprite(300,100, resourceManager.loadImage("Graphics/Menu/BackArrow.png"),vertexBufferObjectManager){
-            @Override
-            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
-                if (pSceneTouchEvent.isActionDown()) {
-                    System.out.println("is touched");
-                    astronautBody.setLinearVelocity(5,0);
-
-                }
-                return true;
-            }
-
-        };
-        sp.setRotation(90f);
-       //this.attachChild(sp);
-        this.registerTouchArea(sp);
-        this.registerTouchArea(sp2);
-        astronautRectangle.attachChild(sp);
-        astronautRectangle.attachChild(sp2);
-
-        astronautRectangle.registerUpdateHandler(new IUpdateHandler() {
-            @Override
-            public void onUpdate(float pSecondsElapsed) {
-                astronautBody.setLinearVelocity(25f,astronautBody.getLinearVelocity().y);
-                astronautRectangle.setRotation(0);
-                astronautBody.setAngularVelocity(0);
-            }
-
-
-            @Override
-            public void reset() {
-
-            }
-        });
-        camera.setChaseEntity(astronautRectangle);
-
+        player = new Astronaut(this, physicsWorld);
+        player.attachToScene();
 
     }
 
@@ -228,6 +170,10 @@ public class AdventureLevelTwoScene extends BaseScene{
         this.setIgnoreUpdate(false);
     }
 
+    @Override
+    public void HUDButton1Pressed(){
+        player.jump();
+    }
     @Override
     public void onBackKeyPressed() {
 

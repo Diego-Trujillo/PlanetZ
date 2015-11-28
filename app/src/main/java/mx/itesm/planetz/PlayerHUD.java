@@ -26,6 +26,8 @@ public class PlayerHUD extends HUD {
     public Sprite pauseScreen;
     public Sprite unpauseButton;
     public Sprite backButton;
+    public Sprite buttonOne;
+    public Sprite buttonTwo;
 
 
     // =============================================================================================
@@ -109,6 +111,26 @@ public class PlayerHUD extends HUD {
         pauseScreen.setVisible(false);
         unpauseButton.setVisible(false);
         backButton.setVisible(false);
+
+
+       switch(currentLevel){
+           case 2:
+               buttonOne = new Sprite(GameManager.CAMERA_WIDTH - 150, 150,resourceManager.loadImage("Graphics/BraveNewWorld/Buttons/ButtonJump.png"),gameScene.vertexBufferObjectManager){
+                   @Override
+                   public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
+                       if (pSceneTouchEvent.isActionUp()) {
+                           gameScene.HUDButton1Pressed();
+                       }
+                       return true;
+                   }
+               };
+
+               this.attachChild(buttonOne);
+               this.registerTouchArea(buttonOne);
+
+               break;
+       }
+
     }
 
 
