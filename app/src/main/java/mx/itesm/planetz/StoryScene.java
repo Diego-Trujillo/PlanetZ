@@ -199,6 +199,7 @@ public class StoryScene extends BaseScene {
                             storySlidesSpriteContainer.get(currentIndex).setVisible(true);
                             // -- Reproducir sonido de cambiado --
                             resourceManager.soundOne.play();
+
                         }
 
                         break;

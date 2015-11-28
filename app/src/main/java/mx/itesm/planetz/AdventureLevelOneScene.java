@@ -257,13 +257,17 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // ===========================================================
     @Override
     public void loadMFX() {
-
+        //resourceManager.setMusic("Menu.ogg");
     }
     // ===========================================================
     //                      Cargar sonidos
     // ===========================================================
     @Override
     public void loadSFX() {
+        // -- LLamamos al Adm. de Recursos para cargar los sonidos --
+        resourceManager.setSound("Level1/shipCrash.ogg",1);
+        resourceManager.setSound("Level1/wallcollide.ogg",2);
+        resourceManager.updateAudioVolume();
 
     }
 
@@ -320,6 +324,10 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // -- Creamos la lista de elementos a ser borrados
         toBeDeleted = new ArrayList<Meteorite>();
 
+
+        // =============== Reproducir música de fondo ============
+        //resourceManager.backgroundMusic.play();
+        //resourceManager.updateAudioVolume();
 
         // ============== CICLO PRINCIPAL =========================
         // -- Se va a ejecutar la acción cada x segundos (x inicial es 4f)
@@ -585,6 +593,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                         // -- Resta el contador de vidas
                         playerLives--;
                         mVibrator.vibrate(300);
+                        resourceManager.soundOne.play();
                         sceneHUD.updateLives(playerLives);
                         updateSprite();
                         if(playerLives == 0){
@@ -619,6 +628,11 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                             // -- Agregamos el meteorito a la lista de elemtos a ser borrados
                             toBeDeleted.add((Meteorite)fixtureB.getBody().getUserData());
                         }
+                    }
+                    // -========== Registra el contacto entre meteorito y los muros ==
+                    if((fixtureA.getBody().getUserData().equals("wall") && fixtureB.getBody().getUserData() instanceof Meteorite) || (fixtureB.getBody().getUserData().equals("wall") && fixtureA.getBody().getUserData() instanceof Meteorite) ){
+                        resourceManager.soundTwo.play();
+
                     }
                 }
             }

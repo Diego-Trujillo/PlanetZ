@@ -699,10 +699,10 @@ public class ResourceManager {
         YouWinBackgroundTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinBackgroundTextureAtlas, gameManager, "ScreenWin.jpg", 0, 0);
         //--Botones-----
         YouWinExitButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "DoorButtonPauseScreen.png", 0, 0);
-        YouWinRetryButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "Retry_Norm.png", 200, 0);
+        YouWinRetryButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "Retry_Norm.png", 128, 0);
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/buttons/");
-        YouWinContinueButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "arrow_right.png", 415, 0);
+        YouWinContinueButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "arrow_right.png", 243, 0);
         // --Gemas------
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/WinScene/");
         YouWinGemBlue1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems1TextureAtlas, gameManager, "ScreenWinGemBlue1.png", 0, 0);
