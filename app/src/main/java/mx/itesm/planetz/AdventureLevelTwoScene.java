@@ -66,8 +66,10 @@ public class AdventureLevelTwoScene extends BaseScene{
     private Rectangle astronautRectangle;
     private Body astronautBody;
 
+    private PlayerHUD sceneHUD;
     @Override
     public void loadGFX() {
+        sceneHUD = new PlayerHUD(this,2);
 
     }
 
@@ -87,6 +89,7 @@ public class AdventureLevelTwoScene extends BaseScene{
 
         this.registerUpdateHandler(physicsWorld);
 
+        sceneHUD.attachToScene();
 
         this.setBackground(new Background(0f, 0f, 0f));
         createWalls();
@@ -215,6 +218,15 @@ public class AdventureLevelTwoScene extends BaseScene{
 
     }
 
+    @Override
+    public void pause(){
+        this.setIgnoreUpdate(true);
+    }
+
+    @Override
+    public void unPause(){
+        this.setIgnoreUpdate(false);
+    }
 
     @Override
     public void onBackKeyPressed() {

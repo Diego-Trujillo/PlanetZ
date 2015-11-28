@@ -240,6 +240,14 @@ public class ResourceManager {
     public ITextureRegion adventureLevelOneBackgroundStars2TextureRegion;
     public ITextureRegion adventureLevelOneBackgroundStars3TextureRegion;
 
+    // ============================================================================
+    //                                RECURSOS DE AUDIO
+    // ============================================================================
+    public ITextureRegion HUDPlayerLivesTextureRegion;
+    public ITextureRegion HUDPauseButtonTextureRegion;
+    public ITextureRegion HUDPauseScreenTextureRegion;
+    public ITextureRegion HUDUnpauseButtonTextureRegion;
+    public ITextureRegion HUDReturnToMenuButtonTextureRegion;
 
     // =================================================================
     //                  ESCENA YOU LOSE
@@ -262,13 +270,13 @@ public class ResourceManager {
     // ============== RECURSOS GRÁFICOS ==========================
     // ===========================================================
     //-------Atlas-------
-    BitmapTextureAtlas YouWinBackgroundTextureAtlas;
-    BitmapTextureAtlas YouWinButtonsTextureAtlas;
+    public BitmapTextureAtlas YouWinBackgroundTextureAtlas;
+    public BitmapTextureAtlas YouWinButtonsTextureAtlas;
     //--------Texturas----
-    ITextureRegion YouWinBackgroundTextureRegion;
-    ITextureRegion YouWinExitButtonTextureRegion;
-    ITextureRegion YouWinRetryButtonTextureRegion;
-    ITextureRegion YouWinContinueButtonTextureRegion;
+    public ITextureRegion YouWinBackgroundTextureRegion;
+    public ITextureRegion YouWinExitButtonTextureRegion;
+    public ITextureRegion YouWinRetryButtonTextureRegion;
+    public ITextureRegion YouWinContinueButtonTextureRegion;
 
     // -------------- Gemas --------------------------------------
     private BitmapTextureAtlas YouWinGems1TextureAtlas;
@@ -626,6 +634,31 @@ public class ResourceManager {
             atlas.unload();
         }
 
+    }
+
+    public void loadHUD(){
+        HUDPlayerLivesTextureRegion = loadImage("Graphics/HUD/LifeIcon.png");
+        HUDPauseButtonTextureRegion = loadImage("Graphics/HUD/PauseButton.png");
+        HUDPauseScreenTextureRegion = loadImage("Graphics/HUD/PauseScreen.png");
+        HUDUnpauseButtonTextureRegion = loadImage("Graphics/HUD/UnpauseButton.png");
+        HUDReturnToMenuButtonTextureRegion = loadImage("Graphics/HUD/BackButton.png");
+    }
+
+    public void unloadHUD(){
+        HUDPlayerLivesTextureRegion.getTexture().unload();
+        HUDPlayerLivesTextureRegion =  null;
+
+        HUDPauseButtonTextureRegion.getTexture().unload();
+        HUDPauseButtonTextureRegion = null;
+
+        HUDPauseScreenTextureRegion.getTexture().unload();
+        HUDPauseScreenTextureRegion = null;
+
+        HUDUnpauseButtonTextureRegion.getTexture().unload();
+        HUDUnpauseButtonTextureRegion = null;
+
+        HUDReturnToMenuButtonTextureRegion.getTexture().unload();
+        HUDReturnToMenuButtonTextureRegion = null;
     }
 
     public void loadYouLoseResourcesGFX(){

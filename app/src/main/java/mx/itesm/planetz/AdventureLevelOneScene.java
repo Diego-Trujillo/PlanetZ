@@ -183,7 +183,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
 
     // ===========================================================
-    //          Elementos de la funcion que crea Meteoritos=
+    //          Elementos de la funcion que crea Meteoritos
     // ===========================================================
     // -- Veces que ha sido ejecutada la función del loop de tiempo
     private int timeRemaining;
@@ -207,7 +207,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     private boolean gameWon = false;
 
 
-
+    public PlayerHUD sceneHUD;
 
     // =============================================================================================
     //                                    C O N S T R U C T O R
@@ -248,19 +248,10 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // -- Habilita el color de fondo ..
         movingParallaxBackground.setColorEnabled(true);
         // -- Asignamos los sprites como entidades móviles y les damos distintas velocidades de movimiento --
-        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-20f,backgroundStars1Sprite));
-        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-80f,backgroundStars2Sprite));
+        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-20f, backgroundStars1Sprite));
+        movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-80f, backgroundStars2Sprite));
         movingParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-175f,backgroundStars3Sprite));
-
-        // -- Crea los sprites de los cascos de la vida
-        playerLivesSprites = new ArrayList<>();
-        playerLivesSprites.add(resourceManager.loadSprite(50,GameManager.CAMERA_HEIGHT - 50,resourceManager.adventureLevelOneLivesTexureRegion));
-        playerLivesSprites.add(resourceManager.loadSprite(50 + 75,GameManager.CAMERA_HEIGHT - 50,resourceManager.adventureLevelOneLivesTexureRegion));
-        playerLivesSprites.add(resourceManager.loadSprite(50 + 75 + 75,GameManager.CAMERA_HEIGHT - 50,resourceManager.adventureLevelOneLivesTexureRegion));
-
-        // -- El texto de tiempo para ganar
-        timeRemainingText = new Text(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT - 50,resourceManager.fontOne,"  ",vertexBufferObjectManager);
-    }
+     }
     // ===========================================================
     //                       Cargar música
     // ===========================================================
@@ -322,7 +313,8 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // -- La nave
         createShip();
         // -- El Heads-Up Display con la información del el nivel
-        createHUD();
+        sceneHUD = new PlayerHUD(this,sessionManager.currentLevel);
+        sceneHUD.attachToScene();
 
 
         // -- Creamos la lista de elementos a ser borrados
@@ -361,14 +353,14 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         final TimerHandler timeLoop = new TimerHandler(1f, true, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
-                if(timeRemaining >= 0)timeRemainingText.setText(Integer.toString(timeRemaining));
+                if(timeRemaining >= 0)sceneHUD.updateTimeText(timeRemaining);
                 else if(timeRemaining == -2){
                     pTimerHandler.setTimerSeconds(3);
                     sceneManager.getCurrentScene().unregisterUpdateHandler(meteorSpawner);
                     gameManager.getEngine().disableAccelerationSensor(gameManager);
                     shipBody.setType(BodyDef.BodyType.KinematicBody);
                     shipBody.setLinearVelocity(10f, 0);
-                    smokeEmmiter.setCenterX(shipSprite.getX()-20);
+                    //smokeEmmiter.setCenterX(shipSprite.getX()-20);
                     gameWon = true;
                     gameManager.toastOnUiThread("Gems Unlocked!", Toast.LENGTH_SHORT);
                     sessionManager.gemsUnlocked[1][1]= true;
@@ -420,7 +412,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // -- Colorear ambos rectángulos de blanco
         leftWallRectangle.setColor(0f, 0f, 0f);
         rightWallRectangle.setColor(0f, 0f, 0f);
-        wallOfDeathRectangle.setColor(1f, 1f,1f);
+        wallOfDeathRectangle.setColor(1f, 1f, 1f);
 
         // ============== Crear los cuerpos de física ===============
         leftWallBody = PhysicsFactory.createBoxBody(physicsWorld, leftWallRectangle, BodyDef.BodyType.StaticBody, WALL_FIXTURE_DEFINITION);
@@ -435,7 +427,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // ============== Conectar cuerpos de física a sprites ======
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(leftWallRectangle, leftWallBody));
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(rightWallRectangle, rightWallBody));
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(wallOfDeathRectangle,wallOfDeathBody));
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(wallOfDeathRectangle, wallOfDeathBody));
 
         // ============== Adjuntar las paredes al mundo =============
         this.attachChild(leftWallRectangle);
@@ -500,124 +492,30 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // -- Agregamos el objeto a la escena
 
     }
-    // ===========================================================
-    //                  Crea el HUD del nivel
-    // ===========================================================
-    private void createHUD(){
-        // -- Inicializamos un nuevo HUD
-        playerHUD = new HUD();
-
-        playerHUD.attachChild(timeRemainingText);
-
-
-        // ============= Creamos los elementos del HUD ===========
-        // -- Creamos el botón de PAUSA y sus acciones
-        pauseButton = new Sprite(GameManager.CAMERA_WIDTH - 50,GameManager.CAMERA_HEIGHT-50,resourceManager.adventureLevel1PauseButtonTextureRegion,vertexBufferObjectManager){
-            @Override
-            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
-                // Cuando se toca el botón de pausa
-                if (pSceneTouchEvent.isActionUp()&& isPaused == false) {
-                    setPauseGame();
-                }
-                return true;
-            }
-        };
-
-        // ========== Botones de pausa y sus acciones ================
-        // -- Creamos la pantalla de PAUSA
-        pauseScreen = new Sprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2, resourceManager.adventureLevel1PauseScreenTextureRegion,vertexBufferObjectManager);
-
-
-        resumeButton = new Sprite(GameManager.CAMERA_WIDTH/2 - 75, GameManager.CAMERA_HEIGHT/2 - 75, resourceManager.adventureLevel1PlayButtonTextureRegion,vertexBufferObjectManager){
-            //si se da click se reanuda colocando el time step en 1/30
-            @Override
-            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
-                //Cuando se toque la pantalla de pausa
-                if (pSceneTouchEvent.isActionUp()) {
-                    setPauseGame();
-                }
-                return true;}};
-        backButton  = new Sprite(GameManager.CAMERA_WIDTH/2 + 75 , GameManager.CAMERA_HEIGHT/2 - 75, resourceManager.adventureLevel1BackButtonTextureRegion,vertexBufferObjectManager){
-            //regresa al menu play en
-            @Override
-            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
-                //Cuando se toque la pantalla de pausa
-                if (pSceneTouchEvent.isActionUp()) {
-                    // -- Creamos la escena del primer nivel
-                    sceneManager.createScene(SceneType.MENU);
-                    // -- Corremos la escena del primer nivel
-                    sceneManager.setScene(SceneType.MENU);
-                    // -- Liberamos la escena actual
-                    sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_1);
-                }
-                return true;}
-        };
-
-
-        // ============= Adjuntamos todos los elementos al HUD ===
-        playerHUD.attachChild(pauseButton);
-        playerHUD.attachChild(pauseScreen);
-        playerHUD.attachChild(resumeButton);
-        playerHUD.attachChild(backButton);
-        playerHUD.attachChild(playerLivesSprites.get(0));
-        playerHUD.attachChild(playerLivesSprites.get(1));
-        playerHUD.attachChild(playerLivesSprites.get(2));
-
-        // ============= Deshabilitamos la pantalla de pausa =====
-        pauseScreen.setVisible(false);
-        resumeButton.setVisible(false);
-        backButton.setVisible(false);
-
-        // ============= Registramos las áreas táctiles ==========
-        playerHUD.registerTouchArea(pauseButton);
-
-
-
-        // -- Adjuntamos el HUD a la cámara
-        camera.setHUD(playerHUD);
-
-    }
 
     // ===========================================================
     //    Pausa el Juego
     // ===========================================================
-    void setPauseGame(){
-        if(isPaused){
-            // -- Declaramos que retome todos los Update Handlers
-            sceneManager.getCurrentScene().setIgnoreUpdate(false);
-            // -- Quita la visibilidad de la pantalla
-            pauseScreen.setVisible(false);
-            resumeButton.setVisible(false);
-            backButton.setVisible(false);
-            // -- Desregistra la habilidad de tocar esta pantalla
-            playerHUD.unregisterTouchArea(backButton);
-            playerHUD.unregisterTouchArea(resumeButton);
-            // -- Habilitamos el movimiento de la nave con el accelerómetro
-            gameManager.getEngine().enableAccelerationSensor(gameManager, (AdventureLevelOneScene) sceneManager.getCurrentScene());
-            // -- Cambiamos la bandera de juego pausado
-            isPaused = false;
-        }
-        else{
-            // -- Deshabilitamos el movimiento de la nave
-            gameManager.getEngine().disableAccelerationSensor(gameManager);
-            // -- Detenemos a la nave
-            shipBody.setLinearVelocity(0,0);
-            // -- Hacemos a la pantalla de pausa visible
-            pauseScreen.setVisible(true);
-            resumeButton.setVisible(true);
-            backButton.setVisible(true);
+    @Override
+    public void pause(){
+        shipBody.setLinearVelocity(0,0);
+        gameManager.getEngine().disableAccelerationSensor(gameManager);
+        this.setIgnoreUpdate(true);
+        isPaused = true;
+    }
 
-            // -- Registramos el área táctil de la pantalla de pausa
-            playerHUD.registerTouchArea(resumeButton);
-            playerHUD.registerTouchArea(backButton);
-            // -- Declaramos que ignore todos los Update Handlers de esta escena
-            sceneManager.getCurrentScene().setIgnoreUpdate(true);
-            // -- Cambiamos la bandera de juego pausado
-            isPaused = true;
-        }
+    // ===========================================================
+    //    Despausa el Juego
+    // ===========================================================
+    @Override
+    public void unPause(){
+        this.setIgnoreUpdate(false);
+        gameManager.getEngine().enableAccelerationSensor(gameManager,this);
+        isPaused = false;
 
 
     }
+
     //Sistema de particulas
 
     public ParticleSystem<Sprite> getSmokeParticleSystem() {
@@ -653,14 +551,6 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
 
     // ===========================================================
-    //   Actualiza los cascos indicadores de vidas del personaje
-    // ===========================================================
-    private void updateLives(){
-        for(int i = 0; i < playerLivesSprites.size(); i++){
-            playerLivesSprites.get(i).setVisible(playerLives >= i+1);
-        }
-    }
-    // ===========================================================
     //   Actualiza el indice del sprite para mostrar el daño
     // ===========================================================
     private void updateSprite(){
@@ -695,7 +585,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                         // -- Resta el contador de vidas
                         playerLives--;
                         mVibrator.vibrate(300);
-                        updateLives();
+                        sceneHUD.updateLives(playerLives);
                         updateSprite();
                         if(playerLives == 0){
                             // -- Creamos la escena del primer nivel
@@ -773,9 +663,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // -- Liberamos los recursos de esta escena
         resourceManager.unloadAdventureLevelOneResources();
 
-        // -- Quitamos los elementos del HUD y el HUD mismo
-        playerHUD.detachChildren();
-        playerHUD.clearTouchAreas();
+        sceneHUD.destroy();
         // -- Borramos la escena
         this.detachChildren();
         this.detachSelf();
