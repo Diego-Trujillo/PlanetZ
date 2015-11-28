@@ -7,7 +7,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
+import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.entity.Entity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.AnimationData;
@@ -42,11 +44,12 @@ public class Astronaut {
     private BitmapTextureAtlas astronautBitmapTextureAtlas;
     private ITiledTextureRegion astronautTextureRegion;
     private AnimatedSprite astronautSprite;
+    private Entity objectOfDesire;
 
     // ===========================================================
     //                 Elementos de Física
     // ===========================================================
-    private Body astronautBody;
+    public Body astronautBody;
     private final FixtureDef ASTRONAUT_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(1000.f,0.1f,0.5f);
 
     // ===========================================================
@@ -61,10 +64,17 @@ public class Astronaut {
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/");
        astronautBitmapTextureAtlas = new BitmapTextureAtlas(gameScene.resourceManager.textureManager,688,387, TextureOptions.BILINEAR);
         astronautTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(astronautBitmapTextureAtlas,gameScene.gameManager,"AstronautSprites.png",0,0,8,3);
-        astronautSprite = new AnimatedSprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2,astronautTextureRegion,gameScene.vertexBufferObjectManager);
-
 
         astronautBitmapTextureAtlas.load();
+        astronautSprite = new AnimatedSprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2,astronautTextureRegion,gameScene.vertexBufferObjectManager);
+
+        objectOfDesire = new Entity();
+        astronautSprite.attachChild(objectOfDesire);
+        objectOfDesire.setPosition(0,150);
+
+
+
+
 
         astronautBody = PhysicsFactory.createBoxBody(physicsWorld,astronautSprite, BodyDef.BodyType.DynamicBody,ASTRONAUT_FIXTURE_DEFINITION);
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(astronautSprite,astronautBody,true,true));
@@ -79,15 +89,17 @@ public class Astronaut {
         long[] lista = {50,50,50,50,50,50,50,50};
         astronautSprite.animate(lista, 0, 7, true);
 
-        gameScene.camera.setChaseEntity(astronautSprite);
+        gameScene.camera.setChaseEntity(objectOfDesire);
+
+
+
+
+
 
         astronautSprite.registerUpdateHandler(new IUpdateHandler() {
             @Override
             public void onUpdate(float pSecondsElapsed) {
                 astronautBody.setLinearVelocity(25f, astronautBody.getLinearVelocity().y);
-
-                //astronautSprite.setRotation(0);
-                astronautBody.setAngularVelocity(0);
             }
 
             @Override
@@ -100,10 +112,10 @@ public class Astronaut {
     }
 
     public void jump() {
-        astronautBody.setLinearVelocity(0, 10f);
-        long[] lista = {75,75,75,75,75,75,75};
+        astronautBody.setLinearVelocity(0, 17f);
+        long[] lista = {75,75,100,500};
         astronautSprite.stopAnimation();
-        astronautSprite.animate(lista, 16, 22, false, new AnimatedSprite.IAnimationListener() {
+        astronautSprite.animate(lista, 16, 19, false, new AnimatedSprite.IAnimationListener() {
             @Override
             public void onAnimationStarted(AnimatedSprite pAnimatedSprite, int pInitialLoopCount) {
 

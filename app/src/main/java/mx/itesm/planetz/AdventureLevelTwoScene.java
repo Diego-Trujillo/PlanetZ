@@ -99,7 +99,7 @@ public class AdventureLevelTwoScene extends BaseScene{
         TimerHandler platformSpawner = new TimerHandler(1,true, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
-                final Rectangle rekt= new Rectangle(GameManager.CAMERA_WIDTH * i ,40*rand.nextFloat() ,GameManager.CAMERA_HEIGHT*1.25F,50, vertexBufferObjectManager);
+                final Rectangle rekt= new Rectangle(GameManager.CAMERA_WIDTH * i + 200,400*rand.nextFloat() +150,GameManager.CAMERA_HEIGHT*1.25F,50, vertexBufferObjectManager);
                 rekt.setColor(1f, 0, 1f);
                 Body rektBody = PhysicsFactory.createBoxBody(physicsWorld, rekt, BodyDef.BodyType.KinematicBody, WALL_FIXTURE_DEFINITION);
 
@@ -133,7 +133,7 @@ public class AdventureLevelTwoScene extends BaseScene{
         wallOfDeathRectangle.setColor(1f, 1f,1f);
 
         // ============== Crear los cuerpos de física ===============
-        leftWallBody = PhysicsFactory.createBoxBody(physicsWorld, leftWallRectangle, BodyDef.BodyType.StaticBody, WALL_FIXTURE_DEFINITION);
+        leftWallBody = PhysicsFactory.createBoxBody(physicsWorld, leftWallRectangle, BodyDef.BodyType.KinematicBody, WALL_FIXTURE_DEFINITION);
         rightWallBody = PhysicsFactory.createBoxBody(physicsWorld, rightWallRectangle, BodyDef.BodyType.StaticBody, WALL_FIXTURE_DEFINITION);
         wallOfDeathBody = PhysicsFactory.createBoxBody(physicsWorld,wallOfDeathRectangle, BodyDef.BodyType.StaticBody,WALL_FIXTURE_DEFINITION);
 
@@ -151,6 +151,19 @@ public class AdventureLevelTwoScene extends BaseScene{
         this.attachChild(leftWallRectangle);
         this.attachChild(rightWallRectangle);
         this.attachChild(wallOfDeathRectangle);
+
+        leftWallRectangle.registerUpdateHandler(new IUpdateHandler() {
+            @Override
+            public void onUpdate(float pSecondsElapsed) {
+                //leftWallBody.setLinearVelocity(astronautBody.getLinearVelocity().x,0);
+                leftWallBody.setTransform(player.astronautBody.getPosition().x,0,0);
+            }
+
+            @Override
+            public void reset() {
+
+            }
+        });
     }
 
 

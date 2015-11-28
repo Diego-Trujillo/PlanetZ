@@ -2,6 +2,7 @@ package mx.itesm.planetz;
 
 import android.view.KeyEvent;
 
+import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.CameraFactory;
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -53,7 +54,8 @@ public class GameManager extends BaseGameActivity {
     @Override
     public EngineOptions onCreateEngineOptions() {
         // ============== Inicializamos la cámara principal ======
-        camera = new Camera(0,0,CAMERA_WIDTH,CAMERA_HEIGHT);
+       // camera = new Camera(0,0,CAMERA_WIDTH,CAMERA_HEIGHT);
+        camera = new BoundCamera(0,0,CAMERA_WIDTH,CAMERA_HEIGHT);
 
         // ============== Creamos las opciones del motor =========
         /* -- Orientación Landscape no modificable
