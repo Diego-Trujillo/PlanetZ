@@ -37,6 +37,12 @@ public class Platform {
     public Body platformBody;
     private static final FixtureDef PLATFORM_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(0, 0, 0);
 
+
+    // ===========================================================
+    //                Opciones de Spawn
+    // ===========================================================
+    public static final int
+
     // ===========================================================
     //                 Elementos de Miscelaneos
     // ===========================================================
@@ -44,7 +50,7 @@ public class Platform {
     // =============================================================================================
     //                                    C O N S T R U C T O R
     // =============================================================================================
-    public Platform(BaseScene gameScene,PhysicsWorld physicsWorld,int currentLevel){
+    public Platform(BaseScene gameScene,PhysicsWorld physicsWorld,int currentLevel, ){
         this.gameScene = gameScene;
         this.physicsWorld = physicsWorld;
 
