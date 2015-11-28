@@ -112,7 +112,7 @@ public class Astronaut {
     }
 
     public void jump() {
-        astronautBody.setLinearVelocity(0, 14.5f);
+        astronautBody.setLinearVelocity(0, 37.5f);
         long[] lista = {75,75,100,500};
         astronautSprite.stopAnimation();
         astronautSprite.animate(lista, 16, 19, false, new AnimatedSprite.IAnimationListener() {
