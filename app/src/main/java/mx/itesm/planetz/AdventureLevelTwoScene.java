@@ -11,7 +11,10 @@ import org.andengine.engine.handler.UpdateHandlerList;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.scene.background.ParallaxBackground;
+import org.andengine.entity.scene.background.modifier.IBackgroundModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -59,6 +62,17 @@ public class AdventureLevelTwoScene extends BaseScene{
     // -- "Pared de la muerte"
     private Body wallOfDeathBody;
 
+    // ===========================================================
+    //                     Elementos Gráficos
+    // ===========================================================
+    // ================ Fondos ===================================
+    private Sprite backgroundSkySprite;
+    private Sprite backgroundRocks1Sprite;
+    private Sprite backgroundRocks2Sprite;
+    private Sprite backgroundRocks3Sprite;
+
+
+
     Random rand;
     private int i= 1;
 
@@ -67,9 +81,27 @@ public class AdventureLevelTwoScene extends BaseScene{
 
     private Astronaut player;
     private PlayerHUD sceneHUD;
+    // =============================================================================================
+    //                                    C O N S T R U C T O R
+    // =============================================================================================
+    public AdventureLevelTwoScene() {
+        super();
+        sceneType = SceneType.ADVENTURE_LEVEL_2;
+    }
+    // =============================================================================================
+    //                                       M É T O D O S
+    // =============================================================================================
+
+    // ===========================================================
+    //                 Cargar recursos gráficos
+    // ===========================================================
+
     @Override
     public void loadGFX() {
+        resourceManager.loadAdventureLevelTwoResourcesGFX();
         sceneHUD = new PlayerHUD(this,2);
+
+
 
     }
 
@@ -85,13 +117,30 @@ public class AdventureLevelTwoScene extends BaseScene{
 
     @Override
     public void createScene() {
+
+        backgroundSkySprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelTwoBackgroundSkyTextureRegion);
+        backgroundRocks1Sprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelTwoBackgroundRocks1TextureRegion);
+        backgroundRocks2Sprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelTwoBackgroundRocks2TextureRegion);
+        backgroundRocks3Sprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelTwoBackgroundRocks3TextureRegion);
+
+
+        ParallaxBackground background = new AutoParallaxBackground((208f/255f),(162f/255f),(142f/255f),2f);
+
+        this.setBackground(background);
+
+
+        background.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-4f, backgroundSkySprite));
+        background.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-22f, backgroundRocks1Sprite));
+        background.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-44f,backgroundRocks2Sprite));
+        background.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-88f,backgroundRocks3Sprite));
+
+
         physicsWorld = new PhysicsWorld(new Vector2(GRAVITY_X,GRAVITY_Y),true);
 
         this.registerUpdateHandler(physicsWorld);
 
         sceneHUD.attachToScene();
 
-        this.setBackground(new Background(0f, 0f, 0f));
         createWalls();
 
         createAstronaut();

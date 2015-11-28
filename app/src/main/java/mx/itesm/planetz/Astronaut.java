@@ -70,7 +70,7 @@ public class Astronaut {
 
         objectOfDesire = new Entity();
         astronautSprite.attachChild(objectOfDesire);
-        objectOfDesire.setPosition(0,150);
+        objectOfDesire.setPosition(300,150);
 
 
 
@@ -112,7 +112,7 @@ public class Astronaut {
     }
 
     public void jump() {
-        astronautBody.setLinearVelocity(0, 17f);
+        astronautBody.setLinearVelocity(0, 14.5f);
         long[] lista = {75,75,100,500};
         astronautSprite.stopAnimation();
         astronautSprite.animate(lista, 16, 19, false, new AnimatedSprite.IAnimationListener() {
