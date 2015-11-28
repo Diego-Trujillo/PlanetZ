@@ -240,8 +240,38 @@ public class ResourceManager {
     public ITextureRegion adventureLevelOneBackgroundStars2TextureRegion;
     public ITextureRegion adventureLevelOneBackgroundStars3TextureRegion;
 
+
+    // ===========================================================================
+    //                ESCENA NIVEL DOS ADVENTURE MODE
+    // ===========================================================================
+
+    // ============== RECURSOS GRÁFICOS ==========================
+    // ===========================================================
+
+    // ============== Contenedor de BitmapAtlas ==================
+    ArrayList<BitmapTextureAtlas> adventureLevelTwoBitmapTextureAtlasContainer;
+
+    // ============== Contenedor de Atlas's de Región ============
+    public BitmapTextureAtlas adventureLevelTwoBackgroundSkyTextureAtlas;
+    public BitmapTextureAtlas adventureLevelTwoBackgroundRocks1TextureAtlas;
+    public BitmapTextureAtlas adventureLevelTwoBackgroundRocks2TextureAtlas;
+    public BitmapTextureAtlas adventureLevelTwoBackgroundRocks3TextureAtlas;
+    public BitmapTextureAtlas adventureLevelTwoPlatormsBigTextureAtlas;
+
+    // ============== Texturas ====================================
+    public ITextureRegion adventureLevelTwoBackgroundSkyTextureRegion;
+    public ITextureRegion adventureLevelTwoBackgroundRocks1TextureRegion;
+    public ITextureRegion adventureLevelTwoBackgroundRocks2TextureRegion;
+    public ITextureRegion adventureLevelTwoBackgroundRocks3TextureRegion;
+
+    public ArrayList<ITextureRegion> adventureLevelTwoPlatformsBigTextureRegion;
+
+
+
+
+
     // ============================================================================
-    //                                RECURSOS DE AUDIO
+    //                            Elementos del HUD
     // ============================================================================
     public ITextureRegion HUDPlayerLivesTextureRegion;
     public ITextureRegion HUDPauseButtonTextureRegion;
@@ -632,6 +662,46 @@ public class ResourceManager {
     public void unloadAdventureLevelOneResources(){
         for(BitmapTextureAtlas atlas : adventureLevel1BitmapTextureAtlasContainer){
             atlas.unload();
+        }
+
+    }
+
+    public void loadAdventureLevelTwoResourcesGFX(){
+        adventureLevelTwoBitmapTextureAtlasContainer = new ArrayList<>();
+
+        // -- Bitmap TextureAtlas
+        adventureLevelTwoBackgroundSkyTextureAtlas = new BitmapTextureAtlas(textureManager,1280,720,TextureOptions.BILINEAR);
+        adventureLevelTwoBitmapTextureAtlasContainer.add(adventureLevelTwoBackgroundSkyTextureAtlas);
+
+        adventureLevelTwoBackgroundRocks1TextureAtlas = new BitmapTextureAtlas(textureManager,1280,720,TextureOptions.BILINEAR);
+        adventureLevelTwoBitmapTextureAtlasContainer.add(adventureLevelTwoBackgroundRocks1TextureAtlas);
+
+        adventureLevelTwoBackgroundRocks2TextureAtlas = new BitmapTextureAtlas(textureManager,1280,720,TextureOptions.BILINEAR);
+        adventureLevelTwoBitmapTextureAtlasContainer.add(adventureLevelTwoBackgroundRocks2TextureAtlas);
+
+        adventureLevelTwoBackgroundRocks3TextureAtlas = new BitmapTextureAtlas(textureManager,1280,720,TextureOptions.BILINEAR);
+        adventureLevelTwoBitmapTextureAtlasContainer.add(adventureLevelTwoBackgroundRocks3TextureAtlas);
+
+        adventureLevelTwoPlatormsBigTextureAtlas = new BitmapTextureAtlas(textureManager,600,108,TextureOptions.BILINEAR);
+        adventureLevelTwoBitmapTextureAtlasContainer.add(adventureLevelTwoPlatormsBigTextureAtlas);
+
+
+        // -- Texturas
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/IntoTheWilderness/");
+        adventureLevelTwoBackgroundSkyTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoBackgroundSkyTextureAtlas,gameManager,"BackgroundSky.png",0,0);
+        adventureLevelTwoBackgroundRocks1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoBackgroundRocks1TextureAtlas,gameManager,"BackgroundRocks1.png",0,0);
+        adventureLevelTwoBackgroundRocks2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoBackgroundRocks2TextureAtlas,gameManager,"BackgroundRocks2.png",0,0);;
+        adventureLevelTwoBackgroundRocks3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoBackgroundRocks3TextureAtlas,gameManager,"BackgroundRocks3.png",0,0);;
+
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/IntoTheWilderness/Platforms/Big/");
+        adventureLevelTwoPlatformsBigTextureRegion = new ArrayList<>();
+
+        for(int i = 0; i < 3; i++){
+            adventureLevelTwoPlatformsBigTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoPlatormsBigTextureAtlas,gameManager,Integer.toString(i+1)+".png",0,i*36));
+        }
+
+        for(BitmapTextureAtlas atlas : adventureLevelTwoBitmapTextureAtlasContainer){
+            atlas.load();
         }
 
     }
