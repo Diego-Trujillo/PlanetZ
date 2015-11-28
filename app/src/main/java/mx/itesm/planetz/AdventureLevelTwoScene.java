@@ -132,7 +132,7 @@ public class AdventureLevelTwoScene extends BaseScene{
         background.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-4f, backgroundSkySprite));
         background.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-22f, backgroundRocks1Sprite));
         background.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-44f,backgroundRocks2Sprite));
-        background.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-88f,backgroundRocks3Sprite));
+        background.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-88f, backgroundRocks3Sprite));
 
 
         physicsWorld = new PhysicsWorld(new Vector2(GRAVITY_X,GRAVITY_Y),true);
@@ -148,13 +148,14 @@ public class AdventureLevelTwoScene extends BaseScene{
         TimerHandler platformSpawner = new TimerHandler(1,true, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
-                final Rectangle rekt= new Rectangle(GameManager.CAMERA_WIDTH * i + 200,400*rand.nextFloat() +150,GameManager.CAMERA_HEIGHT*1.25F,50, vertexBufferObjectManager);
-                rekt.setColor(1f, 0, 1f);
-                Body rektBody = PhysicsFactory.createBoxBody(physicsWorld, rekt, BodyDef.BodyType.KinematicBody, WALL_FIXTURE_DEFINITION);
 
-                physicsWorld.registerPhysicsConnector(new PhysicsConnector(rekt, rektBody));
+                Sprite sp = resourceManager.loadSprite(GameManager.CAMERA_WIDTH * i + 200,400*rand.nextFloat() +150,resourceManager.adventureLevelTwoPlatformsBigTextureRegion.get(rand.nextInt(resourceManager.adventureLevelTwoPlatformsBigTextureRegion.size())));
 
-                attachChild(rekt);
+                Body rektBody = PhysicsFactory.createBoxBody(physicsWorld, sp, BodyDef.BodyType.KinematicBody, WALL_FIXTURE_DEFINITION);
+
+                physicsWorld.registerPhysicsConnector(new PhysicsConnector(sp, rektBody));
+
+                attachChild(sp);
                 i++;
                 //rektBody.setLinearVelocity(-5,0);
             }

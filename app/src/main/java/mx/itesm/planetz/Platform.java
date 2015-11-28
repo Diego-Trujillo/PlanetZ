@@ -23,6 +23,8 @@ public class Platform {
     // ===========================================================
     // -------------- La escena del juego ------------------------
     private BaseScene gameScene;
+    // -------------- El mundo de física ------------------------
+    private PhysicsWorld physicsWorld;
 
     // ===========================================================
     //                 Elementos gráficos
@@ -42,7 +44,12 @@ public class Platform {
     // =============================================================================================
     //                                    C O N S T R U C T O R
     // =============================================================================================
-    public Platform(BaseScene gameScene,PhysicsWorld physicsWorld){
+    public Platform(BaseScene gameScene,PhysicsWorld physicsWorld,int currentLevel){
+        this.gameScene = gameScene;
+        this.physicsWorld = physicsWorld;
+
+
+
 
         platformSprite.setCullingEnabled(true);
     }
