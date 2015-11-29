@@ -25,6 +25,7 @@ import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -55,7 +56,7 @@ public class AdventureLevelTwoScene extends BaseScene{
     // -- Paredes laterales
     final FixtureDef WALL_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(0,0f,0f);
     // -- Nave
-    final FixtureDef SHIP_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(1000.f,0.1f,0.5f);
+    final FixtureDef WOD_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(0,0f,0f,true);
 
 
     // ============== Paredes ====================================
@@ -79,6 +80,8 @@ public class AdventureLevelTwoScene extends BaseScene{
     //                     Elementos de Mecánicas
     // ===========================================================
     public int playerLives;
+    private ArrayList<Obstacle> toBeDeleted_Obstacle;
+    private ArrayList<Platform> toBeDeleted_Platform;
 
     Random rand;
     private int i= 1;
@@ -142,8 +145,28 @@ public class AdventureLevelTwoScene extends BaseScene{
         background.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-44f,backgroundRocks2Sprite));
         background.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-88f, backgroundRocks3Sprite));
 
+        toBeDeleted_Obstacle = new ArrayList<>();
+        toBeDeleted_Platform = new ArrayList<>();
 
-        physicsWorld = new PhysicsWorld(new Vector2(GRAVITY_X,GRAVITY_Y),true);
+
+        physicsWorld = new PhysicsWorld(new Vector2(GRAVITY_X,GRAVITY_Y),true){
+            @Override
+            public void onUpdate(float pSecondsElapsed){
+                super.onUpdate(pSecondsElapsed);
+                // -- Para cada plataforma en la lista a ser borrado, llama el método para borrarse
+                for(Platform platform : toBeDeleted_Platform){platform.destroy(); }
+                // -- Para cada obstáculo en la lista a ser borrado, llama el método para borrarse
+                for(Obstacle obstacle : toBeDeleted_Obstacle){obstacle.destroy();}
+
+                // -- Limpia la lista de elementos a ser borrados
+                toBeDeleted_Platform.clear();
+                toBeDeleted_Obstacle.clear();
+
+                // -- Llamamos al recolector de basura
+                System.gc();
+            }
+
+        };
 
         this.registerUpdateHandler(physicsWorld);
 
@@ -151,9 +174,11 @@ public class AdventureLevelTwoScene extends BaseScene{
 
         playerLives = 3;
 
-        createWalls();
 
         createAstronaut();
+        createWalls();
+
+
         rand = new Random();
         TimerHandler platformSpawner = new TimerHandler(1,true, new ITimerCallback() {
             @Override
@@ -175,30 +200,49 @@ public class AdventureLevelTwoScene extends BaseScene{
         // ============== Crear los SpritesRectángulos ===============
         // -- Pared Izquierda
         final Rectangle leftWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2,0,GameManager.CAMERA_WIDTH + 400,10, vertexBufferObjectManager);
+        // -- "Pared de la muerte", definimos un espacio para que los meteoritos que no impactan al jugador se borren del juego
+        final Rectangle wallOfDeathRectangle = new Rectangle(-50,GameManager.CAMERA_HEIGHT/2,10,GameManager.CAMERA_HEIGHT*2,vertexBufferObjectManager);
 
         // -- Colorear ambos rectángulos de blanco
         leftWallRectangle.setColor(1f, 1f, 0f);
+        wallOfDeathRectangle.setColor(1f,0.5f,0.25f);
 
 
         // ============== Crear los cuerpos de física ===============
         leftWallBody = PhysicsFactory.createBoxBody(physicsWorld, leftWallRectangle, BodyDef.BodyType.KinematicBody, WALL_FIXTURE_DEFINITION);
-
+        wallOfDeathBody =  PhysicsFactory.createBoxBody(physicsWorld,wallOfDeathRectangle, BodyDef.BodyType.DynamicBody,WOD_FIXTURE_DEFINITION);
 
         // ============== Registrar ID de cuerpo ====================
         leftWallBody.setUserData("wall");
+        wallOfDeathBody.setUserData("wod");
 
         // ============== Conectar cuerpos de física a sprites ======
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(leftWallRectangle, leftWallBody));
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(leftWallRectangle, leftWallBody,true,true));
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(wallOfDeathRectangle, wallOfDeathBody, true, true));
 
         // ============== Adjuntar las paredes al mundo =============
         this.attachChild(leftWallRectangle);
+        this.attachChild(wallOfDeathRectangle);
 
 
         leftWallRectangle.registerUpdateHandler(new IUpdateHandler() {
             @Override
             public void onUpdate(float pSecondsElapsed) {
-                //leftWallBody.setLinearVelocity(astronautBody.getLinearVelocity().x,0);
-                leftWallBody.setTransform(player.astronautBody.getPosition().x, 0, 0);
+                leftWallBody.setTransform(player.astronautBody.getPosition().x,0,0);
+            }
+
+            @Override
+            public void reset() {
+
+            }
+        });
+
+
+        wallOfDeathRectangle.registerUpdateHandler(new IUpdateHandler() {
+            @Override
+            public void onUpdate(float pSecondsElapsed) {
+                wallOfDeathBody.setTransform(player.astronautBody.getPosition().x - 100,player.astronautBody.getPosition().y,0);
+
             }
 
             @Override
@@ -270,6 +314,16 @@ public class AdventureLevelTwoScene extends BaseScene{
                         ((Astronaut) bodyB.getUserData()).onDamage();
                     }
 
+                }
+                else if(bodyA.getUserData().equals("wod")){
+                    if(bodyB.getUserData() instanceof Platform){toBeDeleted_Platform.add((Platform)(bodyB.getUserData()));System.out.println("Wall of death takes yet another victim >:) A - Platform");}
+                    else if(bodyB.getUserData() instanceof Obstacle){toBeDeleted_Obstacle.add((Obstacle) (bodyB.getUserData()));System.out.println("Wall of death takes yet another victim >:) A - Obstacle");}
+
+                }
+                else if(bodyB.getUserData().equals("wod")){
+                    if(bodyA.getUserData() instanceof Platform){toBeDeleted_Platform.add((Platform)(bodyA.getUserData()));}
+                    else if(bodyA.getUserData() instanceof Obstacle){toBeDeleted_Obstacle.add((Obstacle)(bodyA.getUserData()));}
+                    System.out.println("Wall of death takes yet another victim >:) B");
                 }
             }
 

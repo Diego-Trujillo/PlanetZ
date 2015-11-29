@@ -317,7 +317,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         // -- La nave
         createShip();
         // -- El Heads-Up Display con la información del el nivel
-        sceneHUD = new PlayerHUD(this,sessionManager.currentLevel);
+        sceneHUD = new PlayerHUD(this,1);
         sceneHUD.attachToScene();
 
 
