@@ -243,6 +243,17 @@ public class AdventureLevelTwoScene extends BaseScene{
                     if(bodyA.getUserData() instanceof Astronaut) {((Astronaut) bodyA.getUserData()).animateRun();}
                     else{((Astronaut) bodyB.getUserData()).animateRun();}
                 }
+
+                else if((bodyA.getUserData() instanceof Astronaut && bodyB.getUserData() instanceof Obstacle) || (bodyB.getUserData() instanceof Astronaut && bodyA.getUserData() instanceof Obstacle)){
+                    if(bodyA.getUserData() instanceof Astronaut) {
+                        ((Obstacle)bodyB.getUserData()).deactivate();
+                        ((Astronaut) bodyA.getUserData()).onDamage();
+                    }
+                    else{
+                        ((Obstacle)bodyA.getUserData()).deactivate();
+                        ((Astronaut) bodyB.getUserData()).onDamage();
+                    }
+                }
             }
 
             @Override
@@ -274,7 +285,7 @@ public class AdventureLevelTwoScene extends BaseScene{
     @Override
     public void destroyScene() {
         camera.setChaseEntity(null);
-        camera.setCenter(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
+        camera.setCenter(GameManager.CAMERA_WIDTH / 2, GameManager.CAMERA_HEIGHT / 2);
         sceneHUD.destroy();
         resourceManager.unloadAdventureLevelTwoResources();
         this.detachChildren();

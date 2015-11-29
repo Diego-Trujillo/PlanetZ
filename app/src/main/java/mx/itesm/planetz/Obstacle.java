@@ -85,15 +85,13 @@ public class Obstacle {
     }
 
 
-    public void attachToScene(){
+    public void attachToScene(){gameScene.attachChild(obstacleSprite); }
 
 
-
-    }
-
+    public void deactivate(){obstacleBody.setActive(false);}
 
     // ===========================================================
-    //        Destruimos la plataforma
+    //        Destruimos el obstáculo
     // ===========================================================
     public void destroy(){
         // -- Desregistramos el conector de física entre cuerpo-sprite

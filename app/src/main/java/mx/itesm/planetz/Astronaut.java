@@ -9,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.Entity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.AnimatedSprite;
@@ -57,12 +59,13 @@ public class Astronaut {
     //                 Elementos de Mecanicas
     // ===========================================================
     public int jumpCounter;
+    private IUpdateHandler updateHandler;
 
     // ===========================================================
     //                 Elementos de Miscelaneos
     // ===========================================================
     public long[] walkingAnimationIntervals = {50,50,50,50,50,50,50,50};
-    public long[] jumpingAnimationIntervals = {75,75,100,500};
+    public long[] jumpingAnimationIntervals = {75,75,100,10};
     // =============================================================================================
     //                                    C O N S T R U C T O R
     // =============================================================================================
@@ -101,12 +104,7 @@ public class Astronaut {
 
         gameScene.camera.setChaseEntity(objectOfDesire);
 
-
-
-
-
-
-        astronautSprite.registerUpdateHandler(new IUpdateHandler() {
+        updateHandler = new IUpdateHandler() {
             @Override
             public void onUpdate(float pSecondsElapsed) {
                 astronautBody.setLinearVelocity(25f, astronautBody.getLinearVelocity().y);
@@ -116,18 +114,61 @@ public class Astronaut {
             public void reset() {
 
             }
-        });
+        };
+        astronautSprite.registerUpdateHandler(updateHandler);
 
 
     }
 
     public void jump() {
-        if(jumpCounter++ < 2) {
+        // CAMBIAR ESTO
+        if(jumpCounter++ < 5) {
             astronautBody.setLinearVelocity(0, 37.5f);
 
             astronautSprite.stopAnimation();
             astronautSprite.animate(jumpingAnimationIntervals, 16, 19, false);
         }
+    }
+
+
+    public void onDamage(){
+        astronautSprite.unregisterUpdateHandler(updateHandler);
+        astronautBody.setLinearVelocity(-5f, 10f);
+
+        resetJumpCounter();
+
+        astronautSprite.animate(walkingAnimationIntervals, 8, 15, 3, new AnimatedSprite.IAnimationListener() {
+            @Override
+            public void onAnimationStarted(AnimatedSprite pAnimatedSprite, int pInitialLoopCount) {
+
+            }
+
+            @Override
+            public void onAnimationFrameChanged(AnimatedSprite pAnimatedSprite, int pOldFrameIndex, int pNewFrameIndex) {
+
+            }
+
+            @Override
+            public void onAnimationLoopFinished(AnimatedSprite pAnimatedSprite, int pRemainingLoopCount, int pInitialLoopCount) {
+
+            }
+
+            @Override
+            public void onAnimationFinished(AnimatedSprite pAnimatedSprite) {
+                animateRun();
+            }
+        });
+        TimerHandler returnToAction = new TimerHandler(0.5f, new ITimerCallback() {
+            @Override
+            public void onTimePassed(TimerHandler pTimerHandler) {
+                animateRun();
+                astronautSprite.registerUpdateHandler(updateHandler);
+                astronautSprite.unregisterUpdateHandler(pTimerHandler);
+            }
+        });
+
+        astronautSprite.registerUpdateHandler(returnToAction);
+
     }
 
     public void animateRun(){

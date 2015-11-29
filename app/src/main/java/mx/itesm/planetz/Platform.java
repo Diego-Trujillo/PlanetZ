@@ -97,7 +97,7 @@ public class Platform {
 
         if(containsObstacle){
             Obstacle obstacle = new Obstacle(gameScene,physicsWorld,this,500);
-            gameScene.attachChild(obstacle.obstacleSprite);
+            obstacle.attachToScene();
         }
     }
 
