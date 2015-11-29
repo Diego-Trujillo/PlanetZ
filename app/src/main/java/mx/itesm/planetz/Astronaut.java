@@ -43,7 +43,7 @@ public class Astronaut {
     // ===========================================================
     private BitmapTextureAtlas astronautBitmapTextureAtlas;
     private ITiledTextureRegion astronautTextureRegion;
-    private AnimatedSprite astronautSprite;
+    public AnimatedSprite astronautSprite;
     private Entity objectOfDesire;
 
     // ===========================================================
@@ -52,9 +52,17 @@ public class Astronaut {
     public Body astronautBody;
     private final FixtureDef ASTRONAUT_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(1000.f,0.1f,0.5f);
 
+
+    // ===========================================================
+    //                 Elementos de Mecanicas
+    // ===========================================================
+    public int jumpCounter;
+
     // ===========================================================
     //                 Elementos de Miscelaneos
     // ===========================================================
+    public long[] walkingAnimationIntervals = {50,50,50,50,50,50,50,50};
+    public long[] jumpingAnimationIntervals = {75,75,100,500};
     // =============================================================================================
     //                                    C O N S T R U C T O R
     // =============================================================================================
@@ -62,7 +70,7 @@ public class Astronaut {
         this.gameScene = gameScene;
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/");
-       astronautBitmapTextureAtlas = new BitmapTextureAtlas(gameScene.resourceManager.textureManager,688,387, TextureOptions.BILINEAR);
+        astronautBitmapTextureAtlas = new BitmapTextureAtlas(gameScene.resourceManager.textureManager,688,387, TextureOptions.BILINEAR);
         astronautTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(astronautBitmapTextureAtlas,gameScene.gameManager,"AstronautSprites.png",0,0,8,3);
 
         astronautBitmapTextureAtlas.load();
@@ -77,8 +85,10 @@ public class Astronaut {
 
 
         astronautBody = PhysicsFactory.createBoxBody(physicsWorld,astronautSprite, BodyDef.BodyType.DynamicBody,ASTRONAUT_FIXTURE_DEFINITION);
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(astronautSprite,astronautBody,true,true));
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(astronautSprite, astronautBody, true, true));
         astronautBody.setFixedRotation(true);
+
+        astronautBody.setUserData(this);
 
     }
     // =============================================================================================
@@ -86,8 +96,8 @@ public class Astronaut {
     // =============================================================================================
     public void attachToScene(){
         gameScene.attachChild(astronautSprite);
-        long[] lista = {50,50,50,50,50,50,50,50};
-        astronautSprite.animate(lista, 0, 7, true);
+
+        astronautSprite.animate(walkingAnimationIntervals, 0, 7, true);
 
         gameScene.camera.setChaseEntity(objectOfDesire);
 
@@ -112,31 +122,29 @@ public class Astronaut {
     }
 
     public void jump() {
-        astronautBody.setLinearVelocity(0, 37.5f);
-        long[] lista = {75,75,100,500};
-        astronautSprite.stopAnimation();
-        astronautSprite.animate(lista, 16, 19, false, new AnimatedSprite.IAnimationListener() {
-            @Override
-            public void onAnimationStarted(AnimatedSprite pAnimatedSprite, int pInitialLoopCount) {
+        if(jumpCounter++ < 2) {
+            astronautBody.setLinearVelocity(0, 37.5f);
 
-            }
-
-            @Override
-            public void onAnimationFrameChanged(AnimatedSprite pAnimatedSprite, int pOldFrameIndex, int pNewFrameIndex) {
-
-            }
-
-            @Override
-            public void onAnimationLoopFinished(AnimatedSprite pAnimatedSprite, int pRemainingLoopCount, int pInitialLoopCount) {
-
-            }
-
-            @Override
-            public void onAnimationFinished(AnimatedSprite pAnimatedSprite) {
-                long[] lista = {50,50,50,50,50,50,50,50};
-                pAnimatedSprite.animate(lista, 0, 7, true);
-            }
-        });
+            astronautSprite.stopAnimation();
+            astronautSprite.animate(jumpingAnimationIntervals, 16, 19, false);
+        }
     }
+
+    public void animateRun(){
+        if( !astronautSprite.isAnimationRunning() ){
+            astronautSprite.animate(walkingAnimationIntervals,0,7,true);
+            resetJumpCounter();
+        }
+    }
+
+    public void resetJumpCounter(){
+        jumpCounter = 0;
+    }
+
+    public void animateJump(){
+        astronautSprite.stopAnimation();
+        astronautSprite.animate(jumpingAnimationIntervals, 16, 19, false);
+    }
+
 }
 

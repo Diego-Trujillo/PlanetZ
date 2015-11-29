@@ -1,11 +1,15 @@
 package mx.itesm.planetz;
 
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.Entity;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -23,10 +27,9 @@ public class Platform {
     // ===========================================================
     // -------------- La escena del juego ------------------------
     private BaseScene gameScene;
-
+    // -------------- El Adm. de Recursos ------------------------
     private ResourceManager resourceManager;
-    // -------------- El mundo de física ------------------------
-    private PhysicsWorld physicsWorld;
+
 
     // ===========================================================
     //                 Elementos gráficos
@@ -36,7 +39,13 @@ public class Platform {
     // ===========================================================
     //                 Elementos de Física
     // ===========================================================
+    // -------------- El mundo de física ------------------------
+    private PhysicsWorld physicsWorld;
+    // -------------- Cuerpo -------------------------------------
     public Body platformBody;
+    // -------------- Conector Sprite-Cuerpo ---------------------
+    private PhysicsConnector physicsConnector;
+    // -------------- Definición Fixture -------------------------
     private static final FixtureDef PLATFORM_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(0, 0, 0);
 
 
@@ -46,24 +55,10 @@ public class Platform {
     public static final int BIG = 0;
     public static final int SMALL = 1;
 
-    // ===========================================================
-    //                 Elementos de Miscelaneos
-    // ===========================================================
 
     // =============================================================================================
     //                                    C O N S T R U C T O R
     // =============================================================================================
-    public Platform(BaseScene gameScene,PhysicsWorld physicsWorld,int currentLevel, int size){
-        this.gameScene = gameScene;
-        this.physicsWorld = physicsWorld;
-        this.resourceManager = gameScene.resourceManager;
-
-
-
-
-        platformSprite.setCullingEnabled(true);
-    }
-
 
     public Platform(BaseScene gameScene,PhysicsWorld physicsWorld,int currentLevel, int size,int positionX, int positionY){
         // ========== Inicializamos objetos referenciales ===========
@@ -74,15 +69,44 @@ public class Platform {
         if(size == BIG){
             switch(currentLevel){
                 case 2:
-                    platformSprite = resourceManager.loadSprite(positionX,positionY,resourceManager.adventureLevelTwoPlatformsBigTextureRegion.get(((AdventureLevelTwoScene)(gameScene)).rand.nextInt(3)));
+                    platformSprite = resourceManager.loadSprite(positionX,positionY,resourceManager.adventureLevelTwoPlatformsBigTextureRegion.get(gameScene.randomNumberGenerator.nextInt(3)));
                     break;
             }
         }
 
 
+        platformBody = PhysicsFactory.createBoxBody(physicsWorld,platformSprite, BodyDef.BodyType.KinematicBody,PLATFORM_FIXTURE_DEFINITION);
+
+        physicsConnector = new PhysicsConnector(platformSprite,platformBody,true,false);
+
+        physicsWorld.registerPhysicsConnector(physicsConnector);
+
+
 
 
         platformSprite.setCullingEnabled(true);
+
+        platformBody.setUserData(this);
+    }
+
+
+    public void attachToScene(){
+        gameScene.attachChild(platformSprite);
+    }
+
+
+    // ===========================================================
+    //        Destruimos la plataforma
+    // ===========================================================
+    public void destroy(){
+        // -- Desregistramos el conector de física entre cuerpo-sprite
+        physicsWorld.unregisterPhysicsConnector(physicsConnector);
+        // -- Deshabilitamos al cuerpo
+        platformBody.setActive(false);
+        // -- Destruimos el cuerpo
+        physicsWorld.destroyBody(this.platformBody);
+        // -- Removemos el sprite de la escena
+        gameScene.detachChild(this.platformSprite);
     }
 
 
