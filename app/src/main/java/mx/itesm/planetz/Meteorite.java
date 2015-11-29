@@ -2,6 +2,10 @@ package mx.itesm.planetz;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Manifold;
 
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.RotationModifier;
@@ -139,6 +143,10 @@ public class Meteorite {
                 break;
         }
     }
+
+
+
+
     // ===========================================================
     //        Destruimos el meteorito
     // ===========================================================

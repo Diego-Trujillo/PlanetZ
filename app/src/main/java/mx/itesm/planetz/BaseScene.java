@@ -10,6 +10,7 @@ import org.andengine.input.touch.detector.ScrollDetector;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.io.IOException;
+import java.util.Random;
 
 /**
  *  Define qué debe hacer una escena, así como ofrece algunos métodos útiles
@@ -42,6 +43,11 @@ public abstract class BaseScene extends Scene{
     protected VertexBufferObjectManager vertexBufferObjectManager;
     protected Camera camera;
 
+    // ===========================================================
+    //                  Elementos misceláneos
+    // ===========================================================
+    public static Random randomNumberGenerator;
+
     // =============================================================================================
     //                                      C O N S T R U C T O R
     // =============================================================================================
@@ -56,6 +62,11 @@ public abstract class BaseScene extends Scene{
         this.engine = gameManager.getEngine();
         this.vertexBufferObjectManager = gameManager.getVertexBufferObjectManager();
         this.camera = engine.getCamera();
+
+        // ============== Inicializa un generador aleatorio Misc. =
+        if(randomNumberGenerator == null){
+            randomNumberGenerator = new Random();
+        }
 
         // ============== Carga los recursos de la escena =======
         loadResources();

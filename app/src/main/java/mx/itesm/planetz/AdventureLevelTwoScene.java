@@ -3,8 +3,12 @@ package mx.itesm.planetz;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
 
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.UpdateHandlerList;
@@ -149,21 +153,14 @@ public class AdventureLevelTwoScene extends BaseScene{
         TimerHandler platformSpawner = new TimerHandler(1,true, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
-
-                Sprite sp = resourceManager.loadSprite(GameManager.CAMERA_WIDTH * i + 200,400*rand.nextFloat() +150,resourceManager.adventureLevelTwoPlatformsBigTextureRegion.get(rand.nextInt(resourceManager.adventureLevelTwoPlatformsBigTextureRegion.size())));
-
-                Body rektBody = PhysicsFactory.createBoxBody(physicsWorld, sp, BodyDef.BodyType.KinematicBody, WALL_FIXTURE_DEFINITION);
-
-                physicsWorld.registerPhysicsConnector(new PhysicsConnector(sp, rektBody));
-
-                attachChild(sp);
-                i++;
-                //rektBody.setLinearVelocity(-5,0);
+                Platform platform = new Platform(getWorld(), physicsWorld,2,Platform.BIG,GameManager.CAMERA_WIDTH * i++ + 200,(int)(300*randomNumberGenerator.nextFloat() + 175));
+                platform.attachToScene();
             }
         });
 
 
         this.registerUpdateHandler(platformSpawner);
+        physicsWorld.setContactListener(getContactListener());
 
     }
 
@@ -173,41 +170,30 @@ public class AdventureLevelTwoScene extends BaseScene{
         // ============== Crear los SpritesRectángulos ===============
         // -- Pared Izquierda
         final Rectangle leftWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2,0,GameManager.CAMERA_WIDTH + 400,10, vertexBufferObjectManager);
-        // -- Pared Derecha
-        final Rectangle rightWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT,GameManager.CAMERA_WIDTH + 400,10, vertexBufferObjectManager);
-        // -- "Pared de la muerte", definimos un espacio para que los meteoritos que no impactan al jugador se borren del juego
-        final Rectangle wallOfDeathRectangle = new Rectangle(-256,GameManager.CAMERA_HEIGHT/2,10,GameManager.CAMERA_HEIGHT*2,vertexBufferObjectManager);
 
         // -- Colorear ambos rectángulos de blanco
         leftWallRectangle.setColor(1f, 1f, 0f);
-        rightWallRectangle.setColor(1f, 1f, 0f);
-        wallOfDeathRectangle.setColor(1f, 1f,1f);
+
 
         // ============== Crear los cuerpos de física ===============
         leftWallBody = PhysicsFactory.createBoxBody(physicsWorld, leftWallRectangle, BodyDef.BodyType.KinematicBody, WALL_FIXTURE_DEFINITION);
-        rightWallBody = PhysicsFactory.createBoxBody(physicsWorld, rightWallRectangle, BodyDef.BodyType.StaticBody, WALL_FIXTURE_DEFINITION);
-        wallOfDeathBody = PhysicsFactory.createBoxBody(physicsWorld,wallOfDeathRectangle, BodyDef.BodyType.StaticBody,WALL_FIXTURE_DEFINITION);
+
 
         // ============== Registrar ID de cuerpo ====================
         leftWallBody.setUserData("wall");
-        rightWallBody.setUserData("wall");
-        wallOfDeathBody.setUserData("wod");
 
         // ============== Conectar cuerpos de física a sprites ======
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(leftWallRectangle, leftWallBody));
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(rightWallRectangle, rightWallBody));
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(wallOfDeathRectangle,wallOfDeathBody));
 
         // ============== Adjuntar las paredes al mundo =============
         this.attachChild(leftWallRectangle);
-        this.attachChild(rightWallRectangle);
-        this.attachChild(wallOfDeathRectangle);
+
 
         leftWallRectangle.registerUpdateHandler(new IUpdateHandler() {
             @Override
             public void onUpdate(float pSecondsElapsed) {
                 //leftWallBody.setLinearVelocity(astronautBody.getLinearVelocity().x,0);
-                leftWallBody.setTransform(player.astronautBody.getPosition().x,0,0);
+                leftWallBody.setTransform(player.astronautBody.getPosition().x, 0, 0);
             }
 
             @Override
@@ -222,6 +208,9 @@ public class AdventureLevelTwoScene extends BaseScene{
         player = new Astronaut(this, physicsWorld);
         player.attachToScene();
 
+    }
+    public BaseScene getWorld(){
+        return this;
     }
 
     @Override
@@ -238,6 +227,42 @@ public class AdventureLevelTwoScene extends BaseScene{
     public void HUDButton1Pressed(){
         player.jump();
     }
+
+
+    public ContactListener getContactListener(){
+        ContactListener contactListener = new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                final Body bodyA = contact.getFixtureA().getBody();
+                final Body bodyB = contact.getFixtureB().getBody();
+
+                if((bodyA.getUserData() instanceof Astronaut && bodyB.getUserData() instanceof Platform) || (bodyB.getUserData() instanceof Astronaut && bodyA.getUserData() instanceof Platform)){
+                    if(bodyA.getUserData() instanceof Astronaut) {((Astronaut) bodyA.getUserData()).animateRun();}
+                    else{((Astronaut) bodyB.getUserData()).animateRun();}
+                }
+            }
+
+            @Override
+            public void endContact(Contact contact) {
+
+            }
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {
+
+            }
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+
+            }
+        };
+
+        return contactListener;
+    }
+
+
+
     @Override
     public void onBackKeyPressed() {
 
