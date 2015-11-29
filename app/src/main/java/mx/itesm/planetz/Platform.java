@@ -23,6 +23,8 @@ public class Platform {
     // ===========================================================
     // -------------- La escena del juego ------------------------
     private BaseScene gameScene;
+
+    private ResourceManager resourceManager;
     // -------------- El mundo de física ------------------------
     private PhysicsWorld physicsWorld;
 
@@ -41,7 +43,8 @@ public class Platform {
     // ===========================================================
     //                Opciones de Spawn
     // ===========================================================
-    public static final int
+    public static final int BIG = 0;
+    public static final int SMALL = 1;
 
     // ===========================================================
     //                 Elementos de Miscelaneos
@@ -50,9 +53,31 @@ public class Platform {
     // =============================================================================================
     //                                    C O N S T R U C T O R
     // =============================================================================================
-    public Platform(BaseScene gameScene,PhysicsWorld physicsWorld,int currentLevel, ){
+    public Platform(BaseScene gameScene,PhysicsWorld physicsWorld,int currentLevel, int size){
         this.gameScene = gameScene;
         this.physicsWorld = physicsWorld;
+        this.resourceManager = gameScene.resourceManager;
+
+
+
+
+        platformSprite.setCullingEnabled(true);
+    }
+
+
+    public Platform(BaseScene gameScene,PhysicsWorld physicsWorld,int currentLevel, int size,int positionX, int positionY){
+        // ========== Inicializamos objetos referenciales ===========
+        this.gameScene = gameScene;
+        this.physicsWorld = physicsWorld;
+        this.resourceManager = gameScene.resourceManager;
+
+        if(size == BIG){
+            switch(currentLevel){
+                case 2:
+                    platformSprite = resourceManager.loadSprite(positionX,positionY,resourceManager.adventureLevelTwoPlatformsBigTextureRegion.get(((AdventureLevelTwoScene)(gameScene)).rand.nextInt(3)));
+                    break;
+            }
+        }
 
 
 

@@ -172,35 +172,24 @@ public class AdventureLevelTwoScene extends BaseScene{
         // ============== Crear los SpritesRectángulos ===============
         // -- Pared Izquierda
         final Rectangle leftWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2,0,GameManager.CAMERA_WIDTH + 400,10, vertexBufferObjectManager);
-        // -- Pared Derecha
-        final Rectangle rightWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT,GameManager.CAMERA_WIDTH + 400,10, vertexBufferObjectManager);
-        // -- "Pared de la muerte", definimos un espacio para que los meteoritos que no impactan al jugador se borren del juego
-        final Rectangle wallOfDeathRectangle = new Rectangle(-256,GameManager.CAMERA_HEIGHT/2,10,GameManager.CAMERA_HEIGHT*2,vertexBufferObjectManager);
 
         // -- Colorear ambos rectángulos de blanco
         leftWallRectangle.setColor(1f, 1f, 0f);
-        rightWallRectangle.setColor(1f, 1f, 0f);
-        wallOfDeathRectangle.setColor(1f, 1f,1f);
+
 
         // ============== Crear los cuerpos de física ===============
         leftWallBody = PhysicsFactory.createBoxBody(physicsWorld, leftWallRectangle, BodyDef.BodyType.KinematicBody, WALL_FIXTURE_DEFINITION);
-        rightWallBody = PhysicsFactory.createBoxBody(physicsWorld, rightWallRectangle, BodyDef.BodyType.StaticBody, WALL_FIXTURE_DEFINITION);
-        wallOfDeathBody = PhysicsFactory.createBoxBody(physicsWorld,wallOfDeathRectangle, BodyDef.BodyType.StaticBody,WALL_FIXTURE_DEFINITION);
+
 
         // ============== Registrar ID de cuerpo ====================
         leftWallBody.setUserData("wall");
-        rightWallBody.setUserData("wall");
-        wallOfDeathBody.setUserData("wod");
 
         // ============== Conectar cuerpos de física a sprites ======
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(leftWallRectangle, leftWallBody));
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(rightWallRectangle, rightWallBody));
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(wallOfDeathRectangle,wallOfDeathBody));
 
         // ============== Adjuntar las paredes al mundo =============
         this.attachChild(leftWallRectangle);
-        this.attachChild(rightWallRectangle);
-        this.attachChild(wallOfDeathRectangle);
+
 
         leftWallRectangle.registerUpdateHandler(new IUpdateHandler() {
             @Override
