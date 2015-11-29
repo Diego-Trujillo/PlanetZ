@@ -75,6 +75,9 @@ public class AdventureLevelTwoScene extends BaseScene{
     private Sprite backgroundRocks2Sprite;
     private Sprite backgroundRocks3Sprite;
 
+    // ===========================================================
+    //                     Elementos de Mecánicas
+    // ===========================================================
 
 
     Random rand;
@@ -153,7 +156,7 @@ public class AdventureLevelTwoScene extends BaseScene{
         TimerHandler platformSpawner = new TimerHandler(1,true, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
-                Platform platform = new Platform(getWorld(), physicsWorld,2,Platform.BIG,GameManager.CAMERA_WIDTH * i++ + 200,(int)(300*randomNumberGenerator.nextFloat() + 175));
+                Platform platform = new Platform(getWorld(), physicsWorld,2,Platform.BIG,GameManager.CAMERA_WIDTH * i++ + 150,(int)(300*randomNumberGenerator.nextFloat() + 175),true);
                 platform.attachToScene();
             }
         });
@@ -270,6 +273,12 @@ public class AdventureLevelTwoScene extends BaseScene{
 
     @Override
     public void destroyScene() {
-
+        camera.setChaseEntity(null);
+        camera.setCenter(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
+        sceneHUD.destroy();
+        resourceManager.unloadAdventureLevelTwoResources();
+        this.detachChildren();
+        this.detachSelf();
+        this.dispose();
     }
 }

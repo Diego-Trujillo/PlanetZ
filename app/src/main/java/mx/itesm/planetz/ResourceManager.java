@@ -261,11 +261,15 @@ public class ResourceManager {
     ArrayList<BitmapTextureAtlas> adventureLevelTwoBitmapTextureAtlasContainer;
 
     // ============== Contenedor de Atlas's de Región ============
+    // -------------- Fondo
     public BitmapTextureAtlas adventureLevelTwoBackgroundSkyTextureAtlas;
     public BitmapTextureAtlas adventureLevelTwoBackgroundRocks1TextureAtlas;
     public BitmapTextureAtlas adventureLevelTwoBackgroundRocks2TextureAtlas;
     public BitmapTextureAtlas adventureLevelTwoBackgroundRocks3TextureAtlas;
+    // -------------- Plataformas
     public BitmapTextureAtlas adventureLevelTwoPlatormsBigTextureAtlas;
+    // -------------- Obstáculos
+    public BitmapTextureAtlas adventureLevelTwoObstaclesTextureAtlas;
 
     // ============== Texturas ====================================
     public ITextureRegion adventureLevelTwoBackgroundSkyTextureRegion;
@@ -274,6 +278,9 @@ public class ResourceManager {
     public ITextureRegion adventureLevelTwoBackgroundRocks3TextureRegion;
 
     public ArrayList<ITextureRegion> adventureLevelTwoPlatformsBigTextureRegion;
+
+    public ArrayList<ITextureRegion> adventureLevelTwoObstaclesTextureRegion;
+
 
 
 
@@ -515,8 +522,8 @@ public class ResourceManager {
 
         // -- Botones MenúPrincipal --
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/Menu/Main/"); // Cambiar directorio
-        mainMenuButtonTextureRegion_play = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mainMenuButtonTextureAtlas,gameManager,"PlayButton.png",0,0,2,1);
-        mainMenuButtonTextureRegion_backpack = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mainMenuButtonTextureAtlas,gameManager,"BackpackButton.png",0,128,2,1);
+        mainMenuButtonTextureRegion_play = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mainMenuButtonTextureAtlas, gameManager, "PlayButton.png", 0, 0, 2, 1);
+        mainMenuButtonTextureRegion_backpack = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mainMenuButtonTextureAtlas, gameManager, "BackpackButton.png", 0, 128, 2, 1);
         mainMenuButtonTextureRegion_settings = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mainMenuButtonTextureAtlas, gameManager, "SettingsButton.png", 0, 256, 2, 1);
         mainMenuButtonTextureRegion_about = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mainMenuButtonTextureAtlas, gameManager, "AboutButton.png", 0, 384, 2, 1);
         menuToggleAudioButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuToggleAudioButtonTextureAtlas, gameManager, "AudioToggleButton.png", 0, 0, 2, 1);
@@ -675,14 +682,20 @@ public class ResourceManager {
             atlas.load();
         }
     }
-
+    // ============== Liberar Recursos ===========================
+    // ===========================================================
     public void unloadAdventureLevelOneResources(){
         for(BitmapTextureAtlas atlas : adventureLevel1BitmapTextureAtlasContainer){
             atlas.unload();
         }
 
     }
+    // ================================================================
+    //            ESCENA NIVEL DOS ADVENTURE MODE
+    // =================================================================
 
+    // ============== Cargar Recursos Gráficos ===================
+    // ===========================================================
     public void loadAdventureLevelTwoResourcesGFX(){
         adventureLevelTwoBitmapTextureAtlasContainer = new ArrayList<>();
 
@@ -702,14 +715,19 @@ public class ResourceManager {
         adventureLevelTwoPlatormsBigTextureAtlas = new BitmapTextureAtlas(textureManager,600,108,TextureOptions.BILINEAR);
         adventureLevelTwoBitmapTextureAtlasContainer.add(adventureLevelTwoPlatormsBigTextureAtlas);
 
+        adventureLevelTwoObstaclesTextureAtlas = new BitmapTextureAtlas(textureManager,197,64,TextureOptions.BILINEAR);
+        adventureLevelTwoBitmapTextureAtlasContainer.add(adventureLevelTwoObstaclesTextureAtlas);
 
-        // -- Texturas
+
+        // ============ Texturas
+        // ------------- Fondo
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/IntoTheWilderness/");
         adventureLevelTwoBackgroundSkyTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoBackgroundSkyTextureAtlas,gameManager,"BackgroundSky.png",0,0);
         adventureLevelTwoBackgroundRocks1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoBackgroundRocks1TextureAtlas,gameManager,"BackgroundRocks1.png",0,0);
         adventureLevelTwoBackgroundRocks2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoBackgroundRocks2TextureAtlas,gameManager,"BackgroundRocks2.png",0,0);;
         adventureLevelTwoBackgroundRocks3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoBackgroundRocks3TextureAtlas,gameManager,"BackgroundRocks3.png",0,0);;
 
+        // ----------- Plataformas
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/IntoTheWilderness/Platforms/Big/");
         adventureLevelTwoPlatformsBigTextureRegion = new ArrayList<>();
 
@@ -717,12 +735,32 @@ public class ResourceManager {
             adventureLevelTwoPlatformsBigTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoPlatormsBigTextureAtlas,gameManager,Integer.toString(i+1)+".png",0,i*36));
         }
 
+        // ------------ Obstáculos
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/IntoTheWilderness/Enemies/");
+        adventureLevelTwoObstaclesTextureRegion = new ArrayList<>();
+
+
+        adventureLevelTwoObstaclesTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoObstaclesTextureAtlas,gameManager,"1.png",0,0));
+        adventureLevelTwoObstaclesTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoObstaclesTextureAtlas,gameManager,"2.png",66,0));
+        adventureLevelTwoObstaclesTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoObstaclesTextureAtlas,gameManager,"3.png",129,0));
+
+        // ============== Cargar Atlas
         for(BitmapTextureAtlas atlas : adventureLevelTwoBitmapTextureAtlasContainer){
             atlas.load();
         }
 
     }
-
+    // ============== Liberar Recursos ===========================
+    // ===========================================================
+    public void unloadAdventureLevelTwoResources(){
+        for(BitmapTextureAtlas atlas : adventureLevelTwoBitmapTextureAtlasContainer){
+            atlas.unload();
+            atlas = null;
+        }
+    }
+    // ================================================================
+    //                         ELEMENTOS HUD
+    // =================================================================
     public void loadHUD(){
         HUDPlayerLivesTextureRegion = loadImage("Graphics/HUD/LifeIcon.png");
         HUDPauseButtonTextureRegion = loadImage("Graphics/HUD/PauseButton.png");

@@ -4,21 +4,15 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.Entity;
-import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.region.ITiledTextureRegion;
 
 /**
- * Created by Diego on 28/11/2015.
+ * Created by Diego on 29/11/2015.
  */
-public class Platform {
+public class Obstacle {
     // =============================================================================================
     //                     D E C L A R A C I Ó N  D E  V A R I A B L E S
     // =============================================================================================
@@ -34,7 +28,7 @@ public class Platform {
     // ===========================================================
     //                 Elementos gráficos
     // ===========================================================
-    public Sprite platformSprite;
+    public Sprite obstacleSprite;
 
     // ===========================================================
     //                 Elementos de Física
@@ -42,68 +36,59 @@ public class Platform {
     // -------------- El mundo de física ------------------------
     private PhysicsWorld physicsWorld;
     // -------------- Cuerpo -------------------------------------
-    public Body platformBody;
+    public Body obstacleBody;
     // -------------- Conector Sprite-Cuerpo ---------------------
     private PhysicsConnector physicsConnector;
     // -------------- Definición Fixture -------------------------
-    private static final FixtureDef PLATFORM_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(0, 0, 0);
+    private static final FixtureDef OBSTACLE_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(0, 0, 0);
 
 
     // ===========================================================
     //                Opciones de Spawn
     // ===========================================================
-    public static final int BIG = 0;
-    public static final int SMALL = 1;
 
-    // ===========================================================
-    //                Opciones de Spawn
-    // ===========================================================
-    public int currentLevel;
 
 
     // =============================================================================================
     //                                    C O N S T R U C T O R
     // =============================================================================================
 
-    public Platform(BaseScene gameScene,PhysicsWorld physicsWorld,int currentLevel, int size,int positionX, int positionY, boolean containsObstacle){
+    public Obstacle(BaseScene gameScene,PhysicsWorld physicsWorld,Platform platform,int offsetX){
         // ========== Inicializamos objetos referenciales ===========
         this.gameScene = gameScene;
         this.physicsWorld = physicsWorld;
         this.resourceManager = gameScene.resourceManager;
-        this.currentLevel = currentLevel;
 
-        if(size == BIG){
-            switch(currentLevel){
-                case 2:
-                    platformSprite = resourceManager.loadSprite(positionX,positionY,resourceManager.adventureLevelTwoPlatformsBigTextureRegion.get(gameScene.randomNumberGenerator.nextInt(3)));
-                    break;
-            }
+        int positionX = (int)(platform.platformSprite.getX() - platform.platformSprite.getWidth()/2 + offsetX);
+        int positionY = (int)(platform.platformSprite.getY() + platform.platformSprite.getHeight());
+
+        switch(platform.currentLevel){
+            case 2:
+                obstacleSprite = resourceManager.loadSprite(positionX,positionY,resourceManager.adventureLevelTwoObstaclesTextureRegion.get(gameScene.randomNumberGenerator.nextInt(3)));
+                break;
         }
 
 
-        platformBody = PhysicsFactory.createBoxBody(physicsWorld,platformSprite, BodyDef.BodyType.KinematicBody,PLATFORM_FIXTURE_DEFINITION);
 
-        physicsConnector = new PhysicsConnector(platformSprite,platformBody,true,false);
+        obstacleBody = PhysicsFactory.createBoxBody(physicsWorld,obstacleSprite, BodyDef.BodyType.KinematicBody,OBSTACLE_FIXTURE_DEFINITION);
+
+        physicsConnector = new PhysicsConnector(obstacleSprite,obstacleBody,true,true);
 
         physicsWorld.registerPhysicsConnector(physicsConnector);
 
 
 
 
-        platformSprite.setCullingEnabled(true);
+        //obstacleSprite.setCullingEnabled(true);
 
-        platformBody.setUserData(this);
-
-
-        if(containsObstacle){
-            Obstacle obstacle = new Obstacle(gameScene,physicsWorld,this,500);
-            gameScene.attachChild(obstacle.obstacleSprite);
-        }
+        obstacleBody.setUserData(this);
     }
 
 
     public void attachToScene(){
-        gameScene.attachChild(platformSprite);
+
+
+
     }
 
 
@@ -114,11 +99,11 @@ public class Platform {
         // -- Desregistramos el conector de física entre cuerpo-sprite
         physicsWorld.unregisterPhysicsConnector(physicsConnector);
         // -- Deshabilitamos al cuerpo
-        platformBody.setActive(false);
+        obstacleBody.setActive(false);
         // -- Destruimos el cuerpo
-        physicsWorld.destroyBody(this.platformBody);
+        physicsWorld.destroyBody(this.obstacleBody);
         // -- Removemos el sprite de la escena
-        gameScene.detachChild(this.platformSprite);
+        gameScene.detachChild(this.obstacleSprite);
     }
 
 
