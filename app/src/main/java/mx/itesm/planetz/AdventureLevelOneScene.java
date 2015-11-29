@@ -597,12 +597,13 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                         sceneHUD.updateLives(playerLives);
                         updateSprite();
                         if(playerLives == 0){
+                            // -- Liberamos la escena actual
+                            sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_1);
                             // -- Creamos la escena del primer nivel
                             sceneManager.createScene(SceneType.YOU_LOSE);
                             // -- Corremos la escena del primer nivel
                             sceneManager.setScene(SceneType.YOU_LOSE);
-                            // -- Liberamos la escena actual
-                            sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_1);
+
                         }
 
                         // -- Preguntamos cuál de los dos cuerpos es el meteorito

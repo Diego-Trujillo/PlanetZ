@@ -78,7 +78,7 @@ public class AdventureLevelTwoScene extends BaseScene{
     // ===========================================================
     //                     Elementos de Mecánicas
     // ===========================================================
-
+    public int playerLives;
 
     Random rand;
     private int i= 1;
@@ -148,6 +148,8 @@ public class AdventureLevelTwoScene extends BaseScene{
         this.registerUpdateHandler(physicsWorld);
 
         sceneHUD.attachToScene();
+
+        playerLives = 3;
 
         createWalls();
 
@@ -245,6 +247,20 @@ public class AdventureLevelTwoScene extends BaseScene{
                 }
 
                 else if((bodyA.getUserData() instanceof Astronaut && bodyB.getUserData() instanceof Obstacle) || (bodyB.getUserData() instanceof Astronaut && bodyA.getUserData() instanceof Obstacle)){
+
+                    playerLives--;
+                    sceneHUD.updateLives(playerLives);
+
+                    if(playerLives == 0){
+                        // -- Liberamos la escena actual
+                        sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_2);
+                        // -- Creamos la escena del primer nivel
+                        sceneManager.createScene(SceneType.YOU_LOSE);
+                        // -- Corremos la escena del primer nivel
+                        sceneManager.setScene(SceneType.YOU_LOSE);
+
+                    }
+
                     if(bodyA.getUserData() instanceof Astronaut) {
                         ((Obstacle)bodyB.getUserData()).deactivate();
                         ((Astronaut) bodyA.getUserData()).onDamage();
@@ -253,6 +269,7 @@ public class AdventureLevelTwoScene extends BaseScene{
                         ((Obstacle)bodyA.getUserData()).deactivate();
                         ((Astronaut) bodyB.getUserData()).onDamage();
                     }
+
                 }
             }
 
