@@ -64,13 +64,13 @@ public class YouLose extends BaseScene {
                             sceneManager.destroyScene(SceneType.YOU_LOSE);
                             break;
                         case 2:
-                            sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
-                            sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
+                            sceneManager.createScene(SceneType.ADVENTURE_LEVEL_2);
+                            sceneManager.setScene(SceneType.ADVENTURE_LEVEL_2);
                             sceneManager.destroyScene(SceneType.YOU_LOSE);
                             break;
                         case 3:
-                            sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
-                            sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
+                            sceneManager.createScene(SceneType.ADVENTURE_LEVEL_3);
+                            sceneManager.setScene(SceneType.ADVENTURE_LEVEL_3);
                             sceneManager.destroyScene(SceneType.YOU_LOSE);
                             break;
                 }

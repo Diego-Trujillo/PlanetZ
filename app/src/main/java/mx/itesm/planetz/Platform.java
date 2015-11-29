@@ -41,7 +41,7 @@ public class Platform {
     // ===========================================================
     //                Opciones de Spawn
     // ===========================================================
-    public static final int
+    //public static final int;
 
     // ===========================================================
     //                 Elementos de Miscelaneos
@@ -50,7 +50,7 @@ public class Platform {
     // =============================================================================================
     //                                    C O N S T R U C T O R
     // =============================================================================================
-    public Platform(BaseScene gameScene,PhysicsWorld physicsWorld,int currentLevel, ){
+    /*public Platform(BaseScene gameScene,PhysicsWorld physicsWorld,int currentLevel, ){
         this.gameScene = gameScene;
         this.physicsWorld = physicsWorld;
 
@@ -60,5 +60,5 @@ public class Platform {
         platformSprite.setCullingEnabled(true);
     }
 
-
+*/
 }

@@ -1,16 +1,9 @@
 package mx.itesm.planetz;
 
-import org.andengine.engine.camera.Camera;
-import org.andengine.engine.camera.hud.HUD;
-import org.andengine.entity.scene.menu.*;
-import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
-import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
 import java.util.ArrayList;
@@ -97,6 +90,8 @@ public class StoryScene extends BaseScene {
                 pathName = "Graphics/Story/CrashCourseIntoOblivion/";
                 break;
             case 2:
+                maxIndex = 4;
+                pathName = "Graphics/Story/BNWIntotheWilderness/";
                 break;
             case 3:
                 break;
@@ -214,22 +209,51 @@ public class StoryScene extends BaseScene {
                             resourceManager.soundOne.play();
                         }
                         else{
-                            // -- Liberamos la escena actual
-                            sceneManager.destroyScene(SceneType.STORY);
-                            // -- Creamos la escena del primer nivel --
-                            sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
-                            // -- Corremos la escena del primer nivel
-                            sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
+                            switch (sessionManager.currentLevel) {
+                                case 1:
+                                    // -- Liberamos la escena actual
+                                    sceneManager.destroyScene(SceneType.STORY);
+                                    // -- Creamos la escena del primer nivel --
+                                    sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
+                                    // -- Corremos la escena del primer nivel
+                                    sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
+                                    break;
+                                case 2:
+                                    sceneManager.destroyScene(SceneType.STORY);
+                                    sceneManager.createScene(SceneType.ADVENTURE_LEVEL_2);
+                                    sceneManager.setScene(SceneType.ADVENTURE_LEVEL_2);
+                                    break;
+                                case 3:
+                                    sceneManager.destroyScene(SceneType.STORY);
+                                    sceneManager.createScene(SceneType.ADVENTURE_LEVEL_3);
+                                    sceneManager.setScene(SceneType.ADVENTURE_LEVEL_3);
+                                    break;
+                            }
                         }
                         break;
                     case SKIP_SCENE:
-                        // -- Liberamos la escena actual
-                        sceneManager.destroyScene(SceneType.STORY);
-                        // -- Creamos la escena del primer nivel --
-                        sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
-                        // -- Corremos la escena del primer nivel
-                        sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
+                        switch (sessionManager.currentLevel) {
+                            case 1:
+                                // -- Liberamos la escena actual
+                                sceneManager.destroyScene(SceneType.STORY);
+                                // -- Creamos la escena del primer nivel --
+                                sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
+                                // -- Corremos la escena del primer nivel
+                                sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
+                                break;
+                            case 2:
+                                sceneManager.destroyScene(SceneType.STORY);
+                                sceneManager.createScene(SceneType.ADVENTURE_LEVEL_2);
+                                sceneManager.setScene(SceneType.ADVENTURE_LEVEL_2);
+                                break;
+                            case 3:
+                                sceneManager.destroyScene(SceneType.STORY);
+                                sceneManager.createScene(SceneType.ADVENTURE_LEVEL_3);
+                                sceneManager.setScene(SceneType.ADVENTURE_LEVEL_3);
+                                break;
+                        }
                         break;
+
                 }
 
                 return true;

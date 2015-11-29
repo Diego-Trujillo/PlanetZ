@@ -92,6 +92,9 @@ public class TemporarySceneVictory extends BaseScene {
         exitButton.setPosition(GameManager.CAMERA_WIDTH/2 +400,100);
         continueButton.setPosition(GameManager.CAMERA_WIDTH/2+580,100);
 
+
+
+
         scene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem,
@@ -109,13 +112,13 @@ public class TemporarySceneVictory extends BaseScene {
                                 sceneManager.destroyScene(SceneType.TEMP);
                                 break;
                             case 2:
-                                sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
-                                sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
+                                sceneManager.createScene(SceneType.ADVENTURE_LEVEL_2);
+                                sceneManager.setScene(SceneType.ADVENTURE_LEVEL_2);
                                 sceneManager.destroyScene(SceneType.TEMP);
                                 break;
                             case 3:
-                                sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
-                                sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
+                                sceneManager.createScene(SceneType.ADVENTURE_LEVEL_3);
+                                sceneManager.setScene(SceneType.ADVENTURE_LEVEL_3);
                                 sceneManager.destroyScene(SceneType.TEMP);
                                 break;
                         }
@@ -129,7 +132,17 @@ public class TemporarySceneVictory extends BaseScene {
                         sceneManager.destroyScene(SceneType.TEMP);
                         break;
                     case 3:
-                        // -- Creamos el story line de nuevo
+                        //Cambiamos el curent level al siguiente
+                        switch(sessionManager.currentLevel){
+                            case 1:
+                                sessionManager.currentLevel=2;
+                                sessionManager.writeChanges();
+                                break;
+                            case 2:
+                                sessionManager.currentLevel=2;
+                                sessionManager.writeChanges();
+                                break;
+                        }// -- Creamos el story line de nuevo
                         sceneManager.createScene(SceneType.STORY);
                         // -- Corremos la escena del primer nivel
                         sceneManager.setScene(SceneType.STORY);
