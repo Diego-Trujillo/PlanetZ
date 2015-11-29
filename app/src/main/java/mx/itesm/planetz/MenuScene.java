@@ -691,6 +691,9 @@ public class MenuScene extends BaseScene{
         // -- Ubicar la escena
         settingsMenuScene.setPosition(0, 0);
 
+        // -- Sprite Alerta
+        final Sprite alert = resourceManager.loadSprite(gameManager.CAMERA_WIDTH/2,gameManager.CAMERA_HEIGHT/2+100,resourceManager.settingsMenuAlertTextureRegion);
+
         // =============== Creando los botones ===================
         // -- Botón para regresar al menú principal
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK, resourceManager.menuSubmenuBackButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
@@ -702,14 +705,26 @@ public class MenuScene extends BaseScene{
         IMenuItem soundDecrease = new ScaleMenuItemDecorator(new SpriteMenuItem(SOUND_DECREASE, resourceManager.settingsMenuDecreaseSoundButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1.0f);
         // -- Botón para incrementar el volúmen del sonido
         IMenuItem soundIncrease = new ScaleMenuItemDecorator(new SpriteMenuItem(SOUND_INCREASE, resourceManager.settingsMenuIncreaseSoundButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1.0f);
+        // --Botón para crear un juego nuevo
+        IMenuItem newGame = new ScaleMenuItemDecorator((new SpriteMenuItem(666, resourceManager.settingsMenuNewGameButtonTextureRegion,vertexBufferObjectManager)),0.8f,1.0f);
+        // -- Botones alerta
+        final IMenuItem cancel = new ScaleMenuItemDecorator(new SpriteMenuItem(100, resourceManager.settingsMenuCancelButtonTextureRegion,vertexBufferObjectManager),0.8f,1.0f);
+        final IMenuItem ok = new ScaleMenuItemDecorator(new SpriteMenuItem(200, resourceManager.settingsMenuOKButtonTextureRegion,vertexBufferObjectManager),0.8f,1.0f);
 
 
         // =============== Agregando los botones =================
+        settingsMenuScene.addMenuItem(cancel);
+        settingsMenuScene.addMenuItem(ok);
         settingsMenuScene.addMenuItem(backButton);
         settingsMenuScene.addMenuItem(musicDecrease);
         settingsMenuScene.addMenuItem(musicIncrease);
         settingsMenuScene.addMenuItem(soundDecrease);
         settingsMenuScene.addMenuItem(soundIncrease);
+        settingsMenuScene.addMenuItem(newGame);
+
+
+
+
 
         // =============== Configurando las animaciones =========
         // -- Construir las animaciones
@@ -721,11 +736,21 @@ public class MenuScene extends BaseScene{
         settingsMenuScene.attachChild(new Text(400, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "SETTINGS", vertexBufferObjectManager));
 
         // =============== Ubicando los botones =================
+
+        newGame.setPosition(GameManager.CAMERA_WIDTH-350,GameManager.CAMERA_HEIGHT-150);
+        cancel.setPosition(GameManager.CAMERA_WIDTH/2-100,GameManager.CAMERA_HEIGHT/2-200);
+        ok.setPosition(GameManager.CAMERA_WIDTH/2+100,GameManager.CAMERA_HEIGHT/2-200);
         backButton.setPosition(150, GameManager.CAMERA_HEIGHT - 125);
         musicDecrease.setPosition(300, GameManager.CAMERA_HEIGHT / 2 + 25);
         musicIncrease.setPosition(GameManager.CAMERA_WIDTH - 300, GameManager.CAMERA_HEIGHT / 2 + 25);
         soundDecrease.setPosition(300, GameManager.CAMERA_HEIGHT / 2 - 200);
         soundIncrease.setPosition(GameManager.CAMERA_WIDTH - 300, GameManager.CAMERA_HEIGHT / 2 - 200);
+
+        settingsMenuScene.attachChild(alert);
+        //Ocultando los botones de cancel y ok
+        alert.setVisible(false);
+        cancel.setVisible(false); settingsMenuScene.unregisterTouchArea(cancel);
+        ok.setVisible(false); settingsMenuScene.unregisterTouchArea(ok);
 
         // =============== Creando los Sprites de Settings =================
         // -- Definir un punto de inicio en X
@@ -793,7 +818,41 @@ public class MenuScene extends BaseScene{
                             sessionManager.soundVolume -= 0.20f;
                         }
                         break;
+                    case 666:
+                        //-- Se abre el cuadro de dialogo de alerta
+                        alert.setVisible(true);
+                        //-- Hacer visibles los botones
+                        cancel.setVisible(true);settingsMenuScene.registerTouchArea(cancel);
+                        ok.setVisible(true);settingsMenuScene.registerTouchArea(ok);
+                        break;
+                    case 100:
+                        alert.setVisible(false);
+                         cancel.setVisible(false);settingsMenuScene.unregisterTouchArea(cancel);
+                         ok.setVisible(false);settingsMenuScene.unregisterTouchArea(ok);
+                         break;
+                    case 200:
+                         sessionManager.currentLevel= 1;
+                         sessionManager.writeChanges();
+                         sessionManager.gemsUnlocked[1][1]= false;
+                         sessionManager.gemsUnlocked[1][2]= false;
+                         sessionManager.gemsUnlocked[1][3]= false;
+                         sessionManager.gemsUnlocked[2][1]= false;
+                         sessionManager.gemsUnlocked[2][2]= false;
+                         sessionManager.gemsUnlocked[2][3]= false;
+                         sessionManager.gemsUnlocked[3][1]= false;
+                         sessionManager.gemsUnlocked[3][2]= false;
+                         sessionManager.gemsUnlocked[3][3]= false;
+                         sessionManager.writeChanges();
+                        alert.setVisible(false);
+                        cancel.setVisible(false);settingsMenuScene.unregisterTouchArea(cancel);
+                        ok.setVisible(false);settingsMenuScene.unregisterTouchArea(ok);
+                        break;
+
+
                     case SUBMENU_BACK:
+                        alert.setVisible(false);
+                        cancel.setVisible(false);settingsMenuScene.unregisterTouchArea(cancel);
+                        ok.setVisible(false);settingsMenuScene.unregisterTouchArea(ok);
                         // -- Regresamos al menú principal
                         returnToMenu();
                         resourceManager.soundOne.play();
@@ -854,7 +913,6 @@ public class MenuScene extends BaseScene{
         IMenuItem buttonDiego = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_DIEGO,resourceManager.aboutMenuDiegoButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
         // -- Botón para desplegar el ID de DANIELA
         IMenuItem buttonDanni = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_DANNI,resourceManager.aboutMenuDanniButtonTexureRegion,vertexBufferObjectManager),0.8f,1f);
-
 
         // =============== Agregando los botones =================
         aboutMenuScene.addMenuItem(backButton);

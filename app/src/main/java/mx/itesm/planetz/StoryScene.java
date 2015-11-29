@@ -91,7 +91,8 @@ public class StoryScene extends BaseScene {
                 break;
             case 2:
                 maxIndex = 4;
-                pathName = "Graphics/Story/BNWIntotheWilderness/";
+
+                pathName = "Graphics/Story/BraveNewWorld/IntoTheWilderness/";
                 break;
             case 3:
                 break;

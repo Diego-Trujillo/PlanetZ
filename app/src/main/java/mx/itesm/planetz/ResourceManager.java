@@ -166,6 +166,15 @@ public class ResourceManager {
 
 
     // ============== SUBMENU SETTINGS ===========================
+    //---------------Boton de juego nuevo, alerta y opciones
+    private BitmapTextureAtlas settingsMenuButtonsTextureAtlas;
+    private BitmapTextureAtlas settingsMenuAlertTextureAtlas;
+    public ITextureRegion settingsMenuNewGameButtonTextureRegion;
+    public ITextureRegion settingsMenuCancelButtonTextureRegion;
+    public ITextureRegion settingsMenuOKButtonTextureRegion;
+    public ITextureRegion settingsMenuAlertTextureRegion;
+
+
     // -------------- Las barras de audio ------------------------
     private BitmapTextureAtlas settingsMenuAudioLevelTextureAtlas;
     public ITextureRegion settingsMenuAudioLevel_20_TextureRegion;
@@ -468,6 +477,11 @@ public class ResourceManager {
         settingsMenuAudioButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,190,154,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         menuBitmapTextureAtlasContainer.add(settingsMenuAudioButtonsTextureAtlas);
 
+        settingsMenuButtonsTextureAtlas =  new BitmapTextureAtlas(textureManager, 478,380,TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(settingsMenuButtonsTextureAtlas);
+
+        settingsMenuAlertTextureAtlas =  new BitmapTextureAtlas(textureManager, 500,300,TextureOptions.BILINEAR);
+        menuBitmapTextureAtlasContainer.add(settingsMenuAlertTextureAtlas);
 
 
         // -- Botones About --
@@ -540,7 +554,10 @@ public class ResourceManager {
         settingsMenuDecreaseSoundButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuAudioButtonsTextureAtlas,gameManager,"SoundDecreaseButton.png",0,77);;
         settingsMenuIncreaseSoundButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuAudioButtonsTextureAtlas,gameManager,"SoundIncreaseButton.png",95,77);
 
-
+        settingsMenuNewGameButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuButtonsTextureAtlas,gameManager,"eraseData.png",0,0);
+        settingsMenuCancelButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuButtonsTextureAtlas,gameManager,"cancelButton.png",0,161);
+        settingsMenuOKButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuButtonsTextureAtlas,gameManager,"okButton.png",0,221);
+        settingsMenuAlertTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuAlertTextureAtlas,gameManager,"alert.png",0,0);
         // -- Regiones Botones About --
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/Menu/About/");
         aboutMenuAndyButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutMenuButtonTextureAtlas, gameManager, "AndyButton.png", 0, 0);
@@ -593,7 +610,7 @@ public class ResourceManager {
         adventureLevelOneBackgroundStars2TextureAtlas = new BitmapTextureAtlas(textureManager, 1366, 768, TextureOptions.BILINEAR);
         adventureLevelOneBackgroundStars3TextureAtlas = new BitmapTextureAtlas(textureManager, 1366, 768, TextureOptions.BILINEAR);
         // -------------- Nave -----------------------------------
-        adventureLevelOneShipTextureAtlas = new BitmapTextureAtlas(textureManager,214,235,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        adventureLevelOneShipTextureAtlas = new BitmapTextureAtlas(textureManager,214,130,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         adventureLevel1BitmapTextureAtlasContainer.add(adventureLevelOneShipTextureAtlas);
         //----------------Particulas-------------------------------
         adventureLevelOneParticleTextureAtlas = new BitmapTextureAtlas(textureManager, 15, 16, TextureOptions.BILINEAR);
@@ -769,10 +786,10 @@ public class ResourceManager {
         YouWinBackgroundTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinBackgroundTextureAtlas, gameManager, "ScreenWin.jpg", 0, 0);
         //--Botones-----
         YouWinExitButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "DoorButtonPauseScreen.png", 0, 0);
-        YouWinRetryButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "Retry_Norm.png", 128, 0);
+        YouWinRetryButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "Retry_Norm.png", 256, 0);
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/buttons/");
-        YouWinContinueButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "arrow_right.png", 243, 0);
+        YouWinContinueButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "arrow_right.png", 384, 0);
         // --Gemas------
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/WinScene/");
         YouWinGemBlue1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems1TextureAtlas, gameManager, "ScreenWinGemBlue1.png", 0, 0);
