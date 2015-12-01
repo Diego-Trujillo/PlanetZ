@@ -79,7 +79,7 @@ public class Obstacle {
 
 
 
-        //obstacleSprite.setCullingEnabled(true);
+        obstacleSprite.setCullingEnabled(true);
 
         obstacleBody.setUserData(this);
     }

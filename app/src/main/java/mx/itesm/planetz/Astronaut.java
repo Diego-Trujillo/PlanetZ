@@ -53,6 +53,7 @@ public class Astronaut {
     // ===========================================================
     public Body astronautBody;
     private final FixtureDef ASTRONAUT_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(1000.f,0.1f,0.5f);
+    private final FixtureDef ASTRONAUT_FIXTURE_DEFINITION2 = PhysicsFactory.createFixtureDef(1.f,0.1f,0.5f);
 
 
     // ===========================================================
@@ -86,8 +87,13 @@ public class Astronaut {
 
 
 
+        switch(gameScene.sessionManager.currentLevel){
+            case 2:
+                astronautBody = PhysicsFactory.createBoxBody(physicsWorld,astronautSprite, BodyDef.BodyType.DynamicBody,ASTRONAUT_FIXTURE_DEFINITION);
+            case 3:
+                astronautBody = PhysicsFactory.createBoxBody(physicsWorld,astronautSprite, BodyDef.BodyType.DynamicBody,ASTRONAUT_FIXTURE_DEFINITION2);
 
-        astronautBody = PhysicsFactory.createBoxBody(physicsWorld,astronautSprite, BodyDef.BodyType.DynamicBody,ASTRONAUT_FIXTURE_DEFINITION);
+        }
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(astronautSprite, astronautBody, true, true));
         astronautBody.setFixedRotation(true);
 
@@ -117,7 +123,6 @@ public class Astronaut {
         };
         astronautSprite.registerUpdateHandler(updateHandler);
 
-
     }
 
     public void jump() {
@@ -127,6 +132,19 @@ public class Astronaut {
 
             astronautSprite.stopAnimation();
             astronautSprite.animate(jumpingAnimationIntervals, 16, 19, false);
+        }
+    }
+
+    public void jumpMirror(float n){
+        if(jumpCounter++ < 5) {
+            astronautBody.setLinearVelocity(0, n*100.0f);
+            //astronautBody.applyForce(0,n*-1,0,0);
+            astronautSprite.stopAnimation();
+            astronautSprite.animate(jumpingAnimationIntervals, 16, 19, false);
+            if(n<0)
+                astronautSprite.setFlippedVertical(false);
+            else
+                astronautSprite.setFlippedVertical(true);
         }
     }
 

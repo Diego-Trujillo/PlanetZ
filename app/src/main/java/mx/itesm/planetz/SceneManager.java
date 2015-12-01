@@ -28,6 +28,7 @@ public class SceneManager {
     private BaseScene menuScene;
     private BaseScene levelOneScene;
     private BaseScene levelTwoScene;
+    private BaseScene levelThreeScene;
     private BaseScene storyScene;
     private BaseScene YouLoseScene;
     private BaseScene TempScene;
@@ -71,6 +72,9 @@ public class SceneManager {
             case ADVENTURE_LEVEL_2:
                 levelTwoScene = new AdventureLevelTwoScene();
                 break;
+            case ADVENTURE_LEVEL_3:
+                levelThreeScene = new AdventureLevelThreeScene();
+                break;
             case YOU_LOSE:
                 YouLoseScene = new YouLose();
                 break;
@@ -101,6 +105,9 @@ public class SceneManager {
                 break;
             case ADVENTURE_LEVEL_2:
                 currentScene = levelTwoScene;
+                break;
+            case ADVENTURE_LEVEL_3:
+                currentScene = levelThreeScene;
                 break;
             case YOU_LOSE:
                 currentScene = YouLoseScene;
@@ -150,6 +157,10 @@ public class SceneManager {
             case ADVENTURE_LEVEL_2:
                 levelTwoScene.destroyScene();
                 levelTwoScene = null;
+                break;
+            case ADVENTURE_LEVEL_3:
+                levelThreeScene.destroyScene();
+                levelThreeScene = null;
                 break;
             case YOU_LOSE:
                 YouLoseScene.destroyScene();

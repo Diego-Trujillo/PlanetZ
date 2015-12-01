@@ -283,6 +283,37 @@ public class ResourceManager {
 
 
 
+    // ===========================================================================
+    //                ESCENA NIVEL TRES ADVENTURE MODE
+    // ===========================================================================
+
+    // ============== RECURSOS GRÁFICOS ==========================
+    // ===========================================================
+
+    // ============== Contenedor de BitmapAtlas ==================
+    ArrayList<BitmapTextureAtlas> adventureLevelThreeBitmapTextureAtlasContainer;
+
+    // ============== Contenedor de Atlas's de Región ============
+    // -------------- Fondo
+    public BitmapTextureAtlas adventureLevelThreeBackgroundSkyTextureAtlas;
+    public BitmapTextureAtlas adventureLevelThreeBackgroundRocks1TextureAtlas;
+    public BitmapTextureAtlas adventureLevelThreeBackgroundRocks2TextureAtlas;
+    public BitmapTextureAtlas adventureLevelThreeBackgroundRocks3TextureAtlas;
+    // -------------- Plataformas
+    public BitmapTextureAtlas adventureLevelThreePlatormsBigTextureAtlas;
+    // -------------- Obstáculos
+    public BitmapTextureAtlas adventureLevelThreeObstaclesTextureAtlas;
+
+    // ============== Texturas ====================================
+    public ITextureRegion adventureLevelThreeBackgroundSkyTextureRegion;
+    public ITextureRegion adventureLevelThreeBackgroundRocks1TextureRegion;
+    public ITextureRegion adventureLevelThreeBackgroundRocks2TextureRegion;
+    public ITextureRegion adventureLevelThreeBackgroundRocks3TextureRegion;
+
+    public ArrayList<ITextureRegion> adventureLevelThreePlatformsBigTextureRegion;
+
+    //public ArrayList<ITextureRegion> adventureLevelThreeObstaclesTextureRegion;
+
 
 
 
@@ -754,6 +785,77 @@ public class ResourceManager {
     // ===========================================================
     public void unloadAdventureLevelTwoResources(){
         for(BitmapTextureAtlas atlas : adventureLevelTwoBitmapTextureAtlasContainer){
+            atlas.unload();
+            atlas = null;
+        }
+    }
+
+
+    // ================================================================
+    //            ESCENA NIVEL TRES ADVENTURE MODE
+    // =================================================================
+
+    // ============== Cargar Recursos Gráficos ===================
+    // ===========================================================
+    public void loadAdventureLevelThreeResourcesGFX(){
+        adventureLevelThreeBitmapTextureAtlasContainer = new ArrayList<>();
+
+        // -- Bitmap TextureAtlas
+        adventureLevelThreeBackgroundSkyTextureAtlas = new BitmapTextureAtlas(textureManager,1280,720,TextureOptions.BILINEAR);
+        adventureLevelThreeBitmapTextureAtlasContainer.add(adventureLevelThreeBackgroundSkyTextureAtlas);
+
+        adventureLevelThreeBackgroundRocks1TextureAtlas = new BitmapTextureAtlas(textureManager,1280,720,TextureOptions.BILINEAR);
+        adventureLevelThreeBitmapTextureAtlasContainer.add(adventureLevelThreeBackgroundRocks1TextureAtlas);
+
+        adventureLevelThreeBackgroundRocks2TextureAtlas = new BitmapTextureAtlas(textureManager,1280,720,TextureOptions.BILINEAR);
+        adventureLevelThreeBitmapTextureAtlasContainer.add(adventureLevelThreeBackgroundRocks2TextureAtlas);
+
+        adventureLevelThreeBackgroundRocks3TextureAtlas = new BitmapTextureAtlas(textureManager,1280,720,TextureOptions.BILINEAR);
+        adventureLevelThreeBitmapTextureAtlasContainer.add(adventureLevelThreeBackgroundRocks3TextureAtlas);
+
+        adventureLevelThreePlatormsBigTextureAtlas = new BitmapTextureAtlas(textureManager,308,150,TextureOptions.BILINEAR);
+        adventureLevelThreeBitmapTextureAtlasContainer.add(adventureLevelThreePlatormsBigTextureAtlas);
+
+        //adventureLevelThreeObstaclesTextureAtlas = new BitmapTextureAtlas(textureManager,197,64,TextureOptions.BILINEAR);
+        //adventureLevelThreeBitmapTextureAtlasContainer.add(adventureLevelThreeObstaclesTextureAtlas);
+
+
+        // ============ Texturas
+        // ------------- Fondo
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/NewtonRedefined/");
+        adventureLevelThreeBackgroundSkyTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreeBackgroundSkyTextureAtlas,gameManager,"colorfondo.png",0,0);
+        adventureLevelThreeBackgroundRocks1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreeBackgroundRocks1TextureAtlas,gameManager,"fondofinal.png",0,0);
+        adventureLevelThreeBackgroundRocks2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreeBackgroundRocks2TextureAtlas,gameManager,"fondomedio.png",0,0);;
+        adventureLevelThreeBackgroundRocks3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreeBackgroundRocks3TextureAtlas,gameManager,"fondofrente.png",0,0);;
+
+        // ----------- Plataformas
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/NewtonRedefined/Platforms/");
+        adventureLevelThreePlatformsBigTextureRegion = new ArrayList<>();
+
+
+        adventureLevelThreePlatformsBigTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreePlatormsBigTextureAtlas,gameManager,"1.png",0,0));
+        adventureLevelThreePlatformsBigTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreePlatormsBigTextureAtlas,gameManager,"2.png",0,39));
+        adventureLevelThreePlatformsBigTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreePlatormsBigTextureAtlas,gameManager,"3.png",0,68));
+
+        /* ------------ Obstáculos
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/IntoTheWilderness/Enemies/");
+        adventureLevelTwoObstaclesTextureRegion = new ArrayList<>();
+
+
+        adventureLevelTwoObstaclesTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoObstaclesTextureAtlas,gameManager,"1.png",0,0));
+        adventureLevelTwoObstaclesTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoObstaclesTextureAtlas,gameManager,"2.png",66,0));
+        adventureLevelTwoObstaclesTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoObstaclesTextureAtlas,gameManager,"3.png",129,0));
+        */
+        // ============== Cargar Atlas
+        for(BitmapTextureAtlas atlas : adventureLevelThreeBitmapTextureAtlasContainer){
+            atlas.load();
+        }
+
+    }
+    // ============== Liberar Recursos ===========================
+    // ===========================================================
+    public void unloadAdventureLevelThreeResources(){
+        for(BitmapTextureAtlas atlas : adventureLevelThreeBitmapTextureAtlasContainer){
             atlas.unload();
             atlas = null;
         }

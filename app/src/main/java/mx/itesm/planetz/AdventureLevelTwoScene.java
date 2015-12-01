@@ -164,6 +164,7 @@ public class AdventureLevelTwoScene extends BaseScene{
 
                 // -- Llamamos al recolector de basura
                 System.gc();
+
             }
 
         };

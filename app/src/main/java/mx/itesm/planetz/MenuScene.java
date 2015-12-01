@@ -466,9 +466,9 @@ public class MenuScene extends BaseScene{
                         // -- Liberamos la escena actual
                         sceneManager.destroyScene(SceneType.MENU);
                         // -- Creamos la escena del primer nivel
-                        sceneManager.createScene(SceneType.ADVENTURE_LEVEL_2);
+                        sceneManager.createScene(SceneType.ADVENTURE_LEVEL_3);
                         // -- Corremos la escena del primer nivel
-                        sceneManager.setScene(SceneType.ADVENTURE_LEVEL_2);
+                        sceneManager.setScene(SceneType.ADVENTURE_LEVEL_3);
                         break;
 
                 }

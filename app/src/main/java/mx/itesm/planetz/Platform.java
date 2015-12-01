@@ -77,6 +77,9 @@ public class Platform {
                 case 2:
                     platformSprite = resourceManager.loadSprite(positionX,positionY,resourceManager.adventureLevelTwoPlatformsBigTextureRegion.get(gameScene.randomNumberGenerator.nextInt(3)));
                     break;
+                case 3:
+                    platformSprite = resourceManager.loadSprite(positionX,positionY,resourceManager.adventureLevelThreePlatformsBigTextureRegion.get(gameScene.randomNumberGenerator.nextInt(3)));
+                    break;
             }
         }
 
