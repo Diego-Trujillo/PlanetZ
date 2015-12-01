@@ -80,7 +80,7 @@ public class AdventureLevelThreeScene extends BaseScene {
 
     Random rand;
     private int i= 1;
-    private int modifier=-1;
+    private boolean isMirrored = false;
 
     private Rectangle astronautRectangle;
     private Body astronautBody;
@@ -260,9 +260,11 @@ public class AdventureLevelThreeScene extends BaseScene {
     @Override
     public void HUDButton1Pressed(){
 
-        modifier*= -1;
+        isMirrored = !isMirrored;
                 //System.out.println("Gravity: " + GRAVITY_Y);
-        player.jumpMirror(modifier);
+        player.mirrorAstronaut(isMirrored);
+        GRAVITY_Y = -GRAVITY_Y;
+        physicsWorld.setGravity(new Vector2(GRAVITY_X,GRAVITY_Y));
 
     }
 

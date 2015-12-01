@@ -53,7 +53,7 @@ public class Astronaut {
     // ===========================================================
     public Body astronautBody;
     private final FixtureDef ASTRONAUT_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(1000.f,0.1f,0.5f);
-    private final FixtureDef ASTRONAUT_FIXTURE_DEFINITION2 = PhysicsFactory.createFixtureDef(1.f,0.1f,0.5f);
+    //private final FixtureDef ASTRONAUT_FIXTURE_DEFINITION2 = PhysicsFactory.createFixtureDef(1.f,0.1f,0.5f);
 
 
     // ===========================================================
@@ -78,22 +78,16 @@ public class Astronaut {
         astronautTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(astronautBitmapTextureAtlas,gameScene.gameManager,"AstronautSprites.png",0,0,8,3);
 
         astronautBitmapTextureAtlas.load();
-        astronautSprite = new AnimatedSprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT/2,astronautTextureRegion,gameScene.vertexBufferObjectManager);
+        astronautSprite = new AnimatedSprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT,astronautTextureRegion,gameScene.vertexBufferObjectManager);
 
         objectOfDesire = new Entity();
         astronautSprite.attachChild(objectOfDesire);
-        objectOfDesire.setPosition(300,150);
+        objectOfDesire.setPosition(300, 150);
 
 
 
+        astronautBody = PhysicsFactory.createBoxBody(physicsWorld,astronautSprite, BodyDef.BodyType.DynamicBody,ASTRONAUT_FIXTURE_DEFINITION);
 
-        switch(gameScene.sessionManager.currentLevel){
-            case 2:
-                astronautBody = PhysicsFactory.createBoxBody(physicsWorld,astronautSprite, BodyDef.BodyType.DynamicBody,ASTRONAUT_FIXTURE_DEFINITION);
-            case 3:
-                astronautBody = PhysicsFactory.createBoxBody(physicsWorld,astronautSprite, BodyDef.BodyType.DynamicBody,ASTRONAUT_FIXTURE_DEFINITION2);
-
-        }
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(astronautSprite, astronautBody, true, true));
         astronautBody.setFixedRotation(true);
 
@@ -135,17 +129,8 @@ public class Astronaut {
         }
     }
 
-    public void jumpMirror(float n){
-        if(jumpCounter++ < 5) {
-            astronautBody.setLinearVelocity(0, n*100.0f);
-            //astronautBody.applyForce(0,n*-1,0,0);
-            astronautSprite.stopAnimation();
-            astronautSprite.animate(jumpingAnimationIntervals, 16, 19, false);
-            if(n<0)
-                astronautSprite.setFlippedVertical(false);
-            else
-                astronautSprite.setFlippedVertical(true);
-        }
+    public void mirrorAstronaut(boolean isMirrored){
+        astronautSprite.setFlippedVertical(isMirrored);
     }
 
 

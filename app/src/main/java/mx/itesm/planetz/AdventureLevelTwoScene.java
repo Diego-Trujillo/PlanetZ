@@ -83,6 +83,8 @@ public class AdventureLevelTwoScene extends BaseScene{
     private ArrayList<Obstacle> toBeDeleted_Obstacle;
     private ArrayList<Platform> toBeDeleted_Platform;
 
+    private ArrayList<Platform> toBeAdded_Platform;
+
     Random rand;
     private int i= 1;
 
@@ -164,7 +166,6 @@ public class AdventureLevelTwoScene extends BaseScene{
 
                 // -- Llamamos al recolector de basura
                 System.gc();
-
             }
 
         };
@@ -229,7 +230,7 @@ public class AdventureLevelTwoScene extends BaseScene{
         leftWallRectangle.registerUpdateHandler(new IUpdateHandler() {
             @Override
             public void onUpdate(float pSecondsElapsed) {
-                leftWallBody.setTransform(player.astronautBody.getPosition().x,0,0);
+                leftWallBody.setTransform(player.astronautBody.getPosition().x, 0, 0);
             }
 
             @Override
@@ -242,7 +243,7 @@ public class AdventureLevelTwoScene extends BaseScene{
         wallOfDeathRectangle.registerUpdateHandler(new IUpdateHandler() {
             @Override
             public void onUpdate(float pSecondsElapsed) {
-                wallOfDeathBody.setTransform(player.astronautBody.getPosition().x - 100,player.astronautBody.getPosition().y,0);
+                wallOfDeathBody.setTransform(player.astronautBody.getPosition().x - 100, player.astronautBody.getPosition().y, 0);
 
             }
 
@@ -348,6 +349,12 @@ public class AdventureLevelTwoScene extends BaseScene{
     }
 
 
+    public void spawnPlatforms(){
+        toBeAdded_Platform = new ArrayList<>();
+        // Agregamos las plataformas
+       // toBeAdded_Platform.add(new Platform(this,physicsWorld,2,))
+
+    }
 
     @Override
     public void onBackKeyPressed() {
