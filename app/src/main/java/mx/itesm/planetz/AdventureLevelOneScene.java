@@ -371,7 +371,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                     shipBody.setLinearVelocity(10f, 0);
                     //smokeEmmiter.setCenterX(shipSprite.getX()-20);
                     gameWon = true;
-                    gameManager.toastOnUiThread("Gems Unlocked!", Toast.LENGTH_SHORT);
+                    //gameManager.toastOnUiThread("Gems Unlocked!", Toast.LENGTH_SHORT);
                     sessionManager.gemsUnlocked[1][1]= true;
                     sessionManager.gemsUnlocked[1][2]= (playerLives >= 2);
                     sessionManager.gemsUnlocked[1][3]= (playerLives >= 3);
@@ -380,12 +380,13 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
                 }
                 else if(timeRemaining == -3){
+                    sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_1);
                     // -- Creamos la escena del primer nivel
                     sceneManager.createScene(SceneType.TEMP);
                     // -- Corremos la escena del primer nivel
                     sceneManager.setScene(SceneType.TEMP);
                     // -- Liberamos la escena actual
-                    sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_1);
+
                 }
                 timeRemaining--;
 
