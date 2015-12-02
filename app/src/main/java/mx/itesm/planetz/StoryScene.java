@@ -90,12 +90,12 @@ public class StoryScene extends BaseScene {
                 pathName = "Graphics/Story/CrashCourseIntoOblivion/";
                 break;
             case 2:
-                maxIndex = 4;
+                maxIndex = 5;
                 pathName = "Graphics/Story/BraveNewWorld/IntoTheWilderness/";
                 break;
             case 3:
                 pathName = "Graphics/Story/BraveNewWorld/NewtonRedefined/";
-                maxIndex = 4;
+                maxIndex = 5;
                 break;
             case 4:
                 pathName = "Graphics/Story/TheEnd/";

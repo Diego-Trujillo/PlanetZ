@@ -42,7 +42,7 @@ public class AdventureLevelThreeScene extends BaseScene {
     private PhysicsWorld physicsWorld;
     // -------------- Gravedad -----------------------------------
     private float GRAVITY_X = 0f;
-    private float GRAVITY_Y = -50f;
+    private float GRAVITY_Y = -25f;
 
     // -------------- Escucha los contactos ----------------------
     private ContactListener contactListener;
