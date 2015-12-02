@@ -357,6 +357,7 @@ public class MenuScene extends BaseScene{
                         setChildScene(backpackMenuScene);
                         // -- Poner el Overlay
                         menuOverlaySprite.setVisible(true);
+                        gameManager.toastOnUiThread("Play the game to collect more gems!");
                         break;
                     case MAIN_SETTINGS:
                         // -- Cambiar al submenú Settings
@@ -371,6 +372,7 @@ public class MenuScene extends BaseScene{
                         setChildScene(aboutMenuScene);
                         // -- Poner el Overlay
                         menuOverlaySprite.setVisible(true);
+                        gameManager.toastOnUiThread("Tap on the Planets to learn more!");
                         break;
                     case MAIN_TOGGLE_AUDIO:
                         // == Cuando cualquiera de los dos canales de audio está habilitado ==
@@ -724,6 +726,13 @@ public class MenuScene extends BaseScene{
 
 
 
+        // Cambiar el Zeta de Nuevo Juego
+        alert.setZIndex(10);
+        newGame.setZIndex(9);
+        cancel.setZIndex(11);
+        ok.setZIndex(11);
+
+
 
 
         // =============== Configurando las animaciones =========
@@ -789,6 +798,8 @@ public class MenuScene extends BaseScene{
         // -- Llamamos a la función para poner el estado inicial de las barras de sonido según configuración guardada
         updateAudioVisibility();
 
+        settingsMenuScene.sortChildren();
+
         // ========= Establecer Acción según botoón presionado ===
         settingsMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
@@ -832,7 +843,7 @@ public class MenuScene extends BaseScene{
                          break;
                     case 200:
                          sessionManager.currentLevel= 1;
-                         sessionManager.writeChanges();
+
                          sessionManager.gemsUnlocked[1][1]= false;
                          sessionManager.gemsUnlocked[1][2]= false;
                          sessionManager.gemsUnlocked[1][3]= false;
@@ -1007,6 +1018,7 @@ public class MenuScene extends BaseScene{
                     case ABOUT_ANDY:
                         // -- Llamar a la función para mostrar el ID de ANDY
                         setAboutID(aboutMenuAndyIDSprite, true);
+                        gameManager.toastOnUiThread("Bitch I'm fabulous!",Toast.LENGTH_LONG);
                         break;
                     case ABOUT_DANNI:
                         // -- Llamar a la función para mostrar el ID de DANIELA
@@ -1019,10 +1031,12 @@ public class MenuScene extends BaseScene{
                     case ABOUT_BRIAN:
                         // -- Llamar a la función para mostrar el ID de BRIAN
                         setAboutID(aboutMenuBrianIDSprite, true);
+                        gameManager.toastOnUiThread("'It's not about how much time you have, it's how you use it.'",Toast.LENGTH_LONG);
                         break;
                     case ABOUT_DIEGO:
                         // -- Llamar a la función para mostrar el ID de DIEGO
                         setAboutID(aboutMenuDiegoIDSprite, true);
+                        gameManager.toastOnUiThread("'Don't do it, compa.' - in response to something.",Toast.LENGTH_LONG);
                         break;
                     case SUBMENU_BACK:
                         // -- Regresar al menú principal

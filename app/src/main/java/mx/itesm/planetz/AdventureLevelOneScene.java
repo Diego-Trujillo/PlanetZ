@@ -77,6 +77,7 @@ import org.andengine.opengl.vbo.VertexBufferObject;
 import org.andengine.util.SocketUtils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Timer;
 
@@ -372,8 +373,8 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                     gameWon = true;
                     gameManager.toastOnUiThread("Gems Unlocked!", Toast.LENGTH_SHORT);
                     sessionManager.gemsUnlocked[1][1]= true;
-                    sessionManager.gemsUnlocked[1][2]= true;
-                    sessionManager.gemsUnlocked[1][3]= true;
+                    sessionManager.gemsUnlocked[1][2]= (playerLives >= 2);
+                    sessionManager.gemsUnlocked[1][3]= (playerLives >= 3);
                     sessionManager.writeChanges();
 
                 }
@@ -677,6 +678,20 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
         gameManager.getEngine().disableAccelerationSensor(gameManager);
         // -- Liberamos los recursos de esta escena
         resourceManager.unloadAdventureLevelOneResources();
+        // -- Destruimos el mundo de física
+
+        // TO BE ADDED LATER JAJAJA
+        /*
+        Iterator<Body> bodyIterator = physicsWorld.getBodies();
+        while(bodyIterator.hasNext()){
+            physicsWorld.destroyBody(bodyIterator.next());
+        }
+        physicsWorld.clearForces();
+        physicsWorld.clearPhysicsConnectors();
+        physicsWorld.reset();
+        physicsWorld.dispose();
+        */
+
 
         sceneHUD.destroy();
         // -- Borramos la escena
