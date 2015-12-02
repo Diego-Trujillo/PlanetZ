@@ -129,6 +129,21 @@ public class PlayerHUD extends HUD {
                this.registerTouchArea(buttonOne);
 
                break;
+           case 3:
+               buttonOne = new Sprite(GameManager.CAMERA_WIDTH - 150, 150,resourceManager.loadImage("Graphics/BraveNewWorld/Buttons/ButtonJump.png"),gameScene.vertexBufferObjectManager){
+                   @Override
+                   public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
+                       if (pSceneTouchEvent.isActionUp()) {
+                           gameScene.HUDButton1Pressed();
+                       }
+                       return true;
+                   }
+               };
+
+               this.attachChild(buttonOne);
+               this.registerTouchArea(buttonOne);
+
+               break;
        }
 
     }

@@ -42,7 +42,7 @@ public class AdventureLevelThreeScene extends BaseScene {
     private PhysicsWorld physicsWorld;
     // -------------- Gravedad -----------------------------------
     private float GRAVITY_X = 0f;
-    private float GRAVITY_Y = -100f;
+    private float GRAVITY_Y = -50f;
 
     // -------------- Escucha los contactos ----------------------
     private ContactListener contactListener;
@@ -290,7 +290,7 @@ public class AdventureLevelThreeScene extends BaseScene {
 
         isMirrored = !isMirrored;
         player.mirrorAstronaut(isMirrored);
-        GRAVITY_Y = -GRAVITY_Y;
+        GRAVITY_Y *= -1;
         physicsWorld.setGravity(new Vector2(GRAVITY_X, GRAVITY_Y));
 
     }
@@ -299,41 +299,118 @@ public class AdventureLevelThreeScene extends BaseScene {
     public void spawnPlatforms(){
         toBeAdded_Platform = new ArrayList<>();
         // Agregamos las plataformas
-        int i = 850;
-        int j = 3;
-        int k = 4;
+        int i = 950;
+        int j = 6;
+        int k = 7;
+        int l = 350;
+        int m = 9;
+        int pi = 650;
 
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,0,(120),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589,(120),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*2,(120),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*3,(120),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*4,(120),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*5,(120),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,0,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*2,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*3,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*4,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*5,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*6,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*7,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*8,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(0),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(0),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(0),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(0),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(0),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(0),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(0),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(0),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(0),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(100),false,false));
 
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,0,(600),false,true));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589,(600),false,true));
+
+        //toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,0,(600),false,true));
+        //toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589,(600),false,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*2,(600),false,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*3,(600),false,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*4,(600),true,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*5,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*6,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*7,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*8,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,589*9,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(750),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(750),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(750),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(750),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(750),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(750),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(750),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(750),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(750),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,(i*k++)+l,(600),false,true));
 
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(120),false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,i*j++,(400),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(120),false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,i*j++,(400),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(600),false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(600),false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,i*j++,(400),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(120),false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,i*j++,(400),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(600),false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(120),false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,i*j++,(400),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,i*j++,(400),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,i*j++,(600),false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,i*j++,(400),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,i*j++,(400),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,i*j++,(400),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(300),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(450),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(460),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(470),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(300),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(400),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(300),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(450),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(330),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(400),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(300),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(370),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(450),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(330),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(400),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(300),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(350),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(370),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m +100,(300),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m +250,(350),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m +400,(400),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m +550,(450),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(430),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(320),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(300),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(450),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(430),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(450),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(360),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(370),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(450),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(330),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.SMALL,pi*m++,(400),false,true));
+
+
 
         Goal levelGoal = new Goal(this,physicsWorld,i*(j-1),400);
         levelGoal.attachToScene();

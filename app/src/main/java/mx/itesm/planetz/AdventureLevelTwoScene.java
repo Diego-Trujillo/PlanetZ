@@ -378,7 +378,7 @@ return contactListener;
 public void spawnPlatforms(){
         toBeAdded_Platform = new ArrayList<>();
         // Agregamos las plataformas
-        int i = 900;
+        int i = 880;
         int j = 3;
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,0,(200),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,600,(200),false));
@@ -387,7 +387,7 @@ public void spawnPlatforms(){
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,2400,(200),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,3000,(200),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(200),false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),true,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(200),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),true));
@@ -398,33 +398,36 @@ public void spawnPlatforms(){
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(800),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(600),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(200),false));
+        Gem gem21 = new Gem(this,physicsWorld,2,2,i*j,470);
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(200),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(600),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(600),false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(800),true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(800),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(200),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(600),true));
+
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(200),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(600),true));
+        Gem gem31 = new Gem(this,physicsWorld,2,3,i*j,870);
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(800),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld, 2, Platform.BIG, i * j++, (400), false));
 
-        Goal levelGoal = new Goal(this,physicsWorld,i*(j-1),400);
+        Goal levelGoal = new Goal(this,physicsWorld,i*(j-1),450);
         levelGoal.attachToScene();
 
-        Gem gem13 = new Gem(this,physicsWorld,1,3,2000,700);
+        Gem gem13 = new Gem(this,physicsWorld,1,3,2000,270);
         gem13.attachToScene();
-        Gem gem21 = new Gem(this,physicsWorld,2,2,2000,300);
         gem21.attachToScene();
+        gem31.attachToScene();
 
 
 
