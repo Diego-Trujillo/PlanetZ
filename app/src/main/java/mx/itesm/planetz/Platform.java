@@ -123,6 +123,12 @@ public class Platform {
                     break;
             }
         }
+        if(size == SMALL){
+            switch(currentLevel){
+                case 3:
+                    platformSprite = resourceManager.loadSprite(positionX,positionY,resourceManager.adventureLevelThreePlatformsSmallTextureRegion.get(gameScene.randomNumberGenerator.nextInt(3)));
+            }
+        }
 
 
         platformBody = PhysicsFactory.createBoxBody(physicsWorld,platformSprite, BodyDef.BodyType.KinematicBody,PLATFORM_FIXTURE_DEFINITION);

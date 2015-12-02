@@ -82,6 +82,9 @@ public class AdventureLevelThreeScene extends BaseScene {
     private ArrayList<Obstacle> toBeDeleted_Obstacle;
     private ArrayList<Platform> toBeDeleted_Platform;
 
+    private ArrayList<Platform> toBeAdded_Platform;
+
+
     Random rand;
     private int i= 1;
     private boolean isMirrored = false;
@@ -102,7 +105,7 @@ public class AdventureLevelThreeScene extends BaseScene {
     @Override
     public void loadGFX() {
         resourceManager.loadAdventureLevelThreeResourcesGFX();
-        sceneHUD = new PlayerHUD(this,2);
+        sceneHUD = new PlayerHUD(this,3);
     }
 
     @Override
@@ -180,7 +183,8 @@ public class AdventureLevelThreeScene extends BaseScene {
         });
 
 
-        this.registerUpdateHandler(platformSpawner);
+        //this.registerUpdateHandler(platformSpawner);
+        spawnPlatforms();
         physicsWorld.setContactListener(getContactListener());
 
     }
@@ -285,13 +289,66 @@ public class AdventureLevelThreeScene extends BaseScene {
     public void HUDButton1Pressed(){
 
         isMirrored = !isMirrored;
-                //System.out.println("Gravity: " + GRAVITY_Y);
         player.mirrorAstronaut(isMirrored);
         GRAVITY_Y = -GRAVITY_Y;
         physicsWorld.setGravity(new Vector2(GRAVITY_X, GRAVITY_Y));
 
     }
 
+
+    public void spawnPlatforms(){
+        toBeAdded_Platform = new ArrayList<>();
+        // Agregamos las plataformas
+        int i = 850;
+        int j = 3;
+        int k = 4;
+
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,0,(120),false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,589,(120),false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,589*2,(120),false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,589*3,(120),false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,589*4,(120),true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,589*5,(120),false));
+
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,0,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,589,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,589*2,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,589*3,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,589*4,(600),true,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,589*5,(600),false,true));
+
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(120),false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.SMALL,i*j++,(400),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(120),false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.SMALL,i*j++,(400),true,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(600),true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(600),false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.SMALL,i*j++,(400),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(120),false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.SMALL,i*j++,(400),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(600),true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(120),false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.SMALL,i*j++,(400),true,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.SMALL,i*j++,(400),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(600),true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.SMALL,i*j++,(400),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.SMALL,i*j++,(400),true,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.SMALL,i*j++,(400),false,false));
+
+        Goal levelGoal = new Goal(this,physicsWorld,i*(j-1),400);
+        levelGoal.attachToScene();
+
+        Gem gem13 = new Gem(this,physicsWorld,1,3,2000,700);
+        gem13.attachToScene();
+        Gem gem21 = new Gem(this,physicsWorld,2,2,2000,300);
+        gem21.attachToScene();
+
+
+        for(Platform plat:toBeAdded_Platform){
+            plat.attachToScene();
+        }
+
+    }
 
     public ContactListener getContactListener(){
         ContactListener contactListener = new ContactListener() {
