@@ -287,14 +287,14 @@ public class AdventureLevelThreeScene extends BaseScene {
                     else{((Astronaut) bodyB.getUserData()).animateRun();}
                 }
 
-                /*else if((bodyA.getUserData() instanceof Astronaut && bodyB.getUserData() instanceof Obstacle) || (bodyB.getUserData() instanceof Astronaut && bodyA.getUserData() instanceof Obstacle)){
+                else if((bodyA.getUserData() instanceof Astronaut && bodyB.getUserData() instanceof Obstacle) || (bodyB.getUserData() instanceof Astronaut && bodyA.getUserData() instanceof Obstacle)){
 
                     playerLives--;
                     sceneHUD.updateLives(playerLives);
 
                     if(playerLives == 0){
                         // -- Liberamos la escena actual
-                        sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_3);
+                        sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_2);
                         // -- Creamos la escena del primer nivel
                         sceneManager.createScene(SceneType.YOU_LOSE);
                         // -- Corremos la escena del primer nivel
@@ -311,16 +311,40 @@ public class AdventureLevelThreeScene extends BaseScene {
                         ((Astronaut) bodyB.getUserData()).onDamage();
                     }
 
-                }*/
+                }
                 else if(bodyA.getUserData().equals("wod")){
                     if(bodyB.getUserData() instanceof Platform){toBeDeleted_Platform.add((Platform)(bodyB.getUserData()));System.out.println("Wall of death takes yet another victim >:) A - Platform");}
-                    //else if(bodyB.getUserData() instanceof Obstacle){toBeDeleted_Obstacle.add((Obstacle) (bodyB.getUserData()));System.out.println("Wall of death takes yet another victim >:) A - Obstacle");}
+                    else if(bodyB.getUserData() instanceof Obstacle){toBeDeleted_Obstacle.add((Obstacle) (bodyB.getUserData()));System.out.println("Wall of death takes yet another victim >:) A - Obstacle");}
 
                 }
                 else if(bodyB.getUserData().equals("wod")){
                     if(bodyA.getUserData() instanceof Platform){toBeDeleted_Platform.add((Platform)(bodyA.getUserData()));}
-                    //else if(bodyA.getUserData() instanceof Obstacle){toBeDeleted_Obstacle.add((Obstacle)(bodyA.getUserData()));}
+                    else if(bodyA.getUserData() instanceof Obstacle){toBeDeleted_Obstacle.add((Obstacle)(bodyA.getUserData()));}
                     System.out.println("Wall of death takes yet another victim >:) B");
+                }
+                else if((bodyA.getUserData() instanceof Astronaut && bodyB.getUserData().equals("boundary")) || (bodyB.getUserData() instanceof Astronaut && bodyA.getUserData().equals("boundary"))){
+                    // -- Liberamos la escena actual
+                    sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_2);
+                    // -- Creamos la escena del primer nivel
+                    sceneManager.createScene(SceneType.YOU_LOSE);
+                    // -- Corremos la escena del primer nivel
+                    sceneManager.setScene(SceneType.YOU_LOSE);
+                }
+                else if((bodyA.getUserData() instanceof Astronaut && bodyB.getUserData() instanceof Goal) || (bodyB.getUserData() instanceof Astronaut && bodyA.getUserData() instanceof Goal)){
+                    // -- Liberamos la escena actual
+                    sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_2);
+                    // -- Creamos la escena del primer nivel
+                    sceneManager.createScene(SceneType.TEMP);
+                    // -- Corremos la escena del primer nivel
+                    sceneManager.setScene(SceneType.TEMP);
+                }
+                else if((bodyA.getUserData() instanceof Astronaut && bodyB.getUserData() instanceof Gem) || (bodyB.getUserData() instanceof Astronaut && bodyA.getUserData() instanceof Gem)){
+                    if(bodyA.getUserData() instanceof Gem){
+                        ((Gem)bodyA.getUserData()).collect();
+                    }
+                    else{
+                        ((Gem)bodyB.getUserData()).collect();
+                    }
                 }
             }
 
