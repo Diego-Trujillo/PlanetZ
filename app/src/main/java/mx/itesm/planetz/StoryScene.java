@@ -91,10 +91,11 @@ public class StoryScene extends BaseScene {
                 break;
             case 2:
                 maxIndex = 4;
-
                 pathName = "Graphics/Story/BraveNewWorld/IntoTheWilderness/";
                 break;
             case 3:
+                pathName = "Graphics/Story/BraveNewWorld/NewtonRedefined/";
+                maxIndex = 0;
                 break;
             default:
                 // -- Su ocurre un error --
@@ -105,12 +106,12 @@ public class StoryScene extends BaseScene {
         }
 
         // ============ Cargamos las imágenes las asignamos a sprites ==
-        for (int i = 1; i <= maxIndex; i++) {
+        for (int i = 0; i <= maxIndex; i++) {
             // -- Para cada imágenes en el folder ---
             // -- Cargamos la imagen --
             storySlidesTextureRegionContainer.add(resourceManager.loadImage(pathName + Integer.toString(i) + ".jpg"));
             // -- Asignamos la imagen a un sprite --
-            storySlidesSpriteContainer.add(resourceManager.loadSprite(GameManager.CAMERA_WIDTH / 2, GameManager.CAMERA_HEIGHT / 2, storySlidesTextureRegionContainer.get(i - 1)));
+            storySlidesSpriteContainer.add(resourceManager.loadSprite(GameManager.CAMERA_WIDTH / 2, GameManager.CAMERA_HEIGHT / 2, storySlidesTextureRegionContainer.get(i)));
         }
     }
 

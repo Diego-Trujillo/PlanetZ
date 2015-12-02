@@ -643,7 +643,7 @@ public class ResourceManager {
         // ============== Texture Atlas ==========================
         adventureLevel1BitmapTextureAtlasContainer = new ArrayList<>();
         //---------------fondo----------------------------------
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Level1/");
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/Background/");
         adventureLevelOneBackgroundStars1TextureAtlas = new BitmapTextureAtlas(textureManager, 1366, 768, TextureOptions.BILINEAR);
         adventureLevelOneBackgroundStars2TextureAtlas = new BitmapTextureAtlas(textureManager, 1366, 768, TextureOptions.BILINEAR);
         adventureLevelOneBackgroundStars3TextureAtlas = new BitmapTextureAtlas(textureManager, 1366, 768, TextureOptions.BILINEAR);
@@ -655,58 +655,47 @@ public class ResourceManager {
         adventureLevel1BitmapTextureAtlasContainer.add(adventureLevelOneParticleTextureAtlas);
         // -------------- Meteoritos -----------------------------
         adventureLevelOneMeteoriteTextureRegions = new ArrayList<>();
-        //---------------Botones----------------------------------
-        adventureLevel1OneButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,650,350,TextureOptions.BILINEAR);
-        adventureLevel1BitmapTextureAtlasContainer.add(adventureLevel1OneButtonsTextureAtlas);
+
 
         // ============== Regiones =============================
         //----------------fondo----------------
 
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Level1/");
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/CrashCourseIntoOblivion/");
         adventureLevel1BitmapTextureAtlasContainer.add(adventureLevelOneBackgroundStars1TextureAtlas);
         adventureLevel1BitmapTextureAtlasContainer.add(adventureLevelOneBackgroundStars2TextureAtlas);
         adventureLevel1BitmapTextureAtlasContainer.add(adventureLevelOneBackgroundStars3TextureAtlas);
 
-        //------------Botones--------------
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Level1/buttons/");
-        adventureLevel1PauseButtonTextureRegion =  BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "PauseButton.png", 500, 200);
-        adventureLevel1PauseScreenTextureRegion= BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "PauseScreen.png", 0, 0);
-        adventureLevel1PlayButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "PlayButtonPauseScreen.png", 500, 0);
-        adventureLevel1BackButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevel1OneButtonsTextureAtlas, gameManager, "DoorButtonPauseScreen.png", 500, 100);
-
         // -------------- Nave ---------------------------------
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Sprites/");
-        adventureLevelOneAnimatedShipTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(adventureLevelOneShipTextureAtlas, gameManager, "adfs.png",0,0,3,1);
+        adventureLevelOneAnimatedShipTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(adventureLevelOneShipTextureAtlas, gameManager, "Ship.png", 0, 0, 3, 1);
 
         //----------------Particula-----------------------------
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Level1/");
         adventureLevel1ParticleTextureRegion =  BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelOneParticleTextureAtlas, gameManager, "smokeParticle.png", 0, 0);
 
-        // -------------- Vidas --------------------------------
-        adventureLevelOneLivesTexureRegion = loadImage("gfx/Level1/Lifes/casco_vida.png");
+
 
         //----------------Fondos--------------------------------
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Level1/");
-        adventureLevelOneBackgroundStars1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelOneBackgroundStars1TextureAtlas, gameManager, "layerstars1.png", 0, 0);
-        adventureLevelOneBackgroundStars2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelOneBackgroundStars2TextureAtlas, gameManager, "layerstars2.png", 0, 0);
-        adventureLevelOneBackgroundStars3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelOneBackgroundStars3TextureAtlas, gameManager, "layerstars3.png", 0, 0);
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/CrashCourseIntoOblivion/Background/");
+        adventureLevelOneBackgroundStars1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelOneBackgroundStars1TextureAtlas, gameManager, "BackgroundLayer1.png", 0, 0);
+        adventureLevelOneBackgroundStars2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelOneBackgroundStars2TextureAtlas, gameManager, "BackgroundLayer2.png", 0, 0);
+        adventureLevelOneBackgroundStars3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelOneBackgroundStars3TextureAtlas, gameManager, "BackgroundLayer3.png", 0, 0);
+
 
         // -------------- Meteoritos ---------------------------
-        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/1.png"));
-        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/2.png"));
-        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/3.png"));
-        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/4.png"));
-        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/5.png"));
-        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/6.png"));
-        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/7.png"));
-        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/8.png"));
-        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/9.png"));
-        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/10.png"));
-        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/11.png"));
-        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/12.png"));
-        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/13.png"));
-        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/14.png"));
-        adventureLevelOneMeteoriteTextureRegions.add(loadImage("gfx/Level1/Meteors/15.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("Graphics/CrashCourseIntoOblivion/Meteors/1.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("Graphics/CrashCourseIntoOblivion/Meteors/2.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("Graphics/CrashCourseIntoOblivion/Meteors/3.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("Graphics/CrashCourseIntoOblivion/Meteors/4.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("Graphics/CrashCourseIntoOblivion/Meteors/5.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("Graphics/CrashCourseIntoOblivion/Meteors/6.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("Graphics/CrashCourseIntoOblivion/Meteors/7.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("Graphics/CrashCourseIntoOblivion/Meteors/8.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("Graphics/CrashCourseIntoOblivion/Meteors/9.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("Graphics/CrashCourseIntoOblivion/Meteors/10.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("Graphics/CrashCourseIntoOblivion/Meteors/11.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("Graphics/CrashCourseIntoOblivion/Meteors/12.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("Graphics/CrashCourseIntoOblivion/Meteors/13.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("Graphics/CrashCourseIntoOblivion/Meteors/14.png"));
+        adventureLevelOneMeteoriteTextureRegions.add(loadImage("Graphics/CrashCourseIntoOblivion/Meteors/15.png"));
 
         // ================ Cargar los Atlas ====================
         for(BitmapTextureAtlas atlas : adventureLevel1BitmapTextureAtlasContainer){
@@ -897,11 +886,11 @@ public class ResourceManager {
 
         // ============== Regiones =============================
         //--fondo-------
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/YouLose/");
-        YouLoseBackgroundTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouLoseBackgroundTextureAtlas, gameManager, "fondo.jpg", 0, 0);
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/GameOver/");
+        YouLoseBackgroundTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouLoseBackgroundTextureAtlas, gameManager, "Background.jpg", 0, 0);
         //--Botones-----
-        YouLoseExitButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouLoseButtonsTextureAtlas, gameManager, "DoorButtonPauseScreen.png", 0, 0);
-        YouLoseRetryButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouLoseButtonsTextureAtlas, gameManager, "Retry_Norm.png", 200, 0);
+        YouLoseExitButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouLoseButtonsTextureAtlas, gameManager, "BackButton.png", 0, 0);
+        YouLoseRetryButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouLoseButtonsTextureAtlas, gameManager, "RetryButton.png", 200, 0);
 
         // ================ Cargar los Atlas ====================
         YouLoseBackgroundTextureAtlas.load();
@@ -913,7 +902,7 @@ public class ResourceManager {
         //--atlas del fondo
         YouWinBackgroundTextureAtlas = new BitmapTextureAtlas(textureManager,1280,720,TextureOptions.BILINEAR);
         //--atlas de los botones
-        YouWinButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,750,200,TextureOptions.BILINEAR);
+        YouWinButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,384,128,TextureOptions.BILINEAR);
         YouWinGems1TextureAtlas = new BitmapTextureAtlas(textureManager,600,300,TextureOptions.BILINEAR);
         YouWinGems2TextureAtlas = new BitmapTextureAtlas(textureManager,600,300,TextureOptions.BILINEAR);
         YouWinGems3TextureAtlas = new BitmapTextureAtlas(textureManager,600,300,TextureOptions.BILINEAR);
@@ -926,12 +915,12 @@ public class ResourceManager {
         YouWinBackgroundTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinBackgroundTextureAtlas, gameManager, "ScreenWin.jpg", 0, 0);
         //--Botones-----
         YouWinExitButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "DoorButtonPauseScreen.png", 0, 0);
-        YouWinRetryButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "Retry_Norm.png", 256, 0);
+        YouWinRetryButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "Retry_Norm.png", 128, 0);
 
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/buttons/");
-        YouWinContinueButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "arrow_right.png", 384, 0);
+        // Flecha de Next
+        YouWinContinueButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinButtonsTextureAtlas, gameManager, "NextArrow.png", 256, 0);
         // --Gemas------
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/WinScene/");
+
         YouWinGemBlue1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems1TextureAtlas, gameManager, "ScreenWinGemBlue1.png", 0, 0);
         YouWinGemBlue2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems1TextureAtlas, gameManager, "ScreenWinGemBlue2.png", 200, 0);
         YouWinGemBlue3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(YouWinGems1TextureAtlas, gameManager, "ScreenWinGemBlue3.png", 400, 0);

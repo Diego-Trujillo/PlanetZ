@@ -3,6 +3,7 @@ package mx.itesm.planetz;
 import org.andengine.entity.Entity;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.background.ParallaxBackground;
+import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
@@ -47,14 +48,7 @@ public class TemporarySceneVictory extends BaseScene {
     @Override
     public void loadGFX() {
         resourceManager.loadYouWinResourcesGFX();
-        //background = new Background(0,0,0);
-        text1 = new Text(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 + 100,resourceManager.fontOne,"You won!!!",vertexBufferObjectManager);
-        text2 = new Text(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2 - 100,resourceManager.fontOne,"This is a placeholder",vertexBufferObjectManager);
-        resourceManager.loadYouLoseResourcesGFX();
-        //----fondo------
-        background = new ParallaxBackground(0, 0, 0);
-        backgroundImageSprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.YouWinBackgroundTextureRegion);
-        background.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(0,backgroundImageSprite));
+
 
     }
 
@@ -76,7 +70,7 @@ public class TemporarySceneVictory extends BaseScene {
         // Se crean los bloques con las gemas dependiendo el nivel y el pregreso del usuario
         attachGems();
         // Fondo
-        scene.setBackground(background);
+        scene.setBackground(new SpriteBackground(0,0,0,new Sprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.YouWinBackgroundTextureRegion,vertexBufferObjectManager)));
         scene.setBackgroundEnabled(true);
 
         IMenuItem retryButton = new ScaleMenuItemDecorator(new SpriteMenuItem(1, resourceManager.YouWinRetryButtonTextureRegion, vertexBufferObjectManager), 0.8f, 1f);
