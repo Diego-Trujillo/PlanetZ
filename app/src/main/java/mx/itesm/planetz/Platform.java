@@ -99,8 +99,54 @@ public class Platform {
 
 
         if(containsObstacle){
-            Obstacle obstacle = new Obstacle(gameScene,physicsWorld,this,gameScene.randomNumberGenerator.nextInt((int)platformSprite.getWidth()));
+            //Obstacle obstacle = new Obstacle(gameScene,physicsWorld,this,gameScene.randomNumberGenerator.nextInt((int)platformSprite.getWidth()));
+            Obstacle obstacle = new Obstacle(gameScene,physicsWorld,this,(gameScene.randomNumberGenerator.nextInt(2) == 1)?30:(int)platformSprite.getWidth()-30);
             obstacle.attachToScene();
+        }
+    }
+
+
+    public Platform(BaseScene gameScene,PhysicsWorld physicsWorld,int currentLevel, int size,int positionX, int positionY, boolean containsObstacle, boolean isFlipped){
+        // ========== Inicializamos objetos referenciales ===========
+        this.gameScene = gameScene;
+        this.physicsWorld = physicsWorld;
+        this.resourceManager = gameScene.resourceManager;
+        this.currentLevel = currentLevel;
+
+        if(size == BIG){
+            switch(currentLevel){
+                case 2:
+                    platformSprite = resourceManager.loadSprite(positionX,positionY,resourceManager.adventureLevelTwoPlatformsBigTextureRegion.get(gameScene.randomNumberGenerator.nextInt(3)));
+                    break;
+                case 3:
+                    platformSprite = resourceManager.loadSprite(positionX,positionY,resourceManager.adventureLevelThreePlatformsBigTextureRegion.get(gameScene.randomNumberGenerator.nextInt(3)));
+                    break;
+            }
+        }
+
+
+        platformBody = PhysicsFactory.createBoxBody(physicsWorld,platformSprite, BodyDef.BodyType.KinematicBody,PLATFORM_FIXTURE_DEFINITION);
+
+        physicsConnector = new PhysicsConnector(platformSprite,platformBody,true,false);
+
+        physicsWorld.registerPhysicsConnector(physicsConnector);
+
+
+
+
+        platformSprite.setCullingEnabled(true);
+
+        platformBody.setUserData(this);
+
+
+        if(containsObstacle){
+            //Obstacle obstacle = new Obstacle(gameScene,physicsWorld,this,gameScene.randomNumberGenerator.nextInt((int)platformSprite.getWidth()));
+            Obstacle obstacle = new Obstacle(gameScene,physicsWorld,this,(gameScene.randomNumberGenerator.nextInt(2) == 1)?30:(int)platformSprite.getWidth()-30,isFlipped);
+            obstacle.attachToScene();
+        }
+
+        if(isFlipped){
+            platformSprite.setFlippedVertical(true);
         }
     }
 

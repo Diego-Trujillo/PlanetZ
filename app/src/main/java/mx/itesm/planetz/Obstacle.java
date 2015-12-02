@@ -85,6 +85,40 @@ public class Obstacle {
     }
 
 
+    public Obstacle(BaseScene gameScene,PhysicsWorld physicsWorld,Platform platform,int offsetX, boolean isFlipped){
+        // ========== Inicializamos objetos referenciales ===========
+        this.gameScene = gameScene;
+        this.physicsWorld = physicsWorld;
+        this.resourceManager = gameScene.resourceManager;
+
+        int positionX = (int)(platform.platformSprite.getX() - platform.platformSprite.getWidth()/2 + offsetX);
+        int positionY = (int)(platform.platformSprite.getY());
+        positionY += (isFlipped)?0:platform.platformSprite.getHeight();
+
+
+        switch(platform.currentLevel){
+            case 2:
+                obstacleSprite = resourceManager.loadSprite(positionX,positionY,resourceManager.adventureLevelTwoObstaclesTextureRegion.get(gameScene.randomNumberGenerator.nextInt(3)));
+                break;
+        }
+
+        obstacleSprite.setPosition(obstacleSprite.getX(),obstacleSprite.getY() - ((isFlipped)?obstacleSprite.getHeight()/2:0));
+
+
+        obstacleBody = PhysicsFactory.createBoxBody(physicsWorld,obstacleSprite, BodyDef.BodyType.KinematicBody,OBSTACLE_FIXTURE_DEFINITION);
+
+        physicsConnector = new PhysicsConnector(obstacleSprite,obstacleBody,true,true);
+
+        physicsWorld.registerPhysicsConnector(physicsConnector);
+
+
+        obstacleSprite.setFlippedVertical(isFlipped);
+
+
+        //obstacleSprite.setCullingEnabled(true);
+
+        obstacleBody.setUserData(this);
+    }
     public void attachToScene(){gameScene.attachChild(obstacleSprite); }
 
 
