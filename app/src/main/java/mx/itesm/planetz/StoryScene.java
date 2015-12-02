@@ -86,7 +86,7 @@ public class StoryScene extends BaseScene {
         // los slides y el número de slides que habrá ========
         switch (currentLevel) {
             case 1:
-                maxIndex = 6;
+                maxIndex = 7;
                 pathName = "Graphics/Story/CrashCourseIntoOblivion/";
                 break;
             case 2:
@@ -202,7 +202,7 @@ public class StoryScene extends BaseScene {
                         break;
                     case NEXT_SLIDE:
                         // -- Si todavía hay un slide adelante --
-                        if(currentIndex < maxIndex - 1){
+                        if(currentIndex < maxIndex){
                             // -- Quitamos la visibilidad del slide actual --
                             storySlidesSpriteContainer.get(currentIndex++).setVisible(false);
                             // -- Ponemos la visibilidad del slide siguiente --
