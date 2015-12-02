@@ -942,7 +942,7 @@ public class MenuScene extends BaseScene{
         Sprite itesmLogo = resourceManager.loadSprite(GameManager.CAMERA_WIDTH - 350, 200,resourceManager.loadImage("gfx/menu/About/logotec.png"));
         // =============== Agregando textos "ABOUT" y "versión" ==
         aboutMenuScene.attachChild(new Text(350, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "ABOUT", vertexBufferObjectManager));
-        aboutMenuScene.attachChild(new Text(350, 200,resourceManager.fontOne,"Version 0.3",vertexBufferObjectManager));
+        aboutMenuScene.attachChild(new Text(350, 200,resourceManager.fontOne,"Version 0.9.3.21",vertexBufferObjectManager));
         aboutMenuScene.attachChild(itesmLogo);
 
         // =============== Ubicando los botones =================

@@ -202,13 +202,13 @@ public class AdventureLevelTwoScene extends BaseScene{
 
         // ============== Crear los SpritesRectángulos ===============
         // -- Pared Izquierda
-        final Rectangle leftWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2,0,GameManager.CAMERA_WIDTH + 400,10, vertexBufferObjectManager);
+        final Rectangle leftWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2,-500,GameManager.CAMERA_WIDTH + 400,10, vertexBufferObjectManager);
         // -- "Pared de la muerte", definimos un espacio para que los meteoritos que no impactan al jugador se borren del juego
         final Rectangle wallOfDeathRectangle = new Rectangle(-50,GameManager.CAMERA_HEIGHT/2,10,GameManager.CAMERA_HEIGHT*2,vertexBufferObjectManager);
 
         // -- Colorear ambos rectángulos de blanco
-        leftWallRectangle.setColor(1f, 1f, 0f);
-        wallOfDeathRectangle.setColor(1f,0.5f,0.25f);
+        leftWallRectangle.setColor(1f, 1f, 0f,0);
+        wallOfDeathRectangle.setColor(1f,0.5f,0.25f,0);
 
 
         // ============== Crear los cuerpos de física ===============
@@ -216,7 +216,7 @@ public class AdventureLevelTwoScene extends BaseScene{
         wallOfDeathBody =  PhysicsFactory.createBoxBody(physicsWorld,wallOfDeathRectangle, BodyDef.BodyType.DynamicBody,WOD_FIXTURE_DEFINITION);
 
         // ============== Registrar ID de cuerpo ====================
-        leftWallBody.setUserData("wall");
+        leftWallBody.setUserData("boundary");
         wallOfDeathBody.setUserData("wod");
 
         // ============== Conectar cuerpos de física a sprites ======
@@ -231,7 +231,7 @@ public class AdventureLevelTwoScene extends BaseScene{
         leftWallRectangle.registerUpdateHandler(new IUpdateHandler() {
             @Override
             public void onUpdate(float pSecondsElapsed) {
-                leftWallBody.setTransform(player.astronautBody.getPosition().x, 0, 0);
+                leftWallBody.setTransform(player.astronautBody.getPosition().x, -25, 0);
             }
 
             @Override
@@ -327,6 +327,14 @@ public class AdventureLevelTwoScene extends BaseScene{
                     if(bodyA.getUserData() instanceof Platform){toBeDeleted_Platform.add((Platform)(bodyA.getUserData()));}
                     else if(bodyA.getUserData() instanceof Obstacle){toBeDeleted_Obstacle.add((Obstacle)(bodyA.getUserData()));}
                     System.out.println("Wall of death takes yet another victim >:) B");
+                }
+                else if((bodyA.getUserData() instanceof Astronaut && bodyB.getUserData().equals("boundary")) || (bodyB.getUserData() instanceof Astronaut && bodyA.getUserData().equals("boundary"))){
+                    // -- Liberamos la escena actual
+                    sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_2);
+                    // -- Creamos la escena del primer nivel
+                    sceneManager.createScene(SceneType.YOU_LOSE);
+                    // -- Corremos la escena del primer nivel
+                    sceneManager.setScene(SceneType.YOU_LOSE);
                 }
             }
 
