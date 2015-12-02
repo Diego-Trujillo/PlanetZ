@@ -84,7 +84,7 @@ public class Astronaut {
         astronautTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(astronautBitmapTextureAtlas,gameScene.gameManager,"AstronautSprites.png",0,0,8,3);
 
         //--R0M4N
-        romanBitmapTextureAtlas = new BitmapTextureAtlas(gameScene.resourceManager.textureManager,230,200, TextureOptions.BILINEAR);
+        romanBitmapTextureAtlas = new BitmapTextureAtlas(gameScene.resourceManager.textureManager,106,100, TextureOptions.BILINEAR);
         romanTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(romanBitmapTextureAtlas,gameScene.gameManager,"R0M4N.png",0,0,3,1);
 
         astronautBitmapTextureAtlas.load();
