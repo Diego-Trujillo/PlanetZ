@@ -824,17 +824,19 @@ public class ResourceManager {
         adventureLevelThreeBackgroundRocks3TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreeBackgroundRocks3TextureAtlas,gameManager,"fondofrente.png",0,0);;
 
         // ----------- Plataformas
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/NewtonRedefined/Platforms/");
         adventureLevelThreePlatformsBigTextureRegion = new ArrayList<>();
         adventureLevelThreePlatformsSmallTextureRegion = new ArrayList<>();
 
+
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/NewtonRedefined/Platforms/Small/");
         adventureLevelThreePlatformsSmallTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreePlatformsSmallTextureAtlas,gameManager,"1.png",0,0));
         adventureLevelThreePlatformsSmallTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreePlatformsSmallTextureAtlas,gameManager,"2.png",0,39));
         adventureLevelThreePlatformsSmallTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreePlatformsSmallTextureAtlas,gameManager,"3.png",0,68));
 
-        adventureLevelThreePlatformsBigTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreePlatformsBigTextureAtlas,gameManager,"4.png",0,0));
-        adventureLevelThreePlatformsBigTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreePlatformsBigTextureAtlas,gameManager,"5.png",0,26));
-        adventureLevelThreePlatformsBigTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreePlatformsBigTextureAtlas,gameManager,"6.png",0,52));
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/NewtonRedefined/Platforms/Big/");
+        adventureLevelThreePlatformsBigTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreePlatformsBigTextureAtlas,gameManager,"1.png",0,0));
+        adventureLevelThreePlatformsBigTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreePlatformsBigTextureAtlas,gameManager,"2.png",0,26));
+        adventureLevelThreePlatformsBigTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreePlatformsBigTextureAtlas,gameManager,"3.png",0,52));
         /* ------------ Obstáculos
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/IntoTheWilderness/Enemies/");
         adventureLevelTwoObstaclesTextureRegion = new ArrayList<>();
