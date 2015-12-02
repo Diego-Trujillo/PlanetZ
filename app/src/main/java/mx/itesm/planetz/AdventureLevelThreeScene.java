@@ -146,11 +146,11 @@ public class AdventureLevelThreeScene extends BaseScene {
                 // -- Para cada plataforma en la lista a ser borrado, llama el método para borrarse
                 for(Platform platform : toBeDeleted_Platform){platform.destroy(); }
                 // -- Para cada obstáculo en la lista a ser borrado, llama el método para borrarse
-                //for(Obstacle obstacle : toBeDeleted_Obstacle){obstacle.destroy();}
+                for(Obstacle obstacle : toBeDeleted_Obstacle){obstacle.destroy();}
 
                 // -- Limpia la lista de elementos a ser borrados
                 toBeDeleted_Platform.clear();
-                //toBeDeleted_Obstacle.clear();
+                toBeDeleted_Obstacle.clear();
 
                 // -- Llamamos al recolector de basura
                 System.gc();
@@ -189,37 +189,53 @@ public class AdventureLevelThreeScene extends BaseScene {
     private void createWalls(){
 
         // ============== Crear los SpritesRectángulos ===============
+
+        // MODIFICAR AQUÍ LOS BOUNDARIES DEL NIVEL
         // -- Pared Izquierda
-        final Rectangle leftWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2,0,GameManager.CAMERA_WIDTH + 400,10, vertexBufferObjectManager);
+
+        final int boundarySuperior = (300);
+        final int boundaryInferior = -100;
+
+
+
+
+        final Rectangle leftWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2,boundaryInferior,GameManager.CAMERA_WIDTH + 400,10, vertexBufferObjectManager);
+        final Rectangle rightWallRectangle = new Rectangle(GameManager.CAMERA_WIDTH/2,boundarySuperior,GameManager.CAMERA_WIDTH + 400,10, vertexBufferObjectManager);
         // -- "Pared de la muerte", definimos un espacio para que los meteoritos que no impactan al jugador se borren del juego
         final Rectangle wallOfDeathRectangle = new Rectangle(-50,GameManager.CAMERA_HEIGHT/2,10,GameManager.CAMERA_HEIGHT*2,vertexBufferObjectManager);
 
         // -- Colorear ambos rectángulos de blanco
         leftWallRectangle.setColor(1f, 1f, 0f);
+        rightWallRectangle.setColor(1f, 1f, 0f);
         wallOfDeathRectangle.setColor(1f,0.5f,0.25f);
 
 
         // ============== Crear los cuerpos de física ===============
         leftWallBody = PhysicsFactory.createBoxBody(physicsWorld, leftWallRectangle, BodyDef.BodyType.KinematicBody, WALL_FIXTURE_DEFINITION);
+        rightWallBody = PhysicsFactory.createBoxBody(physicsWorld, rightWallRectangle, BodyDef.BodyType.KinematicBody, WALL_FIXTURE_DEFINITION);
         wallOfDeathBody =  PhysicsFactory.createBoxBody(physicsWorld,wallOfDeathRectangle, BodyDef.BodyType.DynamicBody,WOD_FIXTURE_DEFINITION);
 
         // ============== Registrar ID de cuerpo ====================
-        leftWallBody.setUserData("wall");
+        leftWallBody.setUserData("boundary");
+        rightWallBody.setUserData("boundary");
         wallOfDeathBody.setUserData("wod");
 
         // ============== Conectar cuerpos de física a sprites ======
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(leftWallRectangle, leftWallBody,true,true));
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(rightWallRectangle, rightWallBody,true,true));
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(wallOfDeathRectangle, wallOfDeathBody, true, true));
 
         // ============== Adjuntar las paredes al mundo =============
         this.attachChild(leftWallRectangle);
+        this.attachChild(rightWallRectangle);
         this.attachChild(wallOfDeathRectangle);
 
 
         leftWallRectangle.registerUpdateHandler(new IUpdateHandler() {
             @Override
             public void onUpdate(float pSecondsElapsed) {
-                leftWallBody.setTransform(player.astronautBody.getPosition().x,0,0);
+                leftWallBody.setTransform(player.astronautBody.getPosition().x, boundaryInferior, 0);
+                rightWallBody.setTransform(player.astronautBody.getPosition().x, boundarySuperior, 0);
             }
 
             @Override
@@ -227,6 +243,8 @@ public class AdventureLevelThreeScene extends BaseScene {
 
             }
         });
+
+
 
 
         wallOfDeathRectangle.registerUpdateHandler(new IUpdateHandler() {
@@ -324,7 +342,7 @@ public class AdventureLevelThreeScene extends BaseScene {
                 }
                 else if((bodyA.getUserData() instanceof Astronaut && bodyB.getUserData().equals("boundary")) || (bodyB.getUserData() instanceof Astronaut && bodyA.getUserData().equals("boundary"))){
                     // -- Liberamos la escena actual
-                    sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_2);
+                    sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_3);
                     // -- Creamos la escena del primer nivel
                     sceneManager.createScene(SceneType.YOU_LOSE);
                     // -- Corremos la escena del primer nivel
@@ -332,7 +350,7 @@ public class AdventureLevelThreeScene extends BaseScene {
                 }
                 else if((bodyA.getUserData() instanceof Astronaut && bodyB.getUserData() instanceof Goal) || (bodyB.getUserData() instanceof Astronaut && bodyA.getUserData() instanceof Goal)){
                     // -- Liberamos la escena actual
-                    sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_2);
+                    sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_3);
                     // -- Creamos la escena del primer nivel
                     sceneManager.createScene(SceneType.TEMP);
                     // -- Corremos la escena del primer nivel

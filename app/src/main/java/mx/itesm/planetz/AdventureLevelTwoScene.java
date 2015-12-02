@@ -343,6 +343,7 @@ public class AdventureLevelTwoScene extends BaseScene{
                     sceneManager.createScene(SceneType.TEMP);
                     // -- Corremos la escena del primer nivel
                     sceneManager.setScene(SceneType.TEMP);
+                    sessionManager.currentLevel = 3;
                 }
                 else if((bodyA.getUserData() instanceof Astronaut && bodyB.getUserData() instanceof Gem) || (bodyB.getUserData() instanceof Astronaut && bodyA.getUserData() instanceof Gem)){
                     if(bodyA.getUserData() instanceof Gem){
