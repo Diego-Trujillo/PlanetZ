@@ -144,12 +144,12 @@ public class Platform {
 
         platformBody.setUserData(this);
 
-
+        /*
         if(containsObstacle){
             //Obstacle obstacle = new Obstacle(gameScene,physicsWorld,this,gameScene.randomNumberGenerator.nextInt((int)platformSprite.getWidth()));
             Obstacle obstacle = new Obstacle(gameScene,physicsWorld,this,(gameScene.randomNumberGenerator.nextInt(2) == 1)?30:(int)platformSprite.getWidth()-30,isFlipped);
             obstacle.attachToScene();
-        }
+        }*/
 
         if(isFlipped){
             platformSprite.setFlippedVertical(true);
