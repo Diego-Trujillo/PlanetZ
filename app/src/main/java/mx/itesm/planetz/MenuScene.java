@@ -942,7 +942,7 @@ public class MenuScene extends BaseScene{
         Sprite itesmLogo = resourceManager.loadSprite(GameManager.CAMERA_WIDTH - 350, 200,resourceManager.loadImage("gfx/menu/About/logotec.png"));
         // =============== Agregando textos "ABOUT" y "versión" ==
         aboutMenuScene.attachChild(new Text(350, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "ABOUT", vertexBufferObjectManager));
-        aboutMenuScene.attachChild(new Text(350, 200,resourceManager.fontOne,"Version 0.9.3.21",vertexBufferObjectManager));
+        aboutMenuScene.attachChild(new Text(350, 200,resourceManager.fontOne,"Version 0.9",vertexBufferObjectManager));
         aboutMenuScene.attachChild(itesmLogo);
 
         // =============== Ubicando los botones =================
@@ -1023,10 +1023,12 @@ public class MenuScene extends BaseScene{
                     case ABOUT_DANNI:
                         // -- Llamar a la función para mostrar el ID de DANIELA
                         setAboutID(aboutMenuDanniIDSprite, true);
+                        gameManager.toastOnUiThread("'Reality is for people that lack imagination >:)'",Toast.LENGTH_LONG);
                         break;
                     case ABOUT_REBE:
                         // -- Llamar a la función para mostrar el ID de REBECCA
                         setAboutID(aboutMenuRebeIDSprite, true);
+                        gameManager.toastOnUiThread("'Mmmmmmm.'",Toast.LENGTH_LONG);
                         break;
                     case ABOUT_BRIAN:
                         // -- Llamar a la función para mostrar el ID de BRIAN

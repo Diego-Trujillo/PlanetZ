@@ -336,29 +336,37 @@ public class AdventureLevelTwoScene extends BaseScene{
                     // -- Corremos la escena del primer nivel
                     sceneManager.setScene(SceneType.YOU_LOSE);
                 }
-            }
-
-            @Override
-            public void endContact(Contact contact) {
-
-            }
-
-            @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {
-
-            }
-
-            @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {
-
-            }
-        };
-
-        return contactListener;
+                else if((bodyA.getUserData() instanceof Astronaut && bodyB.getUserData() instanceof Goal) || (bodyB.getUserData() instanceof Astronaut && bodyA.getUserData() instanceof Goal))        {
+            // -- Liberamos la escena actual
+            sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_2);
+            // -- Creamos la escena del primer nivel
+            sceneManager.createScene(SceneType.TEMP);
+            // -- Corremos la escena del primer nivel
+            sceneManager.setScene(SceneType.TEMP);
+        }
     }
 
+    @Override
+    public void endContact(Contact contact) {
 
-    public void spawnPlatforms(){
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+
+    }
+};
+
+return contactListener;
+        }
+
+
+public void spawnPlatforms(){
         toBeAdded_Platform = new ArrayList<>();
         // Agregamos las plataformas
         int i = 900;
@@ -400,6 +408,9 @@ public class AdventureLevelTwoScene extends BaseScene{
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),false));
+
+        Goal levelGoal = new Goal(this,physicsWorld,i*(j-1),400);
+        levelGoal.attachToScene();
 
 
 
