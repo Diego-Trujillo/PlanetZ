@@ -375,6 +375,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                     sessionManager.gemsUnlocked[1][1]= true;
                     sessionManager.gemsUnlocked[1][2]= (playerLives >= 2);
                     sessionManager.gemsUnlocked[1][3]= (playerLives >= 3);
+                    //sessionManager.currentLevel = 2;
                     sessionManager.writeChanges();
 
                 }

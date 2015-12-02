@@ -137,7 +137,7 @@ public class Astronaut {
 
     public void jump() {
         // CAMBIAR ESTO
-        if(jumpCounter++ < 5) {
+        if(jumpCounter++ < 2) {
             astronautBody.setLinearVelocity(0, 37.5f);
 
             astronautSprite.stopAnimation();

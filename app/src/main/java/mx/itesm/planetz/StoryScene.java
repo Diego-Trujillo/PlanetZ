@@ -95,7 +95,11 @@ public class StoryScene extends BaseScene {
                 break;
             case 3:
                 pathName = "Graphics/Story/BraveNewWorld/NewtonRedefined/";
-                maxIndex = 0;
+                maxIndex = 4;
+                break;
+            case 4:
+                pathName = "Graphics/Story/TheEnd/";
+                maxIndex = 3;
                 break;
             default:
                 // -- Su ocurre un error --
@@ -230,6 +234,13 @@ public class StoryScene extends BaseScene {
                                     sceneManager.createScene(SceneType.ADVENTURE_LEVEL_3);
                                     sceneManager.setScene(SceneType.ADVENTURE_LEVEL_3);
                                     break;
+                                case 4:
+                                    sessionManager.currentLevel = 1;
+                                    sceneManager.destroyScene(SceneType.STORY);
+                                    sceneManager.createScene(SceneType.MENU);
+                                    sceneManager.setScene(SceneType.MENU);
+
+                                    break;
                             }
                         }
                         break;
@@ -252,6 +263,11 @@ public class StoryScene extends BaseScene {
                                 sceneManager.destroyScene(SceneType.STORY);
                                 sceneManager.createScene(SceneType.ADVENTURE_LEVEL_3);
                                 sceneManager.setScene(SceneType.ADVENTURE_LEVEL_3);
+                                break;
+                            case 4:
+                                sceneManager.destroyScene(SceneType.STORY);
+                                sceneManager.createScene(SceneType.MENU);
+                                sceneManager.setScene(SceneType.MENU);
                                 break;
                         }
                         break;
@@ -286,6 +302,7 @@ public class StoryScene extends BaseScene {
     // ===========================================================
     @Override
     public void destroyScene() {
+        containerMenu.detachChildren();
         // ============== Liberamos las imágnes ==================
         for(Sprite sp : storySlidesSpriteContainer){
             sp.detachSelf();

@@ -343,7 +343,7 @@ public class AdventureLevelTwoScene extends BaseScene{
                     sceneManager.createScene(SceneType.TEMP);
                     // -- Corremos la escena del primer nivel
                     sceneManager.setScene(SceneType.TEMP);
-                    sessionManager.currentLevel = 3;
+                    //sessionManager.currentLevel = 3;
                 }
                 else if((bodyA.getUserData() instanceof Astronaut && bodyB.getUserData() instanceof Gem) || (bodyB.getUserData() instanceof Astronaut && bodyA.getUserData() instanceof Gem)){
                     if(bodyA.getUserData() instanceof Gem){
@@ -398,7 +398,7 @@ public void spawnPlatforms(){
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(800),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(600),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(200),false));
-        Gem gem21 = new Gem(this,physicsWorld,2,2,i*j,470);
+        Gem gem21 = new Gem(this,physicsWorld,2,2,i*j,800);
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(200),false));
@@ -415,16 +415,16 @@ public void spawnPlatforms(){
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(600),true));
-        Gem gem31 = new Gem(this,physicsWorld,2,3,i*j,870);
+        Gem gem31 = new Gem(this,physicsWorld,2,3,i*j+2*j,1000);
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(800),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld, 2, Platform.BIG, i * j++, (400), false));
 
-        Goal levelGoal = new Goal(this,physicsWorld,i*(j-1),450);
+        Goal levelGoal = new Goal(this,physicsWorld,i*(j-1),460);
         levelGoal.attachToScene();
 
-        Gem gem13 = new Gem(this,physicsWorld,1,3,2000,270);
+        Gem gem13 = new Gem(this,physicsWorld,2,1,2700,550);
         gem13.attachToScene();
         gem21.attachToScene();
         gem31.attachToScene();

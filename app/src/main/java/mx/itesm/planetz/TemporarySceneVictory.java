@@ -98,32 +98,54 @@ public class TemporarySceneVictory extends BaseScene {
                     case 1:
                         switch (sessionManager.currentLevel) {
                             case 1:
+                                sceneManager.destroyScene(SceneType.TEMP);
                                 // -- Creamos la escena del primer nivel
                                 sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
                                 // -- Corremos la escena del primer nivel
                                 sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
                                 // -- Liberamos la escena actual
-                                sceneManager.destroyScene(SceneType.TEMP);
+
                                 break;
                             case 2:
+                                sceneManager.destroyScene(SceneType.TEMP);
                                 sceneManager.createScene(SceneType.ADVENTURE_LEVEL_2);
                                 sceneManager.setScene(SceneType.ADVENTURE_LEVEL_2);
-                                sceneManager.destroyScene(SceneType.TEMP);
+
                                 break;
                             case 3:
+                                sceneManager.destroyScene(SceneType.TEMP);
                                 sceneManager.createScene(SceneType.ADVENTURE_LEVEL_3);
                                 sceneManager.setScene(SceneType.ADVENTURE_LEVEL_3);
-                                sceneManager.destroyScene(SceneType.TEMP);
+
                                 break;
                         }
                         break;
                     case 2:
+
+                        sceneManager.destroyScene(SceneType.TEMP);
                         // -- Creamos la escena del primer nivel
                         sceneManager.createScene(SceneType.MENU);
                         // -- Corremos la escena del primer nivel
                         sceneManager.setScene(SceneType.MENU);
                         // -- Liberamos la escena actual
-                        sceneManager.destroyScene(SceneType.TEMP);
+
+
+                        //Cambiamos el curent level al siguiente
+                        switch(sessionManager.currentLevel){
+                            case 1:
+                                sessionManager.currentLevel=2;
+                                sessionManager.writeChanges();
+                                break;
+                            case 2:
+                                sessionManager.currentLevel=3;
+                                sessionManager.writeChanges();
+                                break;
+                            case 3:
+                                sessionManager.currentLevel=4;
+                                sessionManager.writeChanges();
+                                break;
+
+                        }// -- Creamos el story line de nuevo
                         break;
                     case 3:
                         //Cambiamos el curent level al siguiente
@@ -133,18 +155,25 @@ public class TemporarySceneVictory extends BaseScene {
                                 sessionManager.writeChanges();
                                 break;
                             case 2:
-                                sessionManager.currentLevel=2;
+                                sessionManager.currentLevel=3;
                                 sessionManager.writeChanges();
                                 break;
+                            case 3:
+                                sessionManager.currentLevel=4;
+                                sessionManager.writeChanges();
+                                break;
+
                         }// -- Creamos el story line de nuevo
+                        sceneManager.destroyScene(SceneType.TEMP);
                         sceneManager.createScene(SceneType.STORY);
                         // -- Corremos la escena del primer nivel
                         sceneManager.setScene(SceneType.STORY);
                         // -- Liberamos la escena actual
-                        sceneManager.destroyScene(SceneType.TEMP);
+
                         break;
 
                 }
+
                 return true;
             }
         });

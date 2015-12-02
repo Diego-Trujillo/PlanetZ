@@ -423,9 +423,9 @@ public class MenuScene extends BaseScene{
         // -- Botón para regresar al menú principal
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,resourceManager.menuSubmenuBackButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
         // -- Botón para abrir las opciones de Adventure
-        IMenuItem adventureMode = new ScaleMenuItemDecorator(new SpriteMenuItem(PLAY_ADVENTURE_MODE,resourceManager.loadImage("Graphics/Menu/Play/AdventureModeButton.png") ,vertexBufferObjectManager),1.2f,1f); /*******/
+        IMenuItem adventureMode = new ScaleMenuItemDecorator(new SpriteMenuItem(PLAY_ADVENTURE_MODE,resourceManager.loadImage("Graphics/Menu/Play/AdventureModeButton.png") ,vertexBufferObjectManager),0.8f,1f); /*******/
         // -- Botón para abrir las opciones de Adventure
-        IMenuItem infinityMode = new ScaleMenuItemDecorator(new SpriteMenuItem(PLAY_INFINITE_MODE,resourceManager.loadImage("Graphics/Menu/Play/InfinityModeButtonLocked.png"),vertexBufferObjectManager),0.8f,1f);
+        IMenuItem infinityMode = new ScaleMenuItemDecorator(new SpriteMenuItem(PLAY_INFINITE_MODE,resourceManager.loadImage("Graphics/Menu/Play/InfinityModeButtonLocked.png"),vertexBufferObjectManager),0.9f,1f);
 
 
         // =============== Agregando los botones =================
@@ -465,6 +465,7 @@ public class MenuScene extends BaseScene{
                         sceneManager.setScene(SceneType.STORY);
                         break;
                     case PLAY_INFINITE_MODE:
+                        /*
                         // -- Liberamos la escena actual
                         sceneManager.destroyScene(SceneType.MENU);
                         // -- Creamos la escena del primer nivel
@@ -472,6 +473,8 @@ public class MenuScene extends BaseScene{
                         // -- Corremos la escena del primer nivel
                         sceneManager.setScene(SceneType.ADVENTURE_LEVEL_3);
                         break;
+                        */
+                        gameManager.toastOnUiThread("You can't play this yet!");
 
                 }
                 return true;
@@ -939,7 +942,7 @@ public class MenuScene extends BaseScene{
         // -- Deshabilitar el fondo
         aboutMenuScene.setBackgroundEnabled(false);
 
-        Sprite itesmLogo = resourceManager.loadSprite(GameManager.CAMERA_WIDTH - 350, 200,resourceManager.loadImage("gfx/menu/About/logotec.png"));
+        Sprite itesmLogo = resourceManager.loadSprite(GameManager.CAMERA_WIDTH - 350, 200,resourceManager.loadImage("Graphics/Menu/About/ITESMLogo.png"));
         // =============== Agregando textos "ABOUT" y "versión" ==
         aboutMenuScene.attachChild(new Text(350, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "ABOUT", vertexBufferObjectManager));
         aboutMenuScene.attachChild(new Text(350, 200,resourceManager.fontOne,"Version 0.9",vertexBufferObjectManager));
@@ -1018,27 +1021,27 @@ public class MenuScene extends BaseScene{
                     case ABOUT_ANDY:
                         // -- Llamar a la función para mostrar el ID de ANDY
                         setAboutID(aboutMenuAndyIDSprite, true);
-                        gameManager.toastOnUiThread("Bitch I'm fabulous!",Toast.LENGTH_LONG);
+                        gameManager.toastOnUiThread("Sup, I'm fabulous!",Toast.LENGTH_LONG);
                         break;
                     case ABOUT_DANNI:
                         // -- Llamar a la función para mostrar el ID de DANIELA
                         setAboutID(aboutMenuDanniIDSprite, true);
-                        gameManager.toastOnUiThread("'Reality is for people that lack imagination >:)'",Toast.LENGTH_LONG);
+                        gameManager.toastOnUiThread("Reality is for people that lack imagination >:)",Toast.LENGTH_LONG);
                         break;
                     case ABOUT_REBE:
                         // -- Llamar a la función para mostrar el ID de REBECCA
                         setAboutID(aboutMenuRebeIDSprite, true);
-                        gameManager.toastOnUiThread("'Mmmmmmm.'",Toast.LENGTH_LONG);
+                        gameManager.toastOnUiThread("Mmmmmmm.",Toast.LENGTH_LONG);
                         break;
                     case ABOUT_BRIAN:
                         // -- Llamar a la función para mostrar el ID de BRIAN
                         setAboutID(aboutMenuBrianIDSprite, true);
-                        gameManager.toastOnUiThread("'It's not about how much time you have, it's how you use it.'",Toast.LENGTH_LONG);
+                        gameManager.toastOnUiThread("It's not about how much time you have, it's how you use it.",Toast.LENGTH_LONG);
                         break;
                     case ABOUT_DIEGO:
                         // -- Llamar a la función para mostrar el ID de DIEGO
                         setAboutID(aboutMenuDiegoIDSprite, true);
-                        gameManager.toastOnUiThread("'Don't do it, compa.' - in response to something.",Toast.LENGTH_LONG);
+                        gameManager.toastOnUiThread("'Don't do it, compa.' - in response to Licitaciones.",Toast.LENGTH_LONG);
                         break;
                     case SUBMENU_BACK:
                         // -- Regresar al menú principal
