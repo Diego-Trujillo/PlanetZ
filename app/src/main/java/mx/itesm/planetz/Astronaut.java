@@ -59,7 +59,7 @@ public class Astronaut {
     // ===========================================================
     public Body astronautBody;
     private final FixtureDef ASTRONAUT_FIXTURE_DEFINITION = PhysicsFactory.createFixtureDef(1000.f,0.1f,0.5f);
-    //private final FixtureDef ASTRONAUT_FIXTURE_DEFINITION2 = PhysicsFactory.createFixtureDef(1.f,0.1f,0.5f);
+    private final FixtureDef ASTRONAUT_FIXTURE_DEFINITION2 = PhysicsFactory.createFixtureDef(1.f,0.1f,0.5f);
 
 
     // ===========================================================
@@ -100,8 +100,7 @@ public class Astronaut {
 
 
         romanSprite.setPosition(-50,170);
-
-        astronautBody = PhysicsFactory.createBoxBody(physicsWorld,astronautSprite, BodyDef.BodyType.DynamicBody,ASTRONAUT_FIXTURE_DEFINITION);
+        astronautBody = PhysicsFactory.createBoxBody(physicsWorld,astronautSprite, BodyDef.BodyType.DynamicBody,(gameScene.sessionManager.currentLevel == 2)?ASTRONAUT_FIXTURE_DEFINITION:ASTRONAUT_FIXTURE_DEFINITION2);
 
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(astronautSprite, astronautBody, true, true));
         astronautBody.setFixedRotation(true);

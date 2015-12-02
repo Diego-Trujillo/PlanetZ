@@ -398,7 +398,7 @@ public void spawnPlatforms(){
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(800),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(600),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(200),false));
-        Gem gem21 = new Gem(this,physicsWorld,2,2,i*j,800);
+        Gem gem21 = new Gem(this,physicsWorld,2,2,i*j,700);
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(200),false));
@@ -410,7 +410,6 @@ public void spawnPlatforms(){
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(200),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(600),true));
-
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(200),false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,2,Platform.BIG,i*j++,(400),false));
