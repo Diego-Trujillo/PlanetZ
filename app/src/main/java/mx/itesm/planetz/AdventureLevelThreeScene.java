@@ -19,6 +19,10 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.region.ITextureRegion;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -114,6 +118,7 @@ public class AdventureLevelThreeScene extends BaseScene {
     @Override
     public void createScene() {
 
+
         backgroundSkySprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelThreeBackgroundSkyTextureRegion);
         backgroundRocks1Sprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelThreeBackgroundRocks1TextureRegion);
         backgroundRocks2Sprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelThreeBackgroundRocks2TextureRegion);
@@ -162,6 +167,7 @@ public class AdventureLevelThreeScene extends BaseScene {
 
         createAstronaut();
         createWalls();
+
 
 
         rand = new Random();
@@ -264,7 +270,7 @@ public class AdventureLevelThreeScene extends BaseScene {
                 //System.out.println("Gravity: " + GRAVITY_Y);
         player.mirrorAstronaut(isMirrored);
         GRAVITY_Y = -GRAVITY_Y;
-        physicsWorld.setGravity(new Vector2(GRAVITY_X,GRAVITY_Y));
+        physicsWorld.setGravity(new Vector2(GRAVITY_X, GRAVITY_Y));
 
     }
 

@@ -21,6 +21,7 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegionFactory;
 
@@ -47,6 +48,11 @@ public class Astronaut {
     private ITiledTextureRegion astronautTextureRegion;
     public AnimatedSprite astronautSprite;
     private Entity objectOfDesire;
+
+    //-- Roman
+    private BitmapTextureAtlas romanBitmapTextureAtlas;
+    private ITiledTextureRegion romanTextureRegion;
+    public AnimatedSprite romanSprite;
 
     // ===========================================================
     //                 Elementos de Física
@@ -77,14 +83,23 @@ public class Astronaut {
         astronautBitmapTextureAtlas = new BitmapTextureAtlas(gameScene.resourceManager.textureManager,688,387, TextureOptions.BILINEAR);
         astronautTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(astronautBitmapTextureAtlas,gameScene.gameManager,"AstronautSprites.png",0,0,8,3);
 
+        //--R0M4N
+        romanBitmapTextureAtlas = new BitmapTextureAtlas(gameScene.resourceManager.textureManager,230,200, TextureOptions.BILINEAR);
+        romanTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(romanBitmapTextureAtlas,gameScene.gameManager,"R0M4N.png",0,0,3,1);
+
         astronautBitmapTextureAtlas.load();
         astronautSprite = new AnimatedSprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT,astronautTextureRegion,gameScene.vertexBufferObjectManager);
 
+        romanBitmapTextureAtlas.load();
+        romanSprite = new AnimatedSprite(GameManager.CAMERA_WIDTH/2, GameManager.CAMERA_HEIGHT,romanTextureRegion,gameScene.vertexBufferObjectManager);
+
         objectOfDesire = new Entity();
         astronautSprite.attachChild(objectOfDesire);
-        objectOfDesire.setPosition(300, 150);
+        astronautSprite.attachChild(romanSprite);
+        objectOfDesire.setPosition(500, 150);
 
 
+        romanSprite.setPosition(-50,170);
 
         astronautBody = PhysicsFactory.createBoxBody(physicsWorld,astronautSprite, BodyDef.BodyType.DynamicBody,ASTRONAUT_FIXTURE_DEFINITION);
 
@@ -101,6 +116,7 @@ public class Astronaut {
         gameScene.attachChild(astronautSprite);
 
         astronautSprite.animate(walkingAnimationIntervals, 0, 7, true);
+        romanSprite.animate(250);
 
         gameScene.camera.setChaseEntity(objectOfDesire);
 
@@ -131,6 +147,7 @@ public class Astronaut {
 
     public void mirrorAstronaut(boolean isMirrored){
         astronautSprite.setFlippedVertical(isMirrored);
+        romanSprite.setFlippedVertical(isMirrored);
     }
 
 
