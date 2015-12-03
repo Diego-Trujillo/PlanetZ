@@ -487,14 +487,14 @@ public class MenuScene extends BaseScene{
                         break;
                     case PLAY_INFINITE_MODE:
 
-                        sessionManager.infiniteModeActivated = true;
+
 
                         if(sessionManager.infiniteModeUnlocked==false){
                             gameManager.toastOnUiThread("You can't play this yet!");
 
                         }
                         else{
-
+                            sessionManager.infiniteModeActivated = true;
                             // -- Cambiar al submenú InfiniteMode
                             setChildScene(infiniteModeMenuScene);
                             // -- Poner el Overlay

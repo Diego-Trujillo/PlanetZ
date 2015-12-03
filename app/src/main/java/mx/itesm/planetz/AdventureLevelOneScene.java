@@ -273,7 +273,9 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     // ===========================================================
     @Override
     public void loadMFX() {
-        //resourceManager.setMusic("Menu.ogg");
+        resourceManager.setMusic("Level1.ogg");
+        resourceManager.updateAudioVolume();
+        resourceManager.backgroundMusic.play();
     }
     // ===========================================================
     //                      Cargar sonidos
