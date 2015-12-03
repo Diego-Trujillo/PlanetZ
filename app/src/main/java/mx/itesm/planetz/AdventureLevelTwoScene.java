@@ -1,5 +1,8 @@
 package mx.itesm.planetz;
 
+import android.content.Context;
+import android.os.Vibrator;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -84,7 +87,7 @@ public class AdventureLevelTwoScene extends BaseScene{
     private ArrayList<Platform> toBeDeleted_Platform;
 
     private ArrayList<Platform> toBeAdded_Platform;
-
+    private Vibrator mVibrator;
     Random rand;
     private int i= 1;
 
@@ -141,6 +144,7 @@ public class AdventureLevelTwoScene extends BaseScene{
 
     @Override
     public void createScene() {
+        mVibrator = (Vibrator) gameManager.getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
 
         backgroundSkySprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelTwoBackgroundSkyTextureRegion);
         backgroundRocks1Sprite = resourceManager.loadSprite(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2,resourceManager.adventureLevelTwoBackgroundRocks1TextureRegion);
@@ -307,6 +311,7 @@ public class AdventureLevelTwoScene extends BaseScene{
                 else if((bodyA.getUserData() instanceof Astronaut && bodyB.getUserData() instanceof Obstacle) || (bodyB.getUserData() instanceof Astronaut && bodyA.getUserData() instanceof Obstacle)){
 
                     playerLives--;
+                    mVibrator.vibrate(300);
                     sceneHUD.updateLives(playerLives);
 
                     if(playerLives == 0){
