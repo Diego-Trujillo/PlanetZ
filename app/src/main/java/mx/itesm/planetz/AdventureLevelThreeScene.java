@@ -210,8 +210,8 @@ public class AdventureLevelThreeScene extends BaseScene {
         // MODIFICAR AQUÍ LOS BOUNDARIES DEL NIVEL
         // -- Pared Izquierda
 
-        final int boundarySuperior = (200);
-        final int boundaryInferior = -100;
+        final int boundarySuperior = 75;
+        final int boundaryInferior = -50;
 
 
 
