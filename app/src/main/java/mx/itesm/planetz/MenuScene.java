@@ -777,8 +777,8 @@ public class MenuScene extends BaseScene{
         // =============== Ubicando los botones =================
 
         newGame.setPosition(GameManager.CAMERA_WIDTH-350,GameManager.CAMERA_HEIGHT-150);
-        cancel.setPosition(GameManager.CAMERA_WIDTH/2-100,GameManager.CAMERA_HEIGHT/2+50);
-        ok.setPosition(GameManager.CAMERA_WIDTH/2+100,GameManager.CAMERA_HEIGHT/2+50);
+        cancel.setPosition(GameManager.CAMERA_WIDTH/2-100,GameManager.CAMERA_HEIGHT/2);
+        ok.setPosition(GameManager.CAMERA_WIDTH/2+100,GameManager.CAMERA_HEIGHT/2);
         backButton.setPosition(150, GameManager.CAMERA_HEIGHT - 125);
         musicDecrease.setPosition(300, GameManager.CAMERA_HEIGHT / 2 + 25);
         musicIncrease.setPosition(GameManager.CAMERA_WIDTH - 300, GameManager.CAMERA_HEIGHT / 2 + 25);
