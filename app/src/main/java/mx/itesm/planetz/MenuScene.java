@@ -367,6 +367,8 @@ public class MenuScene extends BaseScene{
                         setChildScene(playMenuScene);
                         // -- Poner el Overlay
                         menuOverlaySprite.setVisible(true);
+                        sessionManager.infiniteModeActivated = false;
+                        sessionManager.writeChanges();
                         break;
                     case MAIN_BACKPACK:
                         // -- Cambiar al submenú Backpack
@@ -1188,6 +1190,7 @@ public class MenuScene extends BaseScene{
                         sessionManager.writeChanges();
                         break;
                     case INF_LEVEL1:
+                        sessionManager.infiniteModeActivated = true;
                         // -- Liberamos la escena actual
                         sceneManager.destroyScene(SceneType.MENU);
                         // -- Creamos la escena del primer nivel
@@ -1196,6 +1199,7 @@ public class MenuScene extends BaseScene{
                         sceneManager.setScene(SceneType.ADVENTURE_LEVEL_INF_1);
                         break;
                     case INF_LEVEL2:
+                        sessionManager.infiniteModeActivated = true;
                         // -- Liberamos la escena actual
                         sceneManager.destroyScene(SceneType.MENU);
                         // -- Creamos la escena del primer nivel
@@ -1204,6 +1208,7 @@ public class MenuScene extends BaseScene{
                         sceneManager.setScene(SceneType.ADVENTURE_LEVEL_INF_2);
                         break;
                     case INF_LEVEL3:
+                        sessionManager.infiniteModeActivated =true;
                         // -- Liberamos la escena actual
                         sceneManager.destroyScene(SceneType.MENU);
                         // -- Creamos la escena del primer nivel

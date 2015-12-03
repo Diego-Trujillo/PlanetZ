@@ -153,24 +153,25 @@ public class TemporarySceneVictory extends BaseScene {
                         sceneManager.setScene(SceneType.MENU);
                         // -- Liberamos la escena actual
 
+                        if(sessionManager.infiniteModeActivated==false) {
+                            //Cambiamos el curent level al siguiente y actualizamos los desbloqueados
+                            switch (sessionManager.currentLevel) {
+                                case 1:
+                                    sessionManager.unlockedLevels = 1;
+                                    sessionManager.currentLevel = 2;
+                                    break;
+                                case 2:
+                                    sessionManager.unlockedLevels = 2;
+                                    sessionManager.currentLevel = 3;
+                                    break;
+                                case 3:
+                                    sessionManager.unlockedLevels = 3;
+                                    sessionManager.currentLevel = 4;
+                                    break;
 
-                        //Cambiamos el curent level al siguiente y actualizamos los desbloqueados
-                        switch(sessionManager.currentLevel){
-                            case 1:
-                                sessionManager.unlockedLevels=1;
-                                sessionManager.currentLevel=2;
-                                break;
-                            case 2:
-                                sessionManager.unlockedLevels=2;
-                                sessionManager.currentLevel=3;
-                                break;
-                            case 3:
-                                sessionManager.unlockedLevels=3;
-                                sessionManager.currentLevel=4;
-                                break;
-
-                        }// -- Creamos el story line de nuevo
-                        sessionManager.writeChanges();
+                            }// -- Creamos el story line de nuevo
+                            sessionManager.writeChanges();
+                        }
                         break;
                     case 3:
 
@@ -188,7 +189,6 @@ public class TemporarySceneVictory extends BaseScene {
                                 sessionManager.unlockedLevels = 3;
                                 sessionManager.currentLevel=4;
                                 break;
-
                         }
 
                         // -- Creamos el story line de nuevo
