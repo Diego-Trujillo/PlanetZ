@@ -129,7 +129,9 @@ public class AdventureLevelTwoScene extends BaseScene{
 
     @Override
     public void loadMFX() {
-
+        resourceManager.setMusic("Level2.ogg");
+        resourceManager.updateAudioVolume();
+        resourceManager.backgroundMusic.play();
     }
 
     @Override

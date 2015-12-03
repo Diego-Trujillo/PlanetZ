@@ -98,6 +98,7 @@ public class Astronaut {
         astronautSprite.attachChild(romanSprite);
         objectOfDesire.setPosition(500, 150);
 
+        gameScene.resourceManager.setSound("Level2/Jump.ogg",1);
 
         romanSprite.setPosition(-50,170);
         astronautBody = PhysicsFactory.createBoxBody(physicsWorld,astronautSprite, BodyDef.BodyType.DynamicBody,(gameScene.sessionManager.currentLevel == 2)?ASTRONAUT_FIXTURE_DEFINITION:ASTRONAUT_FIXTURE_DEFINITION2);
@@ -135,6 +136,7 @@ public class Astronaut {
     }
 
     public void jump() {
+        gameScene.resourceManager.soundOne.play();
         // CAMBIAR ESTO
         if(jumpCounter++ < 2) {
             astronautBody.setLinearVelocity(0, 37.5f);

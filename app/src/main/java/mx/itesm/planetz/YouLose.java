@@ -58,43 +58,48 @@ public class YouLose extends BaseScene {
                         switch (sessionManager.currentLevel) {
                             case 1:
                                 // -- Creamos la escena del primer nivel
+                                sceneManager.destroyScene(SceneType.YOU_LOSE);
                                 sceneManager.createScene(SceneType.ADVENTURE_LEVEL_1);
                                 // -- Corremos la escena del primer nivel
                                 sceneManager.setScene(SceneType.ADVENTURE_LEVEL_1);
                                 // -- Liberamos la escena actual
-                                sceneManager.destroyScene(SceneType.YOU_LOSE);
+
                                 break;
                             case 2:
+                                sceneManager.destroyScene(SceneType.YOU_LOSE);
                                 sceneManager.createScene(SceneType.ADVENTURE_LEVEL_2);
                                 sceneManager.setScene(SceneType.ADVENTURE_LEVEL_2);
-                                sceneManager.destroyScene(SceneType.YOU_LOSE);
                                 break;
                             case 3:
+                                sceneManager.destroyScene(SceneType.YOU_LOSE);
                                 sceneManager.createScene(SceneType.ADVENTURE_LEVEL_3);
                                 sceneManager.setScene(SceneType.ADVENTURE_LEVEL_3);
-                                sceneManager.destroyScene(SceneType.YOU_LOSE);
+
                                 break;
                         }
                     }
                     else{
                         switch (sessionManager.currentLevelInfiniteMode) {
                             case 1:
+                                sceneManager.destroyScene(SceneType.YOU_LOSE);
                                 // -- Creamos la escena del primer nivel
                                 sceneManager.createScene(SceneType.ADVENTURE_LEVEL_INF_1);
                                 // -- Corremos la escena del primer nivel
                                 sceneManager.setScene(SceneType.ADVENTURE_LEVEL_INF_1);
                                 // -- Liberamos la escena actual
-                                sceneManager.destroyScene(SceneType.YOU_LOSE);
+
                                 break;
                             case 2:
+                                sceneManager.destroyScene(SceneType.YOU_LOSE);
                                 sceneManager.createScene(SceneType.ADVENTURE_LEVEL_INF_2);
                                 sceneManager.setScene(SceneType.ADVENTURE_LEVEL_INF_2);
-                                sceneManager.destroyScene(SceneType.YOU_LOSE);
+
                                 break;
                             case 3:
+                                sceneManager.destroyScene(SceneType.YOU_LOSE);
                                 sceneManager.createScene(SceneType.ADVENTURE_LEVEL_INF_3);
                                 sceneManager.setScene(SceneType.ADVENTURE_LEVEL_INF_3);
-                                sceneManager.destroyScene(SceneType.YOU_LOSE);
+
                                 break;
                         }
                     }
