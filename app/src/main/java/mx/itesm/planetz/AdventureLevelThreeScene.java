@@ -326,23 +326,24 @@ public class AdventureLevelThreeScene extends BaseScene {
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),true,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),true,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),true,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),true,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
         a++;
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),true,false));
+        Gem gem33 = new Gem(this,physicsWorld,3,3,pa*a,100);
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),true,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),true,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),false,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(50),true,false));
@@ -381,12 +382,12 @@ public class AdventureLevelThreeScene extends BaseScene {
         e++;
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),true,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),false,true));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),true,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),true,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),false,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),true,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),false,true));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),true,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),false,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),false,true));
         e++;
@@ -400,9 +401,10 @@ public class AdventureLevelThreeScene extends BaseScene {
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),false,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),false,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),true,true));
+        Gem gem21 = new Gem(this,physicsWorld,3,2,pa*e,500);
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),false,true));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),true,true));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),false,true));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),true,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*e++,(600),false,true));
 
 
@@ -444,11 +446,9 @@ public class AdventureLevelThreeScene extends BaseScene {
         Goal levelGoal = new Goal(this,physicsWorld,pa*(a-1),100);
         levelGoal.attachToScene();
 
-        Gem gem13 = new Gem(this,physicsWorld,3,1,2000,700);
+        Gem gem13 = new Gem(this,physicsWorld,3,1,2000,300);
         gem13.attachToScene();
-        Gem gem21 = new Gem(this,physicsWorld,3,2,2000,300);
         gem21.attachToScene();
-        Gem gem33 = new Gem(this,physicsWorld,3,3,2000,300);
         gem33.attachToScene();
 
 
