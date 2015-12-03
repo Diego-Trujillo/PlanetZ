@@ -145,7 +145,6 @@ public class TemporarySceneVictory extends BaseScene {
                         }
                         break;
                     case 2:
-                        sessionManager.infiniteModeActivated = false;
                         sceneManager.destroyScene(SceneType.TEMP);
                         // -- Creamos la escena del primer nivel
                         sceneManager.createScene(SceneType.MENU);
@@ -155,23 +154,25 @@ public class TemporarySceneVictory extends BaseScene {
 
 
                         //Cambiamos el curent level al siguiente y actualizamos los desbloqueados
-                            switch(sessionManager.currentLevel){
+                        if(sessionManager.infiniteModeActivated == false) {
+                            switch (sessionManager.currentLevel) {
                                 case 1:
-                                    sessionManager.unlockedLevels=1;
-                                    sessionManager.currentLevel=2;
+                                    sessionManager.unlockedLevels = 1;
+                                    sessionManager.currentLevel = 2;
                                     break;
                                 case 2:
-                                    sessionManager.unlockedLevels=2;
-                                    sessionManager.currentLevel=3;
+                                    sessionManager.unlockedLevels = 2;
+                                    sessionManager.currentLevel = 3;
                                     break;
                                 case 3:
-                                    sessionManager.unlockedLevels=3;
-                                    sessionManager.currentLevel=4;
+                                    sessionManager.unlockedLevels = 3;
+                                    sessionManager.currentLevel = 4;
                                     break;
 
                             }// -- Creamos el story line de nuevo
 
-
+                        }
+                        sessionManager.infiniteModeActivated = false;
                         sessionManager.writeChanges();
                         break;
                     case 3:

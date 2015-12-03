@@ -99,7 +99,7 @@ public class AdventureLevelThreeScene extends BaseScene {
     public AdventureLevelThreeScene() {
         super();
         sceneType = SceneType.ADVENTURE_LEVEL_3;
-        sessionManager.currentLevel = 3;
+        if(!sessionManager.infiniteModeActivated)sessionManager.currentLevel = 3;
     }
 
     public AdventureLevelThreeScene(boolean infiniteModeActivated) {

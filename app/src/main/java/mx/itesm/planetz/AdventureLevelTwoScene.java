@@ -99,7 +99,7 @@ public class AdventureLevelTwoScene extends BaseScene{
     public AdventureLevelTwoScene() {
         super();
         sceneType = SceneType.ADVENTURE_LEVEL_2;
-        sessionManager.currentLevel = 2;
+        if(!sessionManager.infiniteModeActivated)sessionManager.currentLevel = 2;
 
     }
 
