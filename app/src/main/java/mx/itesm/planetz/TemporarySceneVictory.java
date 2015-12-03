@@ -155,7 +155,6 @@ public class TemporarySceneVictory extends BaseScene {
 
 
                         //Cambiamos el curent level al siguiente y actualizamos los desbloqueados
-                        if(sessionManager.infiniteModeActivated = false){
                             switch(sessionManager.currentLevel){
                                 case 1:
                                     sessionManager.unlockedLevels=1;
@@ -171,7 +170,7 @@ public class TemporarySceneVictory extends BaseScene {
                                     break;
 
                             }// -- Creamos el story line de nuevo
-                        }
+
 
                         sessionManager.writeChanges();
                         break;
