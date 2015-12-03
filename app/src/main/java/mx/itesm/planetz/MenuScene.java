@@ -776,7 +776,7 @@ public class MenuScene extends BaseScene{
 
         // =============== Ubicando los botones =================
 
-        newGame.setPosition(GameManager.CAMERA_WIDTH-350,GameManager.CAMERA_HEIGHT-150);
+        newGame.setPosition(GameManager.CAMERA_WIDTH-275,GameManager.CAMERA_HEIGHT-150);
         cancel.setPosition(GameManager.CAMERA_WIDTH/2-100,GameManager.CAMERA_HEIGHT/2);
         ok.setPosition(GameManager.CAMERA_WIDTH/2+100,GameManager.CAMERA_HEIGHT/2);
         backButton.setPosition(150, GameManager.CAMERA_HEIGHT - 125);
@@ -887,6 +887,7 @@ public class MenuScene extends BaseScene{
                         alert.setVisible(false);
                         cancel.setVisible(false);settingsMenuScene.unregisterTouchArea(cancel);
                         ok.setVisible(false);settingsMenuScene.unregisterTouchArea(ok);
+                        gameManager.toastOnUiThread("All progress has been erased.");
                         break;
 
 
@@ -972,7 +973,7 @@ public class MenuScene extends BaseScene{
         Sprite itesmLogo = resourceManager.loadSprite(GameManager.CAMERA_WIDTH - 350, 200,resourceManager.loadImage("Graphics/Menu/About/ITESMLogo.png"));
         // =============== Agregando textos "ABOUT" y "versión" ==
         aboutMenuScene.attachChild(new Text(350, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "ABOUT", vertexBufferObjectManager));
-        aboutMenuScene.attachChild(new Text(350, 200,resourceManager.fontOne,"Version 0.9",vertexBufferObjectManager));
+        aboutMenuScene.attachChild(new Text(350, 200,resourceManager.fontOne,"Version 1.0",vertexBufferObjectManager));
         aboutMenuScene.attachChild(itesmLogo);
 
         // =============== Ubicando los botones =================
@@ -1048,7 +1049,7 @@ public class MenuScene extends BaseScene{
                     case ABOUT_ANDY:
                         // -- Llamar a la función para mostrar el ID de ANDY
                         setAboutID(aboutMenuAndyIDSprite, true);
-                        gameManager.toastOnUiThread("Sup, I'm fabulous!",Toast.LENGTH_LONG);
+                        gameManager.toastOnUiThread("Yep, I'm fabulous, B.!",Toast.LENGTH_LONG);
                         break;
                     case ABOUT_DANNI:
                         // -- Llamar a la función para mostrar el ID de DANIELA
@@ -1068,7 +1069,7 @@ public class MenuScene extends BaseScene{
                     case ABOUT_DIEGO:
                         // -- Llamar a la función para mostrar el ID de DIEGO
                         setAboutID(aboutMenuDiegoIDSprite, true);
-                        gameManager.toastOnUiThread("'Don't do it, compa.' - in response to Licitaciones.",Toast.LENGTH_LONG);
+                        gameManager.toastOnUiThread("This is a placeholder.",Toast.LENGTH_LONG);
                         break;
                     case SUBMENU_BACK:
                         // -- Regresar al menú principal
