@@ -518,7 +518,7 @@ public class ResourceManager {
         settingsMenuAudioButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,190,154,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         menuBitmapTextureAtlasContainer.add(settingsMenuAudioButtonsTextureAtlas);
 
-        settingsMenuButtonsTextureAtlas =  new BitmapTextureAtlas(textureManager, 478,380,TextureOptions.BILINEAR);
+        settingsMenuButtonsTextureAtlas =  new BitmapTextureAtlas(textureManager, 480,200,TextureOptions.BILINEAR);
         menuBitmapTextureAtlasContainer.add(settingsMenuButtonsTextureAtlas);
 
         settingsMenuAlertTextureAtlas =  new BitmapTextureAtlas(textureManager, 500,300,TextureOptions.BILINEAR);
@@ -596,8 +596,8 @@ public class ResourceManager {
         settingsMenuIncreaseSoundButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuAudioButtonsTextureAtlas,gameManager,"SoundIncreaseButton.png",95,77);
 
         settingsMenuNewGameButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuButtonsTextureAtlas,gameManager,"eraseData.png",0,0);
-        settingsMenuCancelButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuButtonsTextureAtlas,gameManager,"cancelButton.png",0,161);
-        settingsMenuOKButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuButtonsTextureAtlas,gameManager,"okButton.png",0,221);
+        settingsMenuCancelButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuButtonsTextureAtlas,gameManager,"cancelButton.png",200,0);
+        settingsMenuOKButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuButtonsTextureAtlas,gameManager,"okButton.png",340,0);
         settingsMenuAlertTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(settingsMenuAlertTextureAtlas,gameManager,"alert.png",0,0);
         // -- Regiones Botones About --
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/Menu/About/");

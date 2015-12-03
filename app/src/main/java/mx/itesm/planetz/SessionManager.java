@@ -45,6 +45,7 @@ public class SessionManager {
 
     // ============== Si se ha desbloqueado INFINITE MODE========
     public boolean infiniteModeUnlocked;
+    public boolean infiniteModeActivated;
 
     // ============== Contiene qué GEMAS se han desbloqueado =====
     public boolean gemsUnlocked[][];
@@ -83,6 +84,7 @@ public class SessionManager {
 
         // ============== Infite Mode Unlocked ====================
         infiniteModeUnlocked = sharedPreferences.getBoolean("infiniteModeUnlocked",false);
+        infiniteModeActivated = sharedPreferences.getBoolean("infiniteModeActivated",false);
 
         // ============== Gemas Desbloqueadas =====================
         gemsUnlocked = new boolean[4][4];
@@ -124,6 +126,7 @@ public class SessionManager {
 
         // ============== Infite Mode Unlocked ====================
         sharedPreferencesEditor.putBoolean("infiniteModeUnlocked", infiniteModeUnlocked);
+        sharedPreferencesEditor.putBoolean("infiniteModeActivated",infiniteModeActivated);
 
         // ============== Gemas Desbloqueadas ====================
 

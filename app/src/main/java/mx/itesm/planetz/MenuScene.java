@@ -427,12 +427,14 @@ public class MenuScene extends BaseScene{
     //                Crear el menú Play
     // ===========================================================
     public void addPlayMenu(){
+
         // =============== Inicializando la subEscena ============
         // -- Inicializar la instancia de la escena
         playMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
         // -- Ubicar el menú
         playMenuScene.setPosition(0, 0);
-
+        sessionManager.infiniteModeActivated = false;
+        sessionManager.writeChanges();
 
         // =============== Creando los botones ===================
         // -- Botón para regresar al menú principal
@@ -482,6 +484,7 @@ public class MenuScene extends BaseScene{
                     case PLAY_INFINITE_MODE:
                         if(sessionManager.infiniteModeUnlocked==false){
                             gameManager.toastOnUiThread("You can't play this yet!");
+
                         }
                         else{
                             // -- Cambiar al submenú InfiniteMode
@@ -490,7 +493,7 @@ public class MenuScene extends BaseScene{
                             menuOverlaySprite.setVisible(true);
                             break;
                         }
-
+                        break;
 
                 }
                 return true;
@@ -767,8 +770,8 @@ public class MenuScene extends BaseScene{
         // =============== Ubicando los botones =================
 
         newGame.setPosition(GameManager.CAMERA_WIDTH-350,GameManager.CAMERA_HEIGHT-150);
-        cancel.setPosition(GameManager.CAMERA_WIDTH/2-100,GameManager.CAMERA_HEIGHT/2-200);
-        ok.setPosition(GameManager.CAMERA_WIDTH/2+100,GameManager.CAMERA_HEIGHT/2-200);
+        cancel.setPosition(GameManager.CAMERA_WIDTH/2-100,GameManager.CAMERA_HEIGHT/2+50);
+        ok.setPosition(GameManager.CAMERA_WIDTH/2+100,GameManager.CAMERA_HEIGHT/2+50);
         backButton.setPosition(150, GameManager.CAMERA_HEIGHT - 125);
         musicDecrease.setPosition(300, GameManager.CAMERA_HEIGHT / 2 + 25);
         musicIncrease.setPosition(GameManager.CAMERA_WIDTH - 300, GameManager.CAMERA_HEIGHT / 2 + 25);
@@ -1134,17 +1137,18 @@ public class MenuScene extends BaseScene{
         infiniteModeMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
         // -- Ubicar el menú
         infiniteModeMenuScene.setPosition(0, 0);
-
+        sessionManager.infiniteModeActivated = true;
+        sessionManager.writeChanges();
 
         // =============== Creando los botones ===================
         // -- Botón para regresar al menú principal
         IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,resourceManager.menuSubmenuBackButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
         // -- Botón para jugar el nivel 1
-        IMenuItem level1Button = new ScaleMenuItemDecorator(new SpriteMenuItem(INF_LEVEL1,resourceManager.loadImage("Graphics/Menu/Play/AdventureModeButton.png") ,vertexBufferObjectManager),0.8f,1f); /*******/
+        IMenuItem level1Button = new ScaleMenuItemDecorator(new SpriteMenuItem(INF_LEVEL1,resourceManager.loadImage("Graphics/Menu/InfiniteMode/crashcourse.png") ,vertexBufferObjectManager),0.8f,1f); /*******/
         // -- Botón para jugar el nivel 2
-        IMenuItem level2Button = new ScaleMenuItemDecorator(new SpriteMenuItem(INF_LEVEL2,resourceManager.loadImage("Graphics/Menu/Play/InfinityModeButtonLocked.png"),vertexBufferObjectManager),0.9f,1f);
+        IMenuItem level2Button = new ScaleMenuItemDecorator(new SpriteMenuItem(INF_LEVEL2,resourceManager.loadImage("Graphics/Menu/InfiniteMode/intothe.png"),vertexBufferObjectManager),0.9f,1f);
         // -- Botón para jugar el nivel 3
-        IMenuItem level3Button = new ScaleMenuItemDecorator(new SpriteMenuItem(INF_LEVEL3,resourceManager.loadImage("Graphics/Menu/Play/InfinityModeButtonLocked.png"),vertexBufferObjectManager),0.9f,1f);
+        IMenuItem level3Button = new ScaleMenuItemDecorator(new SpriteMenuItem(INF_LEVEL3,resourceManager.loadImage("Graphics/Menu/InfiniteMode/newton.png"),vertexBufferObjectManager),0.9f,1f);
 
 
         // =============== Agregando los botones =================
@@ -1160,7 +1164,7 @@ public class MenuScene extends BaseScene{
         infiniteModeMenuScene.setBackgroundEnabled(false);
 
         // =============== Agregando el Texto "PLAY" =============
-        infiniteModeMenuScene.attachChild(new Text(350, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "INFINITE MODE", vertexBufferObjectManager));
+        infiniteModeMenuScene.attachChild(new Text(450, GameManager.CAMERA_HEIGHT-125, resourceManager.fontOne, "INFINITE MODE", vertexBufferObjectManager));
 
         // =============== Ubicando los botones =================
         backButton.setPosition(150, GameManager.CAMERA_HEIGHT - 125);

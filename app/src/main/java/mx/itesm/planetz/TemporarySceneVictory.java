@@ -81,7 +81,9 @@ public class TemporarySceneVictory extends BaseScene {
 
         scene.addMenuItem(retryButton);
         scene.addMenuItem(exitButton);
-        scene.addMenuItem(continueButton);
+        if(sessionManager.infiniteModeActivated==false) {
+            scene.addMenuItem(continueButton);
+        }
         retryButton.setPosition(GameManager.CAMERA_WIDTH/2+200,100);
         exitButton.setPosition(GameManager.CAMERA_WIDTH/2 +400,100);
         continueButton.setPosition(GameManager.CAMERA_WIDTH/2+580,100);
@@ -96,6 +98,7 @@ public class TemporarySceneVictory extends BaseScene {
 
                 switch (pMenuItem.getID()) {
                     case 1:
+                        if(sessionManager.infiniteModeActivated==false){
                         switch (sessionManager.currentLevel) {
                             case 1:
                                 sceneManager.destroyScene(SceneType.TEMP);
@@ -118,10 +121,31 @@ public class TemporarySceneVictory extends BaseScene {
                                 sceneManager.setScene(SceneType.ADVENTURE_LEVEL_3);
 
                                 break;
+                        }}
+                        else{
+                            switch (sessionManager.currentLevelInfiniteMode) {
+                                case 1:
+                                    sceneManager.destroyScene(SceneType.TEMP);
+                                    sceneManager.createScene(SceneType.ADVENTURE_LEVEL_INF_1);
+                                    sceneManager.setScene(SceneType.ADVENTURE_LEVEL_INF_1);
+                                    break;
+                                case 2:
+                                    sceneManager.destroyScene(SceneType.TEMP);
+                                    sceneManager.createScene(SceneType.ADVENTURE_LEVEL_INF_2);
+                                    sceneManager.setScene(SceneType.ADVENTURE_LEVEL_INF_2);
+
+                                    break;
+                                case 3:
+                                    sceneManager.destroyScene(SceneType.TEMP);
+                                    sceneManager.createScene(SceneType.ADVENTURE_LEVEL_INF_3);
+                                    sceneManager.setScene(SceneType.ADVENTURE_LEVEL_INF_3);
+
+                                    break;
+                            }
                         }
                         break;
                     case 2:
-
+                        sessionManager.infiniteModeActivated = false;
                         sceneManager.destroyScene(SceneType.TEMP);
                         // -- Creamos la escena del primer nivel
                         sceneManager.createScene(SceneType.MENU);
@@ -135,44 +159,46 @@ public class TemporarySceneVictory extends BaseScene {
                             case 1:
                                 sessionManager.unlockedLevels=1;
                                 sessionManager.currentLevel=2;
-                                sessionManager.writeChanges();
                                 break;
                             case 2:
                                 sessionManager.unlockedLevels=2;
                                 sessionManager.currentLevel=3;
-                                sessionManager.writeChanges();
                                 break;
                             case 3:
                                 sessionManager.unlockedLevels=3;
                                 sessionManager.currentLevel=4;
-                                sessionManager.writeChanges();
                                 break;
 
                         }// -- Creamos el story line de nuevo
+                        sessionManager.writeChanges();
                         break;
                     case 3:
+
                         //Cambiamos el curent level al siguiente
                         switch(sessionManager.currentLevel){
                             case 1:
+                                sessionManager.unlockedLevels =1;
                                 sessionManager.currentLevel=2;
-                                sessionManager.writeChanges();
                                 break;
                             case 2:
+                                sessionManager.unlockedLevels = 2;
                                 sessionManager.currentLevel=3;
-                                sessionManager.writeChanges();
                                 break;
                             case 3:
+                                sessionManager.unlockedLevels = 3;
                                 sessionManager.currentLevel=4;
-                                sessionManager.writeChanges();
                                 break;
 
-                        }// -- Creamos el story line de nuevo
+                        }
+
+                        // -- Creamos el story line de nuevo
                         sceneManager.destroyScene(SceneType.TEMP);
                         sceneManager.createScene(SceneType.STORY);
                         // -- Corremos la escena del primer nivel
                         sceneManager.setScene(SceneType.STORY);
                         // -- Liberamos la escena actual
 
+                        sessionManager.writeChanges();
                         break;
 
                 }

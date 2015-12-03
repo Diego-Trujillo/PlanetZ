@@ -315,7 +315,7 @@ public class AdventureLevelThreeScene extends BaseScene {
         int pi = 550;
         int pa = 580;
         int a = 1;
-        int e = 2;
+        int e = 3;
 
         //7*5 platforms
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,0,(100),false,false));
@@ -326,10 +326,10 @@ public class AdventureLevelThreeScene extends BaseScene {
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(100),false,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(100),false,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(100),false,false));
+        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(100),false,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(100),true,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(100),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(100),false,false));
-        toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(100),false,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(100),true,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(100),false,false));
         toBeAdded_Platform.add(new Platform(getWorld(), physicsWorld,3,Platform.BIG,pa*a++,(100),false,false));
@@ -439,7 +439,7 @@ public class AdventureLevelThreeScene extends BaseScene {
 
 
 
-        Goal levelGoal = new Goal(this,physicsWorld,i*(a-1),150);
+        Goal levelGoal = new Goal(this,physicsWorld,pa*(a-1),150);
         levelGoal.attachToScene();
 
         Gem gem13 = new Gem(this,physicsWorld,3,1,2000,700);

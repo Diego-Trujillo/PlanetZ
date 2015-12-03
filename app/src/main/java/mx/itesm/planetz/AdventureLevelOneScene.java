@@ -225,7 +225,7 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
     public AdventureLevelOneScene(boolean infiniteModeActivated){
         super();
-        sceneType = SceneType.ADVENTURE_LEVEL_1;
+        sceneType = SceneType.ADVENTURE_LEVEL_INF_1;
         // -- Deshabilitamos el movimiento de la nave hasta que se cargue todo el nivel.
         movementEnabled = false;
 
@@ -395,13 +395,22 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
 
                 }
                 else if(timeRemaining == -3){
-                    sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_1);
-                    // -- Creamos la escena del primer nivel
-                    sceneManager.createScene(SceneType.TEMP);
-                    // -- Corremos la escena del primer nivel
-                    sceneManager.setScene(SceneType.TEMP);
-                    // -- Liberamos la escena actual
-
+                    if(sessionManager.infiniteModeActivated==false) {
+                        sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_1);
+                        // -- Creamos la escena del primer nivel
+                        sceneManager.createScene(SceneType.TEMP);
+                        // -- Corremos la escena del primer nivel
+                        sceneManager.setScene(SceneType.TEMP);
+                        // -- Liberamos la escena actual
+                    }
+                    else{
+                        sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_INF_1);
+                        // -- Creamos la escena del primer nivel
+                        sceneManager.createScene(SceneType.TEMP);
+                        // -- Corremos la escena del primer nivel
+                        sceneManager.setScene(SceneType.TEMP);
+                        // -- Liberamos la escena actual
+                    }
                 }
                 timeRemaining--;
 
