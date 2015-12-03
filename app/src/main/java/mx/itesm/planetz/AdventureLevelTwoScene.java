@@ -99,7 +99,16 @@ public class AdventureLevelTwoScene extends BaseScene{
     public AdventureLevelTwoScene() {
         super();
         sceneType = SceneType.ADVENTURE_LEVEL_2;
-        sessionManager.currentLevel= 2;
+        sessionManager.currentLevel = 2;
+
+    }
+
+    public AdventureLevelTwoScene(boolean infiniteModeActivated) {
+        super();
+        sceneType = SceneType.ADVENTURE_LEVEL_2;
+        if(infiniteModeActivated==true) {
+            sessionManager.currentLevelInfiniteMode = 2;
+        }
     }
     // =============================================================================================
     //                                       M É T O D O S
@@ -299,6 +308,12 @@ public class AdventureLevelTwoScene extends BaseScene{
                     sceneHUD.updateLives(playerLives);
 
                     if(playerLives == 0){
+                        if(sessionManager.infiniteModeUnlocked==false && sessionManager.unlockedLevels == 1) {
+                            sessionManager.gemsUnlocked[3][1] = false;
+                            sessionManager.gemsUnlocked[3][2] = false;
+                            sessionManager.gemsUnlocked[3][3] = false;
+                            sessionManager.writeChanges();
+                        }
                         // -- Liberamos la escena actual
                         sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_2);
                         // -- Creamos la escena del primer nivel

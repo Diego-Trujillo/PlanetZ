@@ -236,6 +236,9 @@ public class StoryScene extends BaseScene {
                                     break;
                                 case 4:
                                     sessionManager.currentLevel = 1;
+                                    sessionManager.unlockedLevels = 0;
+                                    sessionManager.infiniteModeUnlocked = true;
+                                    sessionManager.writeChanges();
                                     sceneManager.destroyScene(SceneType.STORY);
                                     sceneManager.createScene(SceneType.MENU);
                                     sceneManager.setScene(SceneType.MENU);
@@ -265,6 +268,10 @@ public class StoryScene extends BaseScene {
                                 sceneManager.setScene(SceneType.ADVENTURE_LEVEL_3);
                                 break;
                             case 4:
+                                sessionManager.currentLevel = 1;
+                                sessionManager.unlockedLevels = 0;
+                                sessionManager.infiniteModeUnlocked = true;
+                                sessionManager.writeChanges();
                                 sceneManager.destroyScene(SceneType.STORY);
                                 sceneManager.createScene(SceneType.MENU);
                                 sceneManager.setScene(SceneType.MENU);

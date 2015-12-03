@@ -130,17 +130,20 @@ public class TemporarySceneVictory extends BaseScene {
                         // -- Liberamos la escena actual
 
 
-                        //Cambiamos el curent level al siguiente
+                        //Cambiamos el curent level al siguiente y actualizamos los desbloqueados
                         switch(sessionManager.currentLevel){
                             case 1:
+                                sessionManager.unlockedLevels=1;
                                 sessionManager.currentLevel=2;
                                 sessionManager.writeChanges();
                                 break;
                             case 2:
+                                sessionManager.unlockedLevels=2;
                                 sessionManager.currentLevel=3;
                                 sessionManager.writeChanges();
                                 break;
                             case 3:
+                                sessionManager.unlockedLevels=3;
                                 sessionManager.currentLevel=4;
                                 sessionManager.writeChanges();
                                 break;

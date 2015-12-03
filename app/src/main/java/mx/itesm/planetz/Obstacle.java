@@ -100,6 +100,9 @@ public class Obstacle {
             case 2:
                 obstacleSprite = resourceManager.loadSprite(positionX,positionY,resourceManager.adventureLevelTwoObstaclesTextureRegion.get(gameScene.randomNumberGenerator.nextInt(3)));
                 break;
+            case 3:
+                obstacleSprite = resourceManager.loadSprite(positionX,positionY,resourceManager.adventureLevelThreeObstaclesTextureRegion.get(gameScene.randomNumberGenerator.nextInt(2)));
+                break;
         }
 
         obstacleSprite.setPosition(obstacleSprite.getX(),obstacleSprite.getY() - ((isFlipped)?obstacleSprite.getHeight()/2:0));

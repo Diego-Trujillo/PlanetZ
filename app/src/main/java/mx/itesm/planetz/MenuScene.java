@@ -179,6 +179,18 @@ public class MenuScene extends BaseScene{
     private Sprite aboutMenuDiegoIDSprite;
     private Sprite aboutMenuDanniIDSprite;
 
+    // ===========================================================
+    //                      SUBMENÚ INFINITE MODE
+    // ===========================================================
+
+    // =============== El Contenedor =============================
+    private org.andengine.entity.scene.menu.MenuScene infiniteModeMenuScene;
+
+    // =============== Opciones de Botones =======================
+    private static final int INF_LEVEL1 = 1;
+    private static final int INF_LEVEL2 = 2;
+    private static final int INF_LEVEL3 = 3;
+
 
     // =============================================================================================
     //                                    C O N S T R U C T O R
@@ -237,8 +249,11 @@ public class MenuScene extends BaseScene{
         addBackpack();
         addSettings();
         addAbout();
+        addInfiniteMenu();
 
     }
+
+
 
     // ===========================================================
     //                      Cargar Música
@@ -465,22 +480,24 @@ public class MenuScene extends BaseScene{
                         sceneManager.setScene(SceneType.STORY);
                         break;
                     case PLAY_INFINITE_MODE:
-                        /*
-                        // -- Liberamos la escena actual
-                        sceneManager.destroyScene(SceneType.MENU);
-                        // -- Creamos la escena del primer nivel
-                        sceneManager.createScene(SceneType.ADVENTURE_LEVEL_3);
-                        // -- Corremos la escena del primer nivel
-                        sceneManager.setScene(SceneType.ADVENTURE_LEVEL_3);
-                        break;
-                        */
-                        gameManager.toastOnUiThread("You can't play this yet!");
+                        if(sessionManager.infiniteModeUnlocked==false){
+                            gameManager.toastOnUiThread("You can't play this yet!");
+                        }
+                        else{
+                            // -- Cambiar al submenú InfiniteMode
+                            setChildScene(infiniteModeMenuScene);
+                            // -- Poner el Overlay
+                            menuOverlaySprite.setVisible(true);
+                            break;
+                        }
+
 
                 }
                 return true;
             }
         });
     }
+
 
 
     // ===========================================================
@@ -1107,6 +1124,89 @@ public class MenuScene extends BaseScene{
 
 
     }
+
+    // ===========================================================
+    //                Crear el menú Infinite mode
+    // ===========================================================
+    public void addInfiniteMenu(){
+        // =============== Inicializando la subEscena ============
+        // -- Inicializar la instancia de la escena
+        infiniteModeMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
+        // -- Ubicar el menú
+        infiniteModeMenuScene.setPosition(0, 0);
+
+
+        // =============== Creando los botones ===================
+        // -- Botón para regresar al menú principal
+        IMenuItem backButton = new ScaleMenuItemDecorator(new SpriteMenuItem(SUBMENU_BACK,resourceManager.menuSubmenuBackButtonTextureRegion,vertexBufferObjectManager),0.8f,1f);
+        // -- Botón para jugar el nivel 1
+        IMenuItem level1Button = new ScaleMenuItemDecorator(new SpriteMenuItem(INF_LEVEL1,resourceManager.loadImage("Graphics/Menu/Play/AdventureModeButton.png") ,vertexBufferObjectManager),0.8f,1f); /*******/
+        // -- Botón para jugar el nivel 2
+        IMenuItem level2Button = new ScaleMenuItemDecorator(new SpriteMenuItem(INF_LEVEL2,resourceManager.loadImage("Graphics/Menu/Play/InfinityModeButtonLocked.png"),vertexBufferObjectManager),0.9f,1f);
+        // -- Botón para jugar el nivel 3
+        IMenuItem level3Button = new ScaleMenuItemDecorator(new SpriteMenuItem(INF_LEVEL3,resourceManager.loadImage("Graphics/Menu/Play/InfinityModeButtonLocked.png"),vertexBufferObjectManager),0.9f,1f);
+
+
+        // =============== Agregando los botones =================
+        infiniteModeMenuScene.addMenuItem(backButton);
+        infiniteModeMenuScene.addMenuItem(level1Button);
+        infiniteModeMenuScene.addMenuItem(level2Button);
+        infiniteModeMenuScene.addMenuItem(level3Button);
+
+        // =============== Configurando las animaciones =========
+        // -- Construimos las animaciones
+        infiniteModeMenuScene.buildAnimations();
+        // -- No habilitamos un fondo
+        infiniteModeMenuScene.setBackgroundEnabled(false);
+
+        // =============== Agregando el Texto "PLAY" =============
+        infiniteModeMenuScene.attachChild(new Text(350, GameManager.CAMERA_HEIGHT - 125, resourceManager.fontOne, "INFINITE MODE", vertexBufferObjectManager));
+
+        // =============== Ubicando los botones =================
+        backButton.setPosition(150, GameManager.CAMERA_HEIGHT - 125);
+        level1Button.setPosition(GameManager.CAMERA_WIDTH/2 - 450, GameManager.CAMERA_HEIGHT/2);
+        level2Button.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
+        level3Button.setPosition(GameManager.CAMERA_WIDTH/2 + 450, GameManager.CAMERA_HEIGHT/2);
+
+        playMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
+                switch (pMenuItem.getID()){
+                    case SUBMENU_BACK:
+                        // -- Regresamos al menú principal
+                        returnToMenu();
+                        resourceManager.soundOne.play();
+                        break;
+                    case INF_LEVEL1:
+                        // -- Liberamos la escena actual
+                        sceneManager.destroyScene(SceneType.MENU);
+                        // -- Creamos la escena del primer nivel
+                        sceneManager.createScene(SceneType.ADVENTURE_LEVEL_INF_1);
+                        // -- Corremos la escena del primer nivel
+                        sceneManager.setScene(SceneType.ADVENTURE_LEVEL_INF_1);
+                        break;
+                    case INF_LEVEL2:
+                        // -- Liberamos la escena actual
+                        sceneManager.destroyScene(SceneType.MENU);
+                        // -- Creamos la escena del primer nivel
+                        sceneManager.createScene(SceneType.ADVENTURE_LEVEL_INF_2);
+                        // -- Corremos la escena del primer nivel
+                        sceneManager.setScene(SceneType.ADVENTURE_LEVEL_INF_2);
+                        break;
+                    case INF_LEVEL3:
+                        // -- Liberamos la escena actual
+                        sceneManager.destroyScene(SceneType.MENU);
+                        // -- Creamos la escena del primer nivel
+                        sceneManager.createScene(SceneType.ADVENTURE_LEVEL_INF_3);
+                        // -- Corremos la escena del primer nivel
+                        sceneManager.setScene(SceneType.ADVENTURE_LEVEL_INF_3);
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
 
     // ===========================================================
     //                          Condición Update

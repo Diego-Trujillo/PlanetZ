@@ -38,8 +38,10 @@ public class SessionManager {
     public boolean musicEnabled, soundEnabled;
     public float musicVolume, soundVolume;
 
-    // ============== Nivel de ADVENTURE MODE en el que se halla =
+    // ============== Nivel de ADVENTURE MODE en el que se halla y los desbloqueados=
     public int currentLevel;
+    public int unlockedLevels;
+    public int currentLevelInfiniteMode;
 
     // ============== Si se ha desbloqueado INFINITE MODE========
     public boolean infiniteModeUnlocked;
@@ -101,6 +103,10 @@ public class SessionManager {
 
         // ============== Nivel actual de Adv. Mode ==============
         currentLevel = sharedPreferences.getInt("currentLevel",1);
+        currentLevelInfiniteMode = sharedPreferences.getInt("currentLevelInfiniteMode",1);
+
+        //============== Niveles desbloqueados ==============
+        unlockedLevels = sharedPreferences.getInt("unlockedLevels",0);
     }
 
     // ===========================================================
@@ -123,7 +129,10 @@ public class SessionManager {
 
         // ============== Nivel actual de Adv. Mode ==============
         sharedPreferencesEditor.putInt("currentLevel", currentLevel);
+        sharedPreferencesEditor.putInt("currentLevelInfiniteMode",currentLevelInfiniteMode);
 
+        //============== Niveles desbloqueados ==============
+        sharedPreferencesEditor.putInt("unlockedLevels",unlockedLevels);
         // ============== Gemas Desbloqueadas ===================
         // -------------- Nivel 1 -------------------------------
         sharedPreferencesEditor.putBoolean("gem_1_1",gemsUnlocked[1][1]);

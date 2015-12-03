@@ -216,11 +216,26 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
     public AdventureLevelOneScene(){
         super();
         sceneType = SceneType.ADVENTURE_LEVEL_1;
-        sessionManager.currentLevel= 1;
+        sessionManager.currentLevel = 1;
+
         // -- Deshabilitamos el movimiento de la nave hasta que se cargue todo el nivel.
         movementEnabled = false;
 
     }
+
+    public AdventureLevelOneScene(boolean infiniteModeActivated){
+        super();
+        sceneType = SceneType.ADVENTURE_LEVEL_1;
+        // -- Deshabilitamos el movimiento de la nave hasta que se cargue todo el nivel.
+        movementEnabled = false;
+
+        if(infiniteModeActivated==true) {
+            sessionManager.currentLevelInfiniteMode = 1;
+        }
+
+    }
+
+
 
     // =============================================================================================
     //                                       M É T O D O S
@@ -600,6 +615,12 @@ public class AdventureLevelOneScene extends BaseScene implements IAccelerationLi
                         sceneHUD.updateLives(playerLives);
                         updateSprite();
                         if(playerLives == 0){
+                            if(sessionManager.infiniteModeUnlocked==false && sessionManager.unlockedLevels == 0) {
+                                sessionManager.gemsUnlocked[3][1] = false;
+                                sessionManager.gemsUnlocked[3][2] = false;
+                                sessionManager.gemsUnlocked[3][3] = false;
+                                sessionManager.writeChanges();
+                            }
                             // -- Liberamos la escena actual
                             sceneManager.destroyScene(SceneType.ADVENTURE_LEVEL_1);
                             // -- Creamos la escena del primer nivel

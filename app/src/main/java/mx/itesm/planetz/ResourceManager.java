@@ -315,7 +315,7 @@ public class ResourceManager {
     public ArrayList<ITextureRegion> adventureLevelThreePlatformsSmallTextureRegion;
 
 
-    //public ArrayList<ITextureRegion> adventureLevelThreeObstaclesTextureRegion;
+    public ArrayList<ITextureRegion> adventureLevelThreeObstaclesTextureRegion;
 
 
 
@@ -811,8 +811,8 @@ public class ResourceManager {
         adventureLevelThreePlatformsSmallTextureAtlas = new BitmapTextureAtlas(textureManager,308,150,TextureOptions.BILINEAR);
         adventureLevelThreeBitmapTextureAtlasContainer.add(adventureLevelThreePlatformsSmallTextureAtlas);
 
-        //adventureLevelThreeObstaclesTextureAtlas = new BitmapTextureAtlas(textureManager,197,64,TextureOptions.BILINEAR);
-        //adventureLevelThreeBitmapTextureAtlasContainer.add(adventureLevelThreeObstaclesTextureAtlas);
+        adventureLevelThreeObstaclesTextureAtlas = new BitmapTextureAtlas(textureManager,160,68,TextureOptions.BILINEAR);
+        adventureLevelThreeBitmapTextureAtlasContainer.add(adventureLevelThreeObstaclesTextureAtlas);
 
 
         // ============ Texturas
@@ -837,15 +837,14 @@ public class ResourceManager {
         adventureLevelThreePlatformsBigTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreePlatformsBigTextureAtlas,gameManager,"1.png",0,0));
         adventureLevelThreePlatformsBigTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreePlatformsBigTextureAtlas,gameManager,"2.png",0,26));
         adventureLevelThreePlatformsBigTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreePlatformsBigTextureAtlas,gameManager,"3.png",0,52));
-        /* ------------ Obstáculos
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/IntoTheWilderness/Enemies/");
-        adventureLevelTwoObstaclesTextureRegion = new ArrayList<>();
+        //------------ Obstáculos
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("Graphics/BraveNewWorld/NewtonRedefined/Enemies/");
+        adventureLevelThreeObstaclesTextureRegion = new ArrayList<>();
 
 
-        adventureLevelTwoObstaclesTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoObstaclesTextureAtlas,gameManager,"1.png",0,0));
-        adventureLevelTwoObstaclesTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoObstaclesTextureAtlas,gameManager,"2.png",66,0));
-        adventureLevelTwoObstaclesTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelTwoObstaclesTextureAtlas,gameManager,"3.png",129,0));
-        */
+        adventureLevelThreeObstaclesTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreeObstaclesTextureAtlas,gameManager,"cosamala.png",0,0));
+        adventureLevelThreeObstaclesTextureRegion.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(adventureLevelThreeObstaclesTextureAtlas,gameManager,"picos.png",84,0));
+
         // ============== Cargar Atlas
         for(BitmapTextureAtlas atlas : adventureLevelThreeBitmapTextureAtlasContainer){
             atlas.load();

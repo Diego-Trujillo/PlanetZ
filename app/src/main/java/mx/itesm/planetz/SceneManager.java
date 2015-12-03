@@ -84,7 +84,15 @@ public class SceneManager {
             case TEMP:
                 TempScene = new TemporarySceneVictory();
                 break;
-
+            case ADVENTURE_LEVEL_INF_1:
+                levelOneScene = new AdventureLevelOneScene(true);
+                break;
+            case ADVENTURE_LEVEL_INF_2:
+                levelTwoScene = new AdventureLevelTwoScene(true);
+                break;
+            case ADVENTURE_LEVEL_INF_3:
+                levelThreeScene = new AdventureLevelThreeScene(true);
+                break;
         }
     }
 
@@ -117,6 +125,15 @@ public class SceneManager {
                 break;
             case TEMP:
                 currentScene = TempScene;
+                break;
+            case ADVENTURE_LEVEL_INF_1:
+                currentScene = levelOneScene;
+                break;
+            case ADVENTURE_LEVEL_INF_2:
+                currentScene = levelTwoScene;
+                break;
+            case ADVENTURE_LEVEL_INF_3:
+                currentScene = levelThreeScene;
                 break;
             default:
                 currentScene = menuScene;
@@ -169,6 +186,18 @@ public class SceneManager {
             case TEMP:
                 TempScene.destroyScene();
                 TempScene = null;
+                break;
+            case ADVENTURE_LEVEL_INF_1:
+                levelOneScene.destroyScene();
+                levelOneScene = null;
+                break;
+            case ADVENTURE_LEVEL_INF_2:
+                levelTwoScene.destroyScene();
+                levelTwoScene = null;
+                break;
+            case ADVENTURE_LEVEL_INF_3:
+                levelThreeScene.destroyScene();
+                levelThreeScene = null;
                 break;
         }
     }
