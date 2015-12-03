@@ -251,6 +251,7 @@ public class MenuScene extends BaseScene{
         addAbout();
         addInfiniteMenu();
 
+
     }
 
 
@@ -433,8 +434,9 @@ public class MenuScene extends BaseScene{
         playMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
         // -- Ubicar el menú
         playMenuScene.setPosition(0, 0);
+
         sessionManager.infiniteModeActivated = false;
-        sessionManager.writeChanges();
+
 
         // =============== Creando los botones ===================
         // -- Botón para regresar al menú principal
@@ -482,16 +484,19 @@ public class MenuScene extends BaseScene{
                         sceneManager.setScene(SceneType.STORY);
                         break;
                     case PLAY_INFINITE_MODE:
+
+                        sessionManager.infiniteModeActivated = true;
+
                         if(sessionManager.infiniteModeUnlocked==false){
                             gameManager.toastOnUiThread("You can't play this yet!");
 
                         }
                         else{
+
                             // -- Cambiar al submenú InfiniteMode
                             setChildScene(infiniteModeMenuScene);
                             // -- Poner el Overlay
                             menuOverlaySprite.setVisible(true);
-                            break;
                         }
                         break;
 
@@ -1137,8 +1142,7 @@ public class MenuScene extends BaseScene{
         infiniteModeMenuScene = new org.andengine.entity.scene.menu.MenuScene(camera);
         // -- Ubicar el menú
         infiniteModeMenuScene.setPosition(0, 0);
-        sessionManager.infiniteModeActivated = true;
-        sessionManager.writeChanges();
+
 
         // =============== Creando los botones ===================
         // -- Botón para regresar al menú principal
@@ -1172,7 +1176,7 @@ public class MenuScene extends BaseScene{
         level2Button.setPosition(GameManager.CAMERA_WIDTH/2,GameManager.CAMERA_HEIGHT/2);
         level3Button.setPosition(GameManager.CAMERA_WIDTH/2 + 450, GameManager.CAMERA_HEIGHT/2);
 
-        playMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
+        infiniteModeMenuScene.setOnMenuItemClickListener(new org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClicked(org.andengine.entity.scene.menu.MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
                 switch (pMenuItem.getID()){
@@ -1180,6 +1184,8 @@ public class MenuScene extends BaseScene{
                         // -- Regresamos al menú principal
                         returnToMenu();
                         resourceManager.soundOne.play();
+                        sessionManager.infiniteModeActivated = false;
+                        sessionManager.writeChanges();
                         break;
                     case INF_LEVEL1:
                         // -- Liberamos la escena actual
